@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
-import { Button } from "@/components/ui/button";
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
+import { Button } from '@/components/ui/button';
 import {
   Form,
   FormControl,
@@ -11,17 +11,17 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { useToast } from "@/hooks/use-toast";
-import { submitContactForm } from "@/app/actions";
-import { useState, useTransition } from "react";
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { useToast } from '@/hooks/use-toast';
+import { submitContactForm } from '@/app/actions';
+import { useTransition } from 'react';
 
 const formSchema = z.object({
-  name: z.string().min(2, "Name must be at least 2 characters."),
-  email: z.string().email("Please enter a valid email address."),
-  message: z.string().min(10, "Message must be at least 10 characters."),
+  name: z.string().min(2, 'Name must be at least 2 characters.'),
+  email: z.string().email('Please enter a valid email address.'),
+  message: z.string().min(10, 'Message must be at least 10 characters.'),
 });
 
 export function ContactForm() {
@@ -31,9 +31,9 @@ export function ContactForm() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: "",
-      email: "",
-      message: "",
+      name: '',
+      email: '',
+      message: '',
     },
   });
 
@@ -43,15 +43,17 @@ export function ContactForm() {
 
       if (result.success) {
         toast({
-          title: "Message Sent!",
-          description: "Thank you for reaching out. We'll get back to you soon.",
+          title: 'Message Sent!',
+          description:
+            "Thank you for reaching out. We'll get back to you soon.",
         });
         form.reset();
       } else {
         toast({
-          variant: "destructive",
-          title: "Uh oh! Something went wrong.",
-          description: result.message || "There was a problem with your request.",
+          variant: 'destructive',
+          title: 'Uh oh! Something went wrong.',
+          description:
+            result.message || 'There was a problem with your request.',
         });
       }
     });
@@ -59,7 +61,10 @@ export function ContactForm() {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 text-left">
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="space-y-6 text-left"
+      >
         <FormField
           control={form.control}
           name="name"
@@ -105,7 +110,7 @@ export function ContactForm() {
           )}
         />
         <Button type="submit" className="w-full" size="lg" disabled={isPending}>
-          {isPending ? "Sending..." : "Send Message"}
+          {isPending ? 'Sending...' : 'Send Message'}
         </Button>
       </form>
     </Form>
