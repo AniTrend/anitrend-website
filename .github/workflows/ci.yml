@@ -1,0 +1,140 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+env:
+  NODE_VERSION: '22'
+  YARN_VERSION: '4.9.2'
+
+jobs:
+  lint-and-typecheck:
+    name: Lint & Type Check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'yarn'
+
+      - name: Install dependencies
+        run: yarn install --immutable
+
+      - name: Run ESLint
+        run: yarn lint
+
+      - name: Run TypeScript type check
+        run: yarn typecheck
+
+  build-and-test:
+    name: Build & Test
+    runs-on: ubuntu-latest
+    needs: lint-and-typecheck
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'yarn'
+
+      - name: Install dependencies
+        run: yarn install --immutable
+
+      - name: Build Next.js application
+        run: yarn build
+        env:
+          # Mock environment variables for build
+          GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY || 'mock-key-for-build' }}
+
+      - name: Check build output
+        run: |
+          if [ ! -d ".next" ]; then
+            echo "Build failed - .next directory not found"
+            exit 1
+          fi
+          echo "Build successful - .next directory exists"
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-files
+          path: |
+            .next/
+            public/
+          retention-days: 1
+
+  build-matrix:
+    name: Build Matrix Test
+    runs-on: ${{ matrix.os }}
+    needs: lint-and-typecheck
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        node-version: ['20', '22']
+        include:
+          - os: ubuntu-latest
+            architecture: x64
+          - os: ubuntu-latest
+            architecture: arm64
+      fail-fast: false
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'yarn'
+
+      - name: Install dependencies
+        run: yarn install --immutable
+
+      - name: Build application
+        run: yarn build
+        env:
+          GOOGLE_API_KEY: 'mock-key-for-build'
+
+  deployment-ready:
+    name: Deployment Ready Check
+    runs-on: ubuntu-latest
+    needs: [build-and-test, build-matrix]
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build-files
+
+      - name: Verify deployment readiness
+        run: |
+          echo "✅ All checks passed - ready for deployment"
+          echo "Build artifacts available: $(ls -la .next/ | wc -l) files"
+          echo "Public assets available: $(ls -la public/ | wc -l) files"
+
+      - name: Set deployment status
+        run: |
+          echo "DEPLOYMENT_READY=true" >> $GITHUB_ENV
+          echo "BUILD_TIMESTAMP=$(date -u +%Y%m%d-%H%M%S)" >> $GITHUB_ENV
