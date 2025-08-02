@@ -11,7 +11,7 @@ import { getAnimeById } from '@/lib/anime-service';
 export default async function AnimeDetailPage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
   const anime = await getAnimeById(id);
