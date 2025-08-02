@@ -39,6 +39,7 @@ import {
   getRepositoriesForDisplay,
   getLanguageColor,
 } from '@/lib/github-service';
+import { getShowcaseScreenshots } from '@/lib/screenshots-service';
 import { siGoogleplay } from 'simple-icons';
 
 const features = [
@@ -123,6 +124,9 @@ export default async function Home() {
       },
     ];
   }
+
+  // Get curated screenshots for the showcase
+  const showcaseScreenshots = getShowcaseScreenshots();
   return (
     <div className="flex flex-col min-h-screen">
       <AppHeader />
@@ -384,38 +388,7 @@ export default async function Home() {
                 className="w-full max-w-6xl mx-auto"
               >
                 <CarouselContent className="-ml-4">
-                  {[
-                    {
-                      src: 'https://vzujgysigfwbabgsqcse.supabase.co/storage/v1/object/public/app/android/screenshots/0.jpg',
-                      alt: 'App home screen',
-                      hint: 'app screenshot',
-                    },
-                    {
-                      src: 'https://vzujgysigfwbabgsqcse.supabase.co/storage/v1/object/public/app/android/screenshots/1.jpg',
-                      alt: 'Anime detail screen',
-                      hint: 'app screenshot',
-                    },
-                    {
-                      src: 'https://vzujgysigfwbabgsqcse.supabase.co/storage/v1/object/public/app/android/screenshots/2.jpg',
-                      alt: 'User profile screen',
-                      hint: 'app screenshot',
-                    },
-                    {
-                      src: 'https://vzujgysigfwbabgsqcse.supabase.co/storage/v1/object/public/app/android/screenshots/3.jpg',
-                      alt: 'Seasonal anime screen',
-                      hint: 'app screenshot',
-                    },
-                    {
-                      src: 'https://vzujgysigfwbabgsqcse.supabase.co/storage/v1/object/public/app/android/screenshots/4.jpg',
-                      alt: 'Discover screen',
-                      hint: 'app screenshot',
-                    },
-                    {
-                      src: 'https://vzujgysigfwbabgsqcse.supabase.co/storage/v1/object/public/app/android/screenshots/5.jpg',
-                      alt: 'Manga reader screen',
-                      hint: 'app screenshot',
-                    },
-                  ].map((image, index) => (
+                  {showcaseScreenshots.map((image, index) => (
                     <CarouselItem
                       key={index}
                       className="pl-4 basis-1/2 sm:basis-1/3 md:basis-1/4 lg:basis-1/5"
