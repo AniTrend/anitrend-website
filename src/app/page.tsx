@@ -12,7 +12,6 @@ import {
 import {
   ArrowRight,
   Github,
-  QrCode,
   Heart,
   GitFork,
   Layers,
@@ -27,11 +26,6 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover';
 import { AnimePreview } from '@/components/anime-preview';
 import Balancer from 'react-wrap-balancer';
 import {
@@ -76,7 +70,6 @@ const features = [
 
 const playStoreUrl =
   'https://play.google.com/store/apps/details?id=com.mxt.anitrend';
-const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(playStoreUrl)}`;
 const githubReleasesUrl = 'https://github.com/AniTrend/anitrend-app/releases';
 const discordInviteUrl = 'https://discord.gg/r325bBq';
 
@@ -516,33 +509,23 @@ export default async function Home() {
                   </p>
                 </CardContent>
                 <CardFooter>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <Button className="w-full group" size="lg">
-                        Download from Google Play
-                        <QrCode className="ml-auto h-5 w-5 opacity-70 group-hover:opacity-100 transition-opacity" />
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto border-primary/20">
-                      <div className="flex flex-col items-center gap-4 text-center p-4">
-                        <p className="text-sm font-medium">Scan to download</p>
-                        <div className="bg-white p-2 rounded-lg">
-                          <Image
-                            src={qrCodeUrl}
-                            alt="QR code for Google Play Store"
-                            width={150}
-                            height={150}
-                            data-ai-hint="qr code"
-                          />
-                        </div>
-                        <Button asChild variant="outline" size="sm">
-                          <Link href={playStoreUrl} target="_blank">
-                            Open Store
-                          </Link>
-                        </Button>
-                      </div>
-                    </PopoverContent>
-                  </Popover>
+                  <Button
+                    asChild
+                    className="w-full bg-green-600 hover:bg-green-700 hover:border-primary/50 text-white transition-all duration-200"
+                    size="lg"
+                  >
+                    <Link href={playStoreUrl} target="_blank" rel="noreferrer">
+                      <svg
+                        role="img"
+                        viewBox="0 0 24 24"
+                        className="mr-2 h-5 w-5"
+                        fill="currentColor"
+                      >
+                        <path d={siGoogleplay.path} />
+                      </svg>
+                      Get it on Google Play
+                    </Link>
+                  </Button>
                 </CardFooter>
               </Card>
 
