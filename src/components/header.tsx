@@ -1,4 +1,5 @@
-import { Compass, Github, LayoutDashboard, Tv2, Wand2 } from 'lucide-react';
+import { Compass, LayoutDashboard, Tv2, Wand2 } from 'lucide-react';
+import { siGithub } from 'simple-icons';
 import Link from 'next/link';
 import { Button, buttonVariants } from './ui/button';
 
@@ -80,7 +81,14 @@ export function AppHeader() {
               target="_blank"
               rel="noreferrer"
             >
-              <Github />
+              <svg
+                role="img"
+                viewBox="0 0 24 24"
+                className="h-4 w-4"
+                fill="currentColor"
+              >
+                <path d={siGithub.path} />
+              </svg>
               <span className="sr-only">GitHub</span>
             </Link>
           </Button>
