@@ -1,6 +1,6 @@
-import { Compass, Github, Tv2, Wand2 } from "lucide-react";
-import Link from "next/link";
-import { Button, buttonVariants } from "./ui/button";
+import { Compass, Github, LayoutDashboard, Tv2, Wand2 } from 'lucide-react';
+import Link from 'next/link';
+import { Button, buttonVariants } from './ui/button';
 
 export function AppHeader() {
   return (
@@ -17,10 +17,20 @@ export function AppHeader() {
           </Link>
           <nav className="hidden items-center gap-1 text-sm md:flex">
             <Link
+              href="/dashboard"
+              className={buttonVariants({
+                variant: 'ghost',
+                className: 'text-foreground/60 hover:text-foreground/80',
+              })}
+            >
+              <LayoutDashboard className="mr-2 h-4 w-4" />
+              Dashboard
+            </Link>
+            <Link
               href="/discover"
               className={buttonVariants({
-                variant: "ghost",
-                className: "text-foreground/60 hover:text-foreground/80",
+                variant: 'ghost',
+                className: 'text-foreground/60 hover:text-foreground/80',
               })}
             >
               <Compass className="mr-2 h-4 w-4" />
@@ -29,8 +39,8 @@ export function AppHeader() {
             <Link
               href="/recommend"
               className={buttonVariants({
-                variant: "ghost",
-                className: "text-foreground/60 hover:text-foreground/80",
+                variant: 'ghost',
+                className: 'text-foreground/60 hover:text-foreground/80',
               })}
             >
               <Wand2 className="mr-2 h-4 w-4" />
@@ -44,13 +54,19 @@ export function AppHeader() {
           <nav className="hidden items-center gap-2 md:flex">
             <Link
               href="/#features"
-              className={buttonVariants({ variant: "link", className: "text-foreground/60" })}
+              className={buttonVariants({
+                variant: 'link',
+                className: 'text-foreground/60',
+              })}
             >
               Features
             </Link>
             <Link
               href="/#integrations"
-              className={buttonVariants({ variant: "link", className: "text-foreground/60" })}
+              className={buttonVariants({
+                variant: 'link',
+                className: 'text-foreground/60',
+              })}
             >
               Integrations
             </Link>
