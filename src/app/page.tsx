@@ -45,6 +45,7 @@ import {
   getRepositoriesForDisplay,
   getLanguageColor,
 } from '@/lib/github-service';
+import { siGoogleplay } from 'simple-icons';
 
 const features = [
   {
@@ -492,11 +493,12 @@ export default async function Home() {
                 <CardHeader>
                   <div className="flex items-center gap-4">
                     <svg
+                      role="img"
                       viewBox="0 0 24 24"
                       className="h-10 w-10 text-primary"
                       fill="currentColor"
                     >
-                      <path d="M3 2v19.999L16.499 12 3 2zm15.423 9.006l-2.585-1.42-3.843 3.844 6.428-2.424zM3.413 3.413l9.01 9.018-3.957-3.957L3.413 3.413zm15.174-.001l-6.428 2.423 3.843 3.844 2.585-1.421V3.412z" />
+                      <path d={siGoogleplay.path} />
                     </svg>
                     <div>
                       <CardTitle>Google Play</CardTitle>
