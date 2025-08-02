@@ -1,6 +1,7 @@
-import { Compass, LayoutDashboard, Tv2, Wand2 } from 'lucide-react';
+import { Compass, LayoutDashboard, Wand2 } from 'lucide-react';
 import { siGithub } from 'simple-icons';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Button, buttonVariants } from './ui/button';
 
 export function AppHeader() {
@@ -10,7 +11,13 @@ export function AppHeader() {
         {/* Left side: Logo + Page Links */}
         <div className="flex items-center">
           <Link href="/" className="mr-6 flex items-center space-x-2">
-            <Tv2 className="h-6 w-6 text-primary" />
+            <Image
+              src="/logo.png"
+              alt="AniTrend Logo"
+              width={24}
+              height={24}
+              className="h-6 w-6 rounded-full"
+            />
             <span className="font-headline text-lg">
               <span className="font-medium">Ani</span>
               <span className="font-bold text-primary">Trend</span>
