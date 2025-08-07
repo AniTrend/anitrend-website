@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import { Inter, Space_Grotesk } from 'next/font/google';
 import './globals.css';
+import { AppHeader } from '@/components/header';
+import { AppFooter } from '@/components/footer';
 import { Toaster } from '@/components/ui/toaster';
 
 const inter = Inter({
@@ -34,8 +36,12 @@ export default function RootLayout({
       <body
         className={`${inter.variable} ${spaceGrotesk.variable} font-body antialiased min-h-screen bg-background text-foreground`}
       >
-        {children}
-        <Toaster />
+        <div className="flex flex-col min-h-screen">
+          <AppHeader />
+          <main className="flex-1">{children}</main>
+          <AppFooter />
+          <Toaster />
+        </div>
       </body>
     </html>
   );
