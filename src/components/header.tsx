@@ -1,8 +1,9 @@
-import { Compass, LayoutDashboard, Wand2 } from 'lucide-react';
+import { Compass, LayoutDashboard, Wand2, Menu } from 'lucide-react';
 import { siGithub } from 'simple-icons';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Button, buttonVariants } from './ui/button';
+import { Sheet, SheetTrigger, SheetContent } from '@/components/ui/sheet';
 
 export function AppHeader() {
   return (
@@ -57,8 +58,9 @@ export function AppHeader() {
           </nav>
         </div>
 
-        {/* Right side: Anchor Links + CTAs */}
+        {/* Right side: Anchor Links + CTAs + Mobile Menu */}
         <div className="flex flex-1 items-center justify-end space-x-2">
+          {/* Desktop nav links */}
           <nav className="hidden items-center gap-2 md:flex">
             <Link
               href="/#features"
@@ -82,6 +84,37 @@ export function AppHeader() {
               <Link href="/#get-the-app">Get Started</Link>
             </Button>
           </nav>
+          {/* Mobile menu trigger */}
+          <Sheet>
+            <SheetTrigger asChild>
+              <Button variant="ghost" size="icon" className="md:hidden">
+                <Menu className="h-5 w-5" />
+                <span className="sr-only">Menu</span>
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="left" className="w-full max-w-xs">
+              <nav className="flex flex-col space-y-4 mt-4">
+                <Link href="/dashboard" className="flex items-center text-lg">
+                  <LayoutDashboard className="mr-2 h-5 w-5" /> Dashboard
+                </Link>
+                <Link href="/discover" className="flex items-center text-lg">
+                  <Compass className="mr-2 h-5 w-5" /> Discover
+                </Link>
+                <Link href="/recommend" className="flex items-center text-lg">
+                  <Wand2 className="mr-2 h-5 w-5" /> Recommend
+                </Link>
+                <Link href="/#features" className="text-lg">
+                  Features
+                </Link>
+                <Link href="/#integrations" className="text-lg">
+                  Integrations
+                </Link>
+                <Button asChild className="w-full">
+                  <Link href="/#get-the-app">Get Started</Link>
+                </Button>
+              </nav>
+            </SheetContent>
+          </Sheet>
           <Button asChild variant="ghost" size="icon">
             <Link
               href="https://github.com/AniTrend"
