@@ -1,3 +1,11 @@
+import {
+  playStoreUrl,
+  githubReleasesUrl,
+  discordInviteUrl,
+  githubOrgUrl,
+  supabaseBannerUrl,
+  fallbackRepos,
+} from '@/config/links';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -39,12 +47,6 @@ import {
 } from '@/lib/github-service';
 import { getShowcaseScreenshots } from '@/lib/screenshots-service';
 import { siGoogleplay } from 'simple-icons';
-import {
-  playStoreUrl,
-  githubReleasesUrl,
-  discordInviteUrl,
-} from '@/config/links';
-import { Fragment } from 'react';
 
 const features = [
   {
@@ -96,38 +98,13 @@ export default async function Home() {
   } catch (error) {
     console.error('Failed to load repositories:', error);
     // Fallback to static data if API fails
-    repositories = [
-      {
-        name: 'anitrend-app',
-        description:
-          'The main AniTrend application for Android, built with Kotlin and clean architecture.',
-        url: 'https://github.com/AniTrend/anitrend-app',
-        homepage: null,
-        language: 'Kotlin',
-        stars: 0,
-        forks: 0,
-        topics: [],
-        updatedAt: new Date().toISOString(),
-      },
-      {
-        name: 'anitrend-api',
-        description:
-          'A GraphQL API that aggregates data from various sources for the AniTrend ecosystem.',
-        url: 'https://github.com/AniTrend/anitrend-api',
-        homepage: null,
-        language: 'TypeScript',
-        stars: 0,
-        forks: 0,
-        topics: [],
-        updatedAt: new Date().toISOString(),
-      },
-    ];
+    repositories = fallbackRepos;
   }
 
   // Get curated screenshots for the showcase
   const showcaseScreenshots = getShowcaseScreenshots();
   return (
-    <Fragment>
+    <>
       <section id="hero" className="py-20 md:py-24">
         <div className="container">
           <div className="grid md:grid-cols-2 gap-12 items-center">
@@ -154,11 +131,7 @@ export default async function Home() {
                   variant="outline"
                   className="w-full sm:w-auto"
                 >
-                  <Link
-                    href="https://github.com/AniTrend"
-                    target="_blank"
-                    rel="noreferrer"
-                  >
+                  <Link href={githubOrgUrl} target="_blank" rel="noreferrer">
                     <Github className="mr-2 h-5 w-5" />
                     View on GitHub
                   </Link>
@@ -539,7 +512,7 @@ export default async function Home() {
 
       <section id="community" className="py-20 md:py-32 relative">
         <Image
-          src="https://vzujgysigfwbabgsqcse.supabase.co/storage/v1/object/public/app/android/media/banner/156cc9127eb16c7fd645a9ba0fb3a4e21678353995_main.jpg"
+          src={supabaseBannerUrl}
           alt="Community background"
           fill
           className="absolute inset-0 w-full h-full object-cover -z-10 opacity-20"
@@ -569,6 +542,6 @@ export default async function Home() {
           </div>
         </div>
       </section>
-    </Fragment>
+    </>
   );
 }
