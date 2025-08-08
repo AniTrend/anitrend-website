@@ -1,6 +1,8 @@
-import { Compass, Github, Tv2, Wand2 } from "lucide-react";
-import Link from "next/link";
-import { Button, buttonVariants } from "./ui/button";
+import { Compass, LayoutDashboard, Wand2 } from 'lucide-react';
+import { siGithub } from 'simple-icons';
+import Link from 'next/link';
+import Image from 'next/image';
+import { Button, buttonVariants } from './ui/button';
 
 export function AppHeader() {
   return (
@@ -9,7 +11,13 @@ export function AppHeader() {
         {/* Left side: Logo + Page Links */}
         <div className="flex items-center">
           <Link href="/" className="mr-6 flex items-center space-x-2">
-            <Tv2 className="h-6 w-6 text-primary" />
+            <Image
+              src="/logo.png"
+              alt="AniTrend Logo"
+              width={24}
+              height={24}
+              className="h-6 w-6 rounded-full"
+            />
             <span className="font-headline text-lg">
               <span className="font-medium">Ani</span>
               <span className="font-bold text-primary">Trend</span>
@@ -17,10 +25,20 @@ export function AppHeader() {
           </Link>
           <nav className="hidden items-center gap-1 text-sm md:flex">
             <Link
+              href="/dashboard"
+              className={buttonVariants({
+                variant: 'ghost',
+                className: 'text-foreground/60 hover:text-foreground/80',
+              })}
+            >
+              <LayoutDashboard className="mr-2 h-4 w-4" />
+              Dashboard
+            </Link>
+            <Link
               href="/discover"
               className={buttonVariants({
-                variant: "ghost",
-                className: "text-foreground/60 hover:text-foreground/80",
+                variant: 'ghost',
+                className: 'text-foreground/60 hover:text-foreground/80',
               })}
             >
               <Compass className="mr-2 h-4 w-4" />
@@ -29,8 +47,8 @@ export function AppHeader() {
             <Link
               href="/recommend"
               className={buttonVariants({
-                variant: "ghost",
-                className: "text-foreground/60 hover:text-foreground/80",
+                variant: 'ghost',
+                className: 'text-foreground/60 hover:text-foreground/80',
               })}
             >
               <Wand2 className="mr-2 h-4 w-4" />
@@ -44,13 +62,19 @@ export function AppHeader() {
           <nav className="hidden items-center gap-2 md:flex">
             <Link
               href="/#features"
-              className={buttonVariants({ variant: "link", className: "text-foreground/60" })}
+              className={buttonVariants({
+                variant: 'link',
+                className: 'text-foreground/60',
+              })}
             >
               Features
             </Link>
             <Link
               href="/#integrations"
-              className={buttonVariants({ variant: "link", className: "text-foreground/60" })}
+              className={buttonVariants({
+                variant: 'link',
+                className: 'text-foreground/60',
+              })}
             >
               Integrations
             </Link>
@@ -64,7 +88,14 @@ export function AppHeader() {
               target="_blank"
               rel="noreferrer"
             >
-              <Github />
+              <svg
+                role="img"
+                viewBox="0 0 24 24"
+                className="h-4 w-4"
+                fill="currentColor"
+              >
+                <path d={siGithub.path} />
+              </svg>
               <span className="sr-only">GitHub</span>
             </Link>
           </Button>

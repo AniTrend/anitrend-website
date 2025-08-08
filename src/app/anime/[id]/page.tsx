@@ -11,7 +11,7 @@ import { getAnimeById } from '@/lib/anime-service';
 export default async function AnimeDetailPage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
   const anime = await getAnimeById(id);
@@ -38,7 +38,7 @@ export default async function AnimeDetailPage({
                 />
                 <div className="mt-4 space-y-2">
                   <Button asChild className="w-full" size="lg">
-                    <a href={`anitrend://anime/${anime.id}`}>
+                    <a href={`app.anitrend://action/anime/${anime.id}`}>
                       <Smartphone className="mr-2 h-5 w-5" /> Open in App
                     </a>
                   </Button>

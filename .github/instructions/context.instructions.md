@@ -81,7 +81,7 @@ const anime: Anime = {
 - `/discover` - Server-rendered anime grid with client-side interactivity
 - `/recommend` - AI-powered recommendation interface
 - `/anime/[id]` - Dynamic anime detail pages fetching from Jikan API
-- Deep linking: `anitrend://anime/{id}` protocol for mobile app integration
+- Deep linking: `app.anitrend://action/anime/{id}` protocol for mobile app integration
 
 ## External Integrations
 
