@@ -2,7 +2,7 @@
 applyTo: '**'
 ---
 
-# AniTrend Website - AI Coding Agent Instructions
+# AniTrend Website Context
 
 ## Architecture Overview
 
@@ -14,6 +14,7 @@ This is the **AniTrend landing website** - a Next.js 15 app showcasing the AniTr
 - **AI Recommender**: Genkit-powered anime recommendation engine using Gemini 2.0
 - **Anime Discovery**: Browse interface consuming MyAnimeList (Jikan) API
 - **Design System**: shadcn/ui components with custom AniTrend theming
+- **Repository Showcase**: GitHub org repositories surfaced via a Next.js API route
 
 ## Development Workflows
 
@@ -24,6 +25,9 @@ yarn dev              # Next.js dev server on port 9002 with Turbopack
 yarn genkit:dev       # Start Genkit AI development server
 yarn genkit:watch     # Watch mode for AI flow development
 yarn typecheck        # TypeScript validation
+yarn lint             # ESLint (disabled during CI builds)
+yarn build            # Next.js production build
+yarn start            # Start production server
 ```
 
 ### Firebase Deployment
@@ -43,6 +47,8 @@ AI recommendations live in `src/ai/flows/` using the **server-side flow pattern*
 - Fetch external APIs (Jikan) within flows for real-time data
 - Export wrapper functions for client consumption
 
+Flows are registered for the Genkit dev runtime by importing them in `src/ai/dev.ts` (side-effect import). Run the AI dev server with `yarn genkit:dev`.
+
 Example pattern from `recommend-anime-flow.ts`:
 
 ```typescript
@@ -57,6 +63,8 @@ export async function recommendAnime(
 
 - **Dynamic data**: Direct Jikan API calls in Server Components and AI flows
 - **Type safety**: Shared interfaces in `src/lib/types.ts`
+
+GitHub data is fetched server-side via `src/lib/github-service.ts` with response transformation and light caching using `next: { revalidate: N }`. API rate-limits are handled gracefully with fallbacks.
 
 Transform external APIs to internal types consistently:
 
@@ -78,10 +86,11 @@ const anime: Anime = {
 ### Routing Structure
 
 - `/` - Landing page with marketing sections
+- `/dashboard` - Server-rendered overview page
 - `/discover` - Server-rendered anime grid with client-side interactivity
 - `/recommend` - AI-powered recommendation interface
 - `/anime/[id]` - Dynamic anime detail pages fetching from Jikan API
-- Deep linking: `anitrend://anime/{id}` protocol for mobile app integration
+- Deep linking: `app.anitrend://action/anime/{id}` protocol for mobile app integration
 
 ## External Integrations
 
@@ -89,7 +98,7 @@ const anime: Anime = {
 
 - Base URL: `https://api.jikan.moe/v4/`
 - No auth required, but respect rate limits
-- Key endpoints: `/top/anime`, `/anime/{id}`
+- Key endpoints: `/top/anime`, `/anime/{id}`, `/recommendations/anime`
 - Always handle API failures gracefully with fallbacks
 
 ### Google Genkit AI
@@ -98,6 +107,14 @@ const anime: Anime = {
 - Prompt engineering in `src/ai/flows/recommend-anime-flow.ts`
 - Requires GOOGLE_API_KEY environment variable
 - Use structured JSON output with Zod schemas
+
+### GitHub API (Organization Repos)
+
+- Base URL: `https://api.github.com`
+- Organization: `AniTrend`
+- Accessed via `src/lib/github-service.ts` and exposed through a REST endpoint at `/api/repositories`
+- Query params supported: `?pinned=true|false&starred=true|false&limit=10&username=<user>&sort=updated|created|pushed|full_name`
+- Handles 403 rate limits with warnings and sensible fallbacks
 
 ## Configuration Notes
 
@@ -115,6 +132,14 @@ Next.js image domains configured for:
 - Build errors ignored (`ignoreBuildErrors: true`) for rapid prototyping
 - ESLint disabled during builds for CI/CD speed
 
+### Environment Variables
+
+Set these locally (e.g., `.env.local`) and in hosting:
+
+- `GOOGLE_API_KEY` — API key for Google Genkit `@genkit-ai/googleai` plugin
+- `NEXT_PUBLIC_DISCORD_INVITE_CODE` — Discord invite code used to build the community URL
+- `NEXT_PUBLIC_SUPABASE_BASE_URL` — Base URL for public screenshots/assets
+
 ## Common Tasks
 
 ### Adding New AI Flows
@@ -123,6 +148,8 @@ Next.js image domains configured for:
 2. Define Zod input/output schemas
 3. Export wrapper function for client use
 4. Test with `yarn genkit:dev`
+
+Tip: Register flows by importing them in `src/ai/dev.ts` so the Genkit dev server can load them.
 
 ### Adding New Pages
 
@@ -136,3 +163,7 @@ Next.js image domains configured for:
 - Use `cn()` utility from `src/lib/utils.ts` for conditional classes
 - Extend theme in `tailwind.config.ts` for custom design tokens
 - Follow shadcn/ui patterns for component composition
+
+### API Routes
+
+- Add server routes under `src/app/api/*`. Example already present: `GET /api/repositories` delegates to `getRepositoriesForDisplay()` and supports pinned/starred/limit/sort/username query params.
