@@ -1247,12 +1247,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@genkit-ai/telemetry-server@npm:1.17.1":
-  version: 1.17.1
-  resolution: "@genkit-ai/telemetry-server@npm:1.17.1"
+"@genkit-ai/telemetry-server@npm:1.18.0":
+  version: 1.18.0
+  resolution: "@genkit-ai/telemetry-server@npm:1.18.0"
   dependencies:
     "@asteasolutions/zod-to-openapi": "npm:^7.0.0"
-    "@genkit-ai/tools-common": "npm:1.17.1"
+    "@genkit-ai/tools-common": "npm:1.18.0"
     "@google-cloud/firestore": "npm:^7.6.0"
     "@opentelemetry/api": "npm:~1.9.0"
     "@opentelemetry/context-async-hooks": "npm:~1.25.0"
@@ -1264,13 +1264,13 @@ __metadata:
     express: "npm:^4.21.0"
     lockfile: "npm:^1.0.4"
     zod: "npm:^3.22.4"
-  checksum: 10c0/ec060a018a54346f4a3c2dc42432484e0e0d314a18909b18ad62610d728b2dba9692b4c70aa16625dcc6ce19bf31506b46b48c04658e715b5570928eea3823f8
+  checksum: 10c0/03d3d9de5d40f324a8c6a6a24b921681846e3a37c24fff881a048d67458a54233e1b1b71feb2921bc221224206fea37b8ce58bc6e06e7900160e0a09af4fff98
   languageName: node
   linkType: hard
 
-"@genkit-ai/tools-common@npm:1.17.1":
-  version: 1.17.1
-  resolution: "@genkit-ai/tools-common@npm:1.17.1"
+"@genkit-ai/tools-common@npm:1.18.0":
+  version: 1.18.0
+  resolution: "@genkit-ai/tools-common@npm:1.18.0"
   dependencies:
     "@asteasolutions/zod-to-openapi": "npm:^7.0.0"
     "@inquirer/prompts": "npm:^7.8.0"
@@ -1297,7 +1297,7 @@ __metadata:
     yaml: "npm:^2.4.1"
     zod: "npm:^3.22.4"
     zod-to-json-schema: "npm:^3.22.4"
-  checksum: 10c0/23f40506e8ab780e2cdb81045f329c5eb945cc8eed056f07901ea9a8a63664814dab7f21f4ede76a788233e81e2a2314747c726b42d9aa787eb9bd455af7f75e
+  checksum: 10c0/f68a00bec13bab606643842cc15ff07f20f975697378bc170347ea18ad008f4c407ae3ef086091ca32062f8d595f886136541bf9062edaad356ce8cccccd100b
   languageName: node
   linkType: hard
 
@@ -7878,11 +7878,11 @@ __metadata:
   linkType: hard
 
 "genkit-cli@npm:^1.13.0":
-  version: 1.17.1
-  resolution: "genkit-cli@npm:1.17.1"
+  version: 1.18.0
+  resolution: "genkit-cli@npm:1.18.0"
   dependencies:
-    "@genkit-ai/telemetry-server": "npm:1.17.1"
-    "@genkit-ai/tools-common": "npm:1.17.1"
+    "@genkit-ai/telemetry-server": "npm:1.18.0"
+    "@genkit-ai/tools-common": "npm:1.18.0"
     "@inquirer/prompts": "npm:^7.8.0"
     "@modelcontextprotocol/sdk": "npm:^1.13.1"
     axios: "npm:^1.7.7"
@@ -7892,9 +7892,10 @@ __metadata:
     get-port: "npm:5.1.1"
     open: "npm:^6.3.0"
     ora: "npm:^5.4.1"
+    semver: "npm:^7.7.2"
   bin:
     genkit: dist/bin/genkit.js
-  checksum: 10c0/0603f3ec9dc6fbe4babd55bf2bc2a19997f5f7d7c7955ca67bd25f6f18920d0bde780b629bbb28ec2c745b21cf48b579b4a7890ab35f71d9447548961e3052cf
+  checksum: 10c0/69594c87fc04aba22c9b1c7b62f23c309eb08c043fa35108c5fb3b3c92abf07311aec99f8ca0cd54c27570d4c56bb6af7c0cbe1744259a03ed5430b76f592c43
   languageName: node
   linkType: hard
 
