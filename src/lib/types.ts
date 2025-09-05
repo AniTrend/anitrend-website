@@ -84,3 +84,49 @@ export interface AnimeRecommendation {
   date: string;
   username: string;
 }
+
+// GitHub API response types
+export interface GitHubRepository {
+  id: number;
+  name: string;
+  full_name: string;
+  description: string | null;
+  html_url: string;
+  stargazers_count: number;
+  watchers_count: number;
+  forks_count: number;
+  language: string | null;
+  created_at: string;
+  updated_at: string;
+  pushed_at: string;
+  homepage: string | null;
+  topics: string[];
+  license: {
+    key: string;
+    name: string;
+    url: string;
+  } | null;
+  archived: boolean;
+  disabled: boolean;
+  private: boolean;
+}
+
+export interface Repository {
+  id: string;
+  name: string;
+  fullName: string;
+  description: string;
+  url: string;
+  homepage: string | null;
+  language: string | null;
+  stars: number;
+  forks: number;
+  watchers: number;
+  topics: string[];
+  createdAt: string;
+  updatedAt: string;
+  pushedAt: string;
+  isArchived: boolean;
+  isPrivate: boolean;
+  license: string | null;
+}

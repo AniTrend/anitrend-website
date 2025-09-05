@@ -156,6 +156,48 @@ export async function getAnimeById(id: string): Promise<Anime | null> {
 }
 
 /**
+ * Search anime by query string
+ * @param query - Search query string
+ * @param filters - Optional additional filters
+ * @returns Promise<Anime[]>
+ */
+export async function searchAnime(
+  query: string,
+  filters: Omit<TopAnimeFilters, 'filter'> = {}
+): Promise<Anime[]> {
+  try {
+    if (!query.trim()) {
+      return [];
+    }
+
+    const searchParams = new URLSearchParams({
+      q: query.trim(),
+      ...Object.fromEntries(
+        Object.entries(filters).filter(
+          ([, value]) => value !== undefined && value !== null
+        )
+      ),
+    });
+
+    const url = `https://api.jikan.moe/v4/anime?${searchParams.toString()}`;
+    const response = await fetch(url);
+
+    if (!response.ok) {
+      console.error('Failed to search anime from Jikan API');
+      return [];
+    }
+
+    const { data }: { data: JikanAnime[] } = await response.json();
+    const animeList = data.map(transformJikanAnime);
+
+    return removeDuplicateAnime(animeList);
+  } catch (error) {
+    console.error('Failed to search anime:', error);
+    return [];
+  }
+}
+
+/**
  * Get anime data optimized for AI recommendation (simplified structure)
  * @param filters - Optional filters to apply to the anime search
  * @returns Promise with simplified anime data for AI processing

@@ -9876,6 +9876,7 @@ __metadata:
     react-is: "npm:^19.0.0"
     react-wrap-balancer: "npm:^1.1.1"
     recharts: "npm:^3.0.0"
+    simple-icons: "npm:^15.8.0"
     tailwind-merge: "npm:^3.0.1"
     tailwindcss: "npm:^3.4.15"
     tailwindcss-animate: "npm:^1.0.7"
@@ -11555,6 +11556,13 @@ __metadata:
   version: 4.1.0
   resolution: "signal-exit@npm:4.1.0"
   checksum: 10c0/41602dce540e46d599edba9d9860193398d135f7ff72cab629db5171516cfae628d21e7bfccde1bbfdf11c48726bc2a6d1a8fb8701125852fbfda7cf19c6aa83
+  languageName: node
+  linkType: hard
+
+"simple-icons@npm:^15.8.0":
+  version: 15.8.0
+  resolution: "simple-icons@npm:15.8.0"
+  checksum: 10c0/10b3048e91a695c137f959a6f101132ef9df5b506b58173b3ee66dd03dce1dc043c99ba0967021414d507db7e5df98c298a9503962153d125e815c07075f7645
   languageName: node
   linkType: hard
 
