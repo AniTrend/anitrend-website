@@ -229,7 +229,13 @@ export async function getAniTrendRepositories(
         Accept: 'application/vnd.github.v3+json',
         'User-Agent': 'AniTrend-Website',
       },
-      // Add caching to reduce API calls
+      // Add caching to reduce API calls. Note: `next: { revalidate }` is a
+      // Next.js App Router fetch option that instructs Next's server fetch
+      // caching to revalidate after the given seconds. It is safe and
+      // desirable when this helper runs in Next server runtime (App Router).
+      // If this utility is later used outside of Next's server runtime,
+      // the `next` option will be ignored — consider adding an in-process
+      // TTL cache (LRU) if portability is required.
       next: { revalidate: 300 }, // Cache for 5 minutes
     });
 
@@ -294,7 +300,7 @@ export async function getStarredRepositories(
         Accept: 'application/vnd.github.v3+json',
         'User-Agent': 'AniTrend-Website',
       },
-      // Add caching to reduce API calls
+      // Add caching to reduce API calls. See note above about `next.revalidate`.
       next: { revalidate: 600 }, // Cache for 10 minutes
     });
 
