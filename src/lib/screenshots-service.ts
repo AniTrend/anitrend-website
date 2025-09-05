@@ -176,19 +176,22 @@ export function getScreenshotsByCategory(
  * Returns a diverse mix representing the app's key features
  */
 export function getShowcaseScreenshots(): AppScreenshot[] {
-  return [
+  const picks = [
     // Start with both theme variations to show light/dark support
-    screenshots.find((s) => s.category === 'home' && s.alt.includes('Light'))!,
-    screenshots.find((s) => s.category === 'home' && s.alt.includes('Dark'))!,
+    screenshots.find((s) => s.category === 'home' && s.alt.includes('Light')),
+    screenshots.find((s) => s.category === 'home' && s.alt.includes('Dark')),
 
     // Core functionality screens
-    screenshots.find((s) => s.category === 'detail')!,
-    screenshots.find((s) => s.category === 'discovery')!,
-    screenshots.find((s) => s.category === 'profile')!,
+    screenshots.find((s) => s.category === 'detail'),
+    screenshots.find((s) => s.category === 'discovery'),
+    screenshots.find((s) => s.category === 'profile'),
 
     // Additional feature
-    screenshots.find((s) => s.category === 'feeds')!,
+    screenshots.find((s) => s.category === 'feeds'),
   ];
+
+  // Filter out any undefined results and preserve type
+  return picks.filter((s): s is AppScreenshot => s !== undefined);
 }
 
 /**
