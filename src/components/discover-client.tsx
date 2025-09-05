@@ -38,12 +38,11 @@ class RateLimiter {
 
   constructor(private minInterval: number) {}
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  debounce<T extends (...args: any[]) => any>(
-    fn: T,
+  debounce<Args extends unknown[], R>(
+    fn: (...args: Args) => R,
     delay: number = this.minInterval
-  ): (...args: Parameters<T>) => void {
-    return (...args: Parameters<T>) => {
+  ): (...args: Args) => void {
+    return (...args: Args) => {
       if (this.timeoutId) {
         clearTimeout(this.timeoutId);
       }
@@ -52,21 +51,21 @@ class RateLimiter {
         const now = Date.now();
         if (now - this.lastCall >= this.minInterval) {
           this.lastCall = now;
-          fn(...args);
+          // Call fn with the correctly typed args
+          (fn as (...a: Args) => R)(...args);
         }
       }, delay);
     };
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  throttle<T extends (...args: any[]) => any>(
-    fn: T
-  ): (...args: Parameters<T>) => void {
-    return (...args: Parameters<T>) => {
+  throttle<Args extends unknown[], R>(
+    fn: (...args: Args) => R
+  ): (...args: Args) => void {
+    return (...args: Args) => {
       const now = Date.now();
       if (now - this.lastCall >= this.minInterval) {
         this.lastCall = now;
-        fn(...args);
+        (fn as (...a: Args) => R)(...args);
       }
     };
   }
