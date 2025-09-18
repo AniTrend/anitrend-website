@@ -45,7 +45,7 @@ yarn install
 3. Copy environment variables:
 
 ```bash
-cp .env.example .env.local
+cp .env.example .env
 ```
 
 4. Start the development server:

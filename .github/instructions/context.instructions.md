@@ -132,14 +132,6 @@ Next.js image domains configured for:
 - Build errors ignored (`ignoreBuildErrors: true`) for rapid prototyping
 - ESLint disabled during builds for CI/CD speed
 
-### Environment Variables
-
-Set these locally (e.g., `.env.local`) and in hosting:
-
-- `GOOGLE_API_KEY` — API key for Google Genkit `@genkit-ai/googleai` plugin
-- `NEXT_PUBLIC_DISCORD_INVITE_CODE` — Discord invite code used to build the community URL
-- `NEXT_PUBLIC_SUPABASE_BASE_URL` — Base URL for public screenshots/assets
-
 ## Common Tasks
 
 ### Adding New AI Flows
