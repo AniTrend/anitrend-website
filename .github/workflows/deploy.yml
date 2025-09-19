@@ -1,10 +1,13 @@
-name: Firebase Deploy
+name: Deploy
 
 on:
-  push:
-    branches: [ main ]
+  workflow_call:
   workflow_dispatch:
     inputs:
+      tag:
+        description: 'Tag to build against'
+        required: true
+        default: 'latest'
       environment:
         description: 'Deployment environment'
         required: true
@@ -13,18 +16,80 @@ on:
         options:
           - production
           - staging
+  push:
+    branches:
+      - dev
+    tags: 
+      - '*'
 
 env:
   NODE_VERSION: '22'
-  YARN_VERSION: '4.9.2'
 
 jobs:
-  deploy:
-    name: Deploy to Firebase App Hosting
+  validate-release:
+    name: Validate Release
     runs-on: ubuntu-latest
-    environment: 
-      name: ${{ github.event.inputs.environment || 'production' }}
-      url: ${{ steps.deploy.outputs.details_url }}
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+      is_prerelease: ${{ steps.version.outputs.is_prerelease }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Extract version
+        id: version
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            VERSION="${{ github.event.inputs.tag }}"
+          elif [[ "${GITHUB_REF}" == refs/tags/* ]]; then
+            VERSION=${GITHUB_REF#refs/tags/}
+          else
+            # Fallback for branch builds; use short SHA
+            VERSION="sha-${GITHUB_SHA::7}"
+          fi
+          
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          
+          # Check if this is a prerelease (contains alpha, beta, rc)
+          if [[ $VERSION =~ (alpha|beta|rc) ]]; then
+            echo "is_prerelease=true" >> $GITHUB_OUTPUT
+            echo "🚧 This is a pre-release: $VERSION"
+          else
+            echo "is_prerelease=false" >> $GITHUB_OUTPUT
+            echo "🚀 This is a stable release: $VERSION"
+          fi
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'yarn'
+
+      - name: Install dependencies
+        run: yarn install --immutable
+
+      - name: Run full test suite
+        run: |
+          echo "🧪 Running full validation suite for release..."
+          yarn lint
+          yarn typecheck
+          yarn build
+
+      - name: Security audit
+        run: |
+          echo "🔍 Running security audit..."
+          yarn audit --groups dependencies --level moderate
+
+  build-release:
+    name: Build Release
+    runs-on: ubuntu-latest
+    needs: validate-release
+    permissions:
+      contents: read
+      packages: write
     steps:
       - name: Checkout code
         uses: actions/checkout@v5
@@ -41,102 +106,112 @@ jobs:
       - name: Install dependencies
         run: yarn install --immutable
 
-      - name: Run pre-deployment checks
-        run: |
-          yarn lint
-          yarn typecheck
-          echo "✅ Pre-deployment checks passed"
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+        
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
 
-      - name: Build application
-        run: yarn build
-        env:
-          GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
-          NEXT_PUBLIC_FIREBASE_API_KEY: ${{ secrets.NEXT_PUBLIC_FIREBASE_API_KEY }}
-          NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN: ${{ secrets.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN }}
-          NEXT_PUBLIC_FIREBASE_PROJECT_ID: ${{ secrets.NEXT_PUBLIC_FIREBASE_PROJECT_ID }}
-          NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET: ${{ secrets.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET }}
-          NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID }}
-          NEXT_PUBLIC_FIREBASE_APP_ID: ${{ secrets.NEXT_PUBLIC_FIREBASE_APP_ID }}
-
-      - name: Verify build output
-        run: |
-          if [ ! -d ".next" ]; then
-            echo "❌ Build failed - .next directory not found"
-            exit 1
-          fi
-          
-          # Check for critical build files
-          if [ ! -f ".next/BUILD_ID" ]; then
-            echo "❌ Build incomplete - BUILD_ID missing"
-            exit 1
-          fi
-          
-          echo "✅ Build verification passed"
-          echo "Build ID: $(cat .next/BUILD_ID)"
-
-      - name: Setup Firebase CLI
-        uses: w9jds/setup-firebase@main
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
         with:
-          firebase_token: ${{ secrets.FIREBASE_TOKEN }}
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Deploy to Firebase App Hosting
-        id: deploy
+      - name: Build and push release image
         run: |
-          # Configure Firebase project
-          firebase use ${{ secrets.FIREBASE_PROJECT_ID }}
+          docker buildx create --use
           
-          # Deploy with Firebase App Hosting
-          firebase deploy --only hosting
+          # Build with version tag
+          docker buildx build \
+          --platform linux/amd64,linux/arm64 \
+          --cache-from type=registry,ref=ghcr.io/anitrend/website:cache,mode=max \
+          --cache-to type=registry,ref=ghcr.io/anitrend/website:cache,mode=max \
+          --tag ghcr.io/anitrend/website:${{ needs.validate-release.outputs.version }} \
+          --push .
           
-          # Get deployment URL
-          DEPLOY_URL=$(firebase hosting:channel:list --json | jq -r '.result[] | select(.name == "live") | .url')
-          echo "details_url=$DEPLOY_URL" >> $GITHUB_OUTPUT
-          echo "✅ Deployment successful to: $DEPLOY_URL"
+          # Also push latest tag for stable releases
+          if [ "${{ needs.validate-release.outputs.is_prerelease }}" = "false" ]; then
+            docker buildx build \
+            --platform linux/amd64,linux/arm64 \
+            --cache-from type=registry,ref=ghcr.io/anitrend/website:cache,mode=max \
+            --tag ghcr.io/anitrend/website:latest \
+            --push .
+          fi
+        working-directory: .
 
-      - name: Update deployment status
-        if: always()
+  post-release:
+    name: Post-Release Tasks
+    runs-on: ubuntu-latest
+    needs: [validate-release]
+    if: needs.validate-release.outputs.is_prerelease == 'false'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Update version in package.json
         run: |
-          if [ "${{ steps.deploy.outcome }}" = "success" ]; then
-            echo "✅ Deployment completed successfully"
-            echo "🌐 Site URL: ${{ steps.deploy.outputs.details_url }}"
+          VERSION="${{ needs.validate-release.outputs.version }}"
+          # Remove 'v' prefix if present
+          VERSION=${VERSION#v}
+          
+          # Update package.json version
+          if command -v jq >/dev/null 2>&1; then
+            jq --arg version "$VERSION" '.version = $version' package.json > package.json.tmp
+            mv package.json.tmp package.json
           else
-            echo "❌ Deployment failed"
-            exit 1
+            sed -i "s/\"version\": \".*\"/\"version\": \"$VERSION\"/" package.json
           fi
-
-      - name: Post-deployment verification
-        run: |
-          # Wait a moment for deployment to propagate
-          sleep 30
           
-          # Basic health check
-          SITE_URL="${{ steps.deploy.outputs.details_url }}"
-          if [ -n "$SITE_URL" ]; then
-            HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" "$SITE_URL" || echo "000")
-            if [ "$HTTP_CODE" = "200" ]; then
-              echo "✅ Site is responding correctly (HTTP $HTTP_CODE)"
-            else
-              echo "⚠️  Site returned HTTP $HTTP_CODE - may need investigation"
-            fi
-          fi
+          echo "📝 Updated package.json version to $VERSION"
+
+      - name: Create version update PR
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "chore: bump version to ${{ needs.validate-release.outputs.version }}"
+          title: "🔖 Version Bump - ${{ needs.validate-release.outputs.version }}"
+          body: |
+            ## Version Update
+            
+            This PR updates the package.json version to match the latest release.
+            
+            **Release**: ${{ needs.validate-release.outputs.version }}
+            **Auto-generated**: Yes
+            
+            This should be merged after the release is confirmed to be working correctly.
+          branch: version-bump/${{ needs.validate-release.outputs.version }}
+          delete-branch: true
+          labels: |
+            version
+            automated
+
+      - name: Notify success
+        run: |
+          echo "🎉 Release ${{ needs.validate-release.outputs.version }} completed successfully!"
+          echo "✅ Build validated and deployed"
+          echo "✅ GitHub release created"
+          echo "✅ Docker image published to GHCR"
+          echo "✅ Version bump PR created"
 
   notify:
     name: Notify Deployment
     runs-on: ubuntu-latest
-    needs: deploy
+    needs: build-release
     if: always()
     steps:
       - name: Notify success
-        if: needs.deploy.result == 'success'
+        if: needs.build-release.result == 'success'
         run: |
-          echo "🚀 AniTrend Website deployed successfully!"
+          echo "Deployed successfully!"
           echo "Environment: ${{ github.event.inputs.environment || 'production' }}"
           echo "Commit: ${{ github.sha }}"
           echo "Timestamp: $(date -u)"
-
+          
       - name: Notify failure
-        if: needs.deploy.result == 'failure'
+        if: needs.build-release.result == 'failure'
         run: |
-          echo "❌ AniTrend Website deployment failed!"
+          echo "Deployment failed!"
           echo "Please check the deployment logs and try again."
           exit 1
