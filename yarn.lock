@@ -1235,15 +1235,15 @@ __metadata:
   linkType: hard
 
 "@genkit-ai/googleai@npm:^1.13.0":
-  version: 1.19.2
-  resolution: "@genkit-ai/googleai@npm:1.19.2"
+  version: 1.19.3
+  resolution: "@genkit-ai/googleai@npm:1.19.3"
   dependencies:
     "@google/generative-ai": "npm:^0.24.0"
     google-auth-library: "npm:^9.6.3"
     node-fetch: "npm:^3.3.2"
   peerDependencies:
-    genkit: ^1.19.2
-  checksum: 10c0/4279d4e928b833c48e6f1b28c6ea613b4365c263f4c7f6047324a4a08284404b136cec52e3dd2b7e0d95065c447ade0d2eb4049a6ee81d3c584c1af7bdd792af
+    genkit: ^1.19.3
+  checksum: 10c0/7b3176d20a361247cbf4686092104fd6287177df4adacbc3648b9145d9f2a36091a058f927b44ced500df6f74c8ba0851b53c1886173107d175d27cce9a88f99
   languageName: node
   linkType: hard
 
