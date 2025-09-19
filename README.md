@@ -5,14 +5,6 @@ A modern landing website for the AniTrend anime tracking ecosystem, built with N
 ## 🚀 Tech Stack
 
 - **Frontend**: Next.js 15 with App Router & Turbopack
-- **UI Components**: shadcn/ui with Tailwind CSS
-- **Typography**: Space Grotesk (headlines) & Inter (body)
-- **Deployment**: Firebase App Hosting
-- **Development**: TypeScript, ESLint, Yarn
-
-## 🚀 Tech Stack
-
-- **Frontend**: Next.js 15 with App Router & Turbopack
 - **AI Framework**: Google Genkit with Gemini 2.0 Flash
 - **UI Components**: shadcn/ui with Tailwind CSS
 - **Typography**: Space Grotesk (headlines) & Inter (body)
@@ -45,7 +37,7 @@ yarn install
 3. Copy environment variables:
 
 ```bash
-cp .env.example .env.local
+cp .env.example .env
 ```
 
 4. Start the development server:

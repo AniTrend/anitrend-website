@@ -1,0 +1,74 @@
+name-template: 'v$RESOLVED_VERSION'
+tag-template: '$RESOLVED_VERSION'
+categories:
+  - title: '🚀 Features'
+    labels:
+      - ':star2: feature'
+    collapse-after: 5
+  - title: '✨ Improvements'
+    labels:
+      - ':wrench: enhancement'
+    collapse-after: 5
+  - title: '🛠️ Bug Fixes'
+    labels:
+      - ':adhesive_bandage: bug fix'
+    collapse-after: 5
+  - title: '🧰 Maintenance'
+    labels:
+      - ':hammer_and_wrench: refactor'
+    collapse-after: 5
+  - title: '📦 Dependencies'
+    labels:
+      - ':dagger: dependencies'
+    collapse-after: 5
+  - title: '🔖 Other changes'
+autolabeler:
+  - label: ':books: docs'
+    files:
+      - '*.md'
+    branch:
+      - '/docs{0,1}\/.+/'
+  - label: ':adhesive_bandage: bug fix'
+    branch:
+      - '/bugfix\/.+/'
+      - '/hotfix\/.+/'
+    title:
+      - '/fix/i'
+  - label: ':star2: feature'
+    branch:
+      - '/feature\/.+/'
+      - '/feat\/.+/'
+  - label: ':wrench: enhancement'
+    branch:
+      - '/enhancement\/.+/'
+  - label: ':hammer_and_wrench: refactor'
+    branch:
+      - '/refactor\/.+/'
+  - label: ':dagger: dependencies'
+    branch:
+      - '/dependencies\/.+/'
+      - '/renovate\/.+/'
+change-template: '- $TITLE by @$AUTHOR in #$NUMBER'
+change-title-escapes: '\<*_&' # You can add # and @ to disable mentions, and add ` to disable code blocks.
+version-resolver:
+  major:
+    labels:
+      - ':cactus: breaking'
+  minor:
+    labels:
+      - ':wrench: enhancement'
+      - ':star2: feature'
+  patch:
+    labels:
+      - ':adhesive_bandage: bug fix'
+      - ':dagger: dependencies'
+      - ':hammer_and_wrench: refactor'
+  default: patch
+exclude-labels:
+  - ':skateboard: skip-changelog'
+template: |
+  # What's Changed
+
+  $CHANGES
+  
+  **Full Changelog**: https://github.com/$OWNER/$REPOSITORY/compare/$PREVIOUS_TAG...v$RESOLVED_VERSION

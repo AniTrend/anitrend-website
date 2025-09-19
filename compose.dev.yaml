@@ -1,0 +1,29 @@
+services:
+  website-app:
+    container_name: website-app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      ENV_VARIABLE: ${ENV_VARIABLE}
+      NEXT_PUBLIC_ENV_VARIABLE: ${NEXT_PUBLIC_ENV_VARIABLE}
+    volumes:
+      - ./src:/app/src
+      - ./public:/app/public
+    networks:
+      - default
+    env_file: .env
+    labels:
+      - 'traefik.enable=${TRAEFIK_ENABLE}'
+      - 'traefik.http.routers.website-app.rule=Host(`${HOST}`)'
+      - 'traefik.http.routers.website-app.entrypoints=web,websecure'
+      - 'traefik.http.routers.website-app.service=website-app'
+      - 'traefik.http.routers.website-app.tls=true'
+      - 'traefik.http.routers.website-app.tls.certresolver=${CERT_RESOLVER}'
+      - 'traefik.http.services.website-app.loadbalancer.server.port=${PORT}'
+    restart: unless-stopped
+
+networks:
+  default:
+    name: traefik
+    external: true

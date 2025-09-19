@@ -30,11 +30,14 @@ yarn build            # Next.js production build
 yarn start            # Start production server
 ```
 
-### Firebase Deployment
+### Deployment (Self-hosted, Docker)
 
-- Uses Firebase App Hosting (`apphosting.yaml`)
-- Configured for single instance deployment
-- Automatic builds from this repository
+- Container images published to GitHub Container Registry (GHCR): `ghcr.io/anitrend/website`
+- Deploys to a self-hosted server via SSH using Docker Compose (`compose.prod.yaml`)
+- Reverse proxy assumed (Traefik) with labels managed in compose files
+- Primary workflows: `ci.yml` (lint/build + docker build check), `deploy.yml` (build & push image, remote deploy), `release.yml` (versioned image publish + release)
+- Docker build uses Next.js standalone output and multi-stage builds for optimization
+- Always uses yarn as package manager with frozen lockfiles for consistent builds
 
 ## Critical Patterns
 
@@ -105,7 +108,6 @@ const anime: Anime = {
 
 - Model: `googleai/gemini-2.0-flash`
 - Prompt engineering in `src/ai/flows/recommend-anime-flow.ts`
-- Requires GOOGLE_API_KEY environment variable
 - Use structured JSON output with Zod schemas
 
 ### GitHub API (Organization Repos)
@@ -131,14 +133,6 @@ Next.js image domains configured for:
 
 - Build errors ignored (`ignoreBuildErrors: true`) for rapid prototyping
 - ESLint disabled during builds for CI/CD speed
-
-### Environment Variables
-
-Set these locally (e.g., `.env.local`) and in hosting:
-
-- `GOOGLE_API_KEY` — API key for Google Genkit `@genkit-ai/googleai` plugin
-- `NEXT_PUBLIC_DISCORD_INVITE_CODE` — Discord invite code used to build the community URL
-- `NEXT_PUBLIC_SUPABASE_BASE_URL` — Base URL for public screenshots/assets
 
 ## Common Tasks
 
@@ -167,3 +161,14 @@ Tip: Register flows by importing them in `src/ai/dev.ts` so the Genkit dev serve
 ### API Routes
 
 - Add server routes under `src/app/api/*`. Example already present: `GET /api/repositories` delegates to `getRepositoriesForDisplay()` and supports pinned/starred/limit/sort/username query params.
+
+## CI/CD & Secrets
+
+### Container Build & Publish
+
+- Images tagged by branch/sha and `latest` on main.
+
+### Compose
+
+- `compose.dev.yaml` for local dev (bind-mount src/public)
+- `compose.prod.yaml` for server deployment pulling `ghcr.io/anitrend/website:latest`
