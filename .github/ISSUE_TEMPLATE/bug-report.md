@@ -5,10 +5,10 @@ about: Create a bug report to help us identify bugs faster and improve the appli
 
 # AniTrend Issue Guidelines
 
-Before opening a new issue, please take a moment to review our [**community guidelines**](https://github.com/AniTrend/anitrend-anitrend-website/blob/master/CONTRIBUTING.md) to make the contribution process easy and effective for everyone involved.
+Before opening a new issue, please take a moment to review our [**community guidelines**](https://github.com/AniTrend/anitrend-website/blob/master/CONTRIBUTING.md) to make the contribution process easy and effective for everyone involved.
 
 **You may find an answer in already closed issues**:
-https://github.com/AniTrend/anitrend-anitrend-website/issues?q=is%3Aissue+is%3Aclosed
+https://github.com/AniTrend/anitrend-website/issues?q=is%3Aissue+is%3Aclosed
 
 ## Description of Bug
 
