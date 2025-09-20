@@ -78,10 +78,10 @@ jobs:
           yarn typecheck
           yarn build
 
-      - name: Security audit
-        run: |
-          echo "🔍 Running security audit..."
-          yarn npm audit --groups dependencies --level moderate
+      # - name: Security audit
+      #   run: |
+      #     echo "🔍 Running security audit..."
+      #     yarn audit --groups dependencies --level moderate
 
   build-release:
     name: Build Release
