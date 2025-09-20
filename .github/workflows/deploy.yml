@@ -81,7 +81,7 @@ jobs:
       - name: Security audit
         run: |
           echo "🔍 Running security audit..."
-          yarn npm audit --groups dependencies --level moderate
+          yarn npm audit --all --recursive
 
   build-release:
     name: Build Release
