@@ -69,6 +69,12 @@ export async function recommendAnime(
 
 GitHub data is fetched server-side via `src/lib/github-service.ts` with response transformation and light caching using `next: { revalidate: N }`. API rate-limits are handled gracefully with fallbacks.
 
+Anime data is fetched via `src/lib/anime-service.ts` using a cache-aware helper (`src/lib/cache-aware-fetch.ts`) that:
+
+- Applies Next.js server fetch caching with sensible defaults per endpoint (e.g., top lists ~5m, details ~1h)
+- Retries transient failures (ETIMEDOUT, 429/5xx) with exponential backoff and optional Retry-After respect
+- Uses a tiny in-memory SWR cache for anime details to serve stale data on transient failures and avoid user-visible reload loops
+
 Transform external APIs to internal types consistently:
 
 ```typescript
@@ -83,7 +89,7 @@ const anime: Anime = {
 
 - **shadcn/ui base**: Pre-configured in `components.json` with custom aliases
 - **Typography**: `font-headline` (Space Grotesk) for titles, `font-body` (Inter) for text
-- **Color scheme**: Dark theme with purple primary (`#BB86FC`) and teal accents
+- **Color scheme**: Dark theme with purple primary (hex BB86FC) and teal accents
 - **Responsive**: Mobile-first with container-based layouts
 
 ### Routing Structure
@@ -93,6 +99,7 @@ const anime: Anime = {
 - `/discover` - Server-rendered anime grid with client-side interactivity
 - `/recommend` - AI-powered recommendation interface
 - `/anime/[id]` - Dynamic anime detail pages fetching from Jikan API
+  - Uses SWR-like in-memory cache for details to improve resilience on network hiccups
 - Deep linking: `app.anitrend://action/anime/{id}` protocol for mobile app integration
 
 ## External Integrations
@@ -103,6 +110,7 @@ const anime: Anime = {
 - No auth required, but respect rate limits
 - Key endpoints: `/top/anime`, `/anime/{id}`, `/recommendations/anime`
 - Always handle API failures gracefully with fallbacks
+- Jikan responses include caching headers (`Expires`, `Cache-Control`) and are cached upstream (24h). We set Next.js `revalidate` hints and rely on server caching; details endpoint also benefits from a local SWR cache.
 
 ### Google Genkit AI
 

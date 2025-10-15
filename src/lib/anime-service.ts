@@ -5,6 +5,18 @@ import type {
   JikanRecommendation,
   AnimeRecommendation,
 } from '@/lib/types';
+import {
+  nextCacheAwareFetch,
+  getRecommendedCacheDuration,
+} from '@/lib/cache-aware-fetch';
+
+// Lightweight in-memory SWR cache for anime details to mask transient network errors
+type AnimeCacheEntry = { data: Anime; freshUntil: number; staleUntil: number };
+const animeDetailCache = new Map<string, AnimeCacheEntry>();
+const now = () => Date.now();
+// Default cache windows for details: fresh 1h, stale 6h
+const DETAILS_FRESH_MS = 60 * 60 * 1000; // 1 hour
+const DETAILS_STALE_MS = 6 * 60 * 60 * 1000; // 6 hours
 
 /**
  * Jikan Top Anime API filter options
@@ -117,7 +129,10 @@ export async function getTopAnime(
       ? `https://api.jikan.moe/v4/top/anime?${queryString}`
       : 'https://api.jikan.moe/v4/top/anime';
 
-    const response = await fetch(url);
+    const response = await nextCacheAwareFetch(url, {
+      fallbackCacheDuration: getRecommendedCacheDuration(url),
+    });
+
     if (!response.ok) {
       console.error('Failed to fetch top anime from Jikan API');
       return [];
@@ -140,7 +155,24 @@ export async function getTopAnime(
  */
 export async function getAnimeById(id: string): Promise<Anime | null> {
   try {
-    const response = await fetch(`https://api.jikan.moe/v4/anime/${id}`);
+    const cacheKey = id;
+    const cached = animeDetailCache.get(cacheKey);
+    const url = `https://api.jikan.moe/v4/anime/${id}`;
+
+    // If we have a fresh cached value, return immediately
+    if (cached && now() < cached.freshUntil) {
+      return cached.data;
+    }
+
+    // Try fetching with retries; prefer stable UX
+    const response = await nextCacheAwareFetch(url, {
+      fallbackCacheDuration: getRecommendedCacheDuration(url),
+      retries: 2,
+      retryDelayMs: 300,
+      retryFactor: 2,
+      maxRetryDelayMs: 2000,
+    });
+
     if (!response.ok) {
       return null;
     }
@@ -148,8 +180,20 @@ export async function getAnimeById(id: string): Promise<Anime | null> {
     const { data }: { data: JikanAnime } = await response.json();
     if (!data) return null;
 
-    return transformJikanAnime(data);
+    const transformed = transformJikanAnime(data);
+    // Update cache on success
+    animeDetailCache.set(cacheKey, {
+      data: transformed,
+      freshUntil: now() + DETAILS_FRESH_MS,
+      staleUntil: now() + DETAILS_STALE_MS,
+    });
+    return transformed;
   } catch (error) {
+    // On failure, serve stale cached value if available
+    const cached = animeDetailCache.get(id);
+    if (cached && now() < cached.staleUntil) {
+      return cached.data;
+    }
     console.error('Failed to fetch anime details:', error);
     return null;
   }
@@ -180,7 +224,9 @@ export async function searchAnime(
     });
 
     const url = `https://api.jikan.moe/v4/anime?${searchParams.toString()}`;
-    const response = await fetch(url);
+    const response = await nextCacheAwareFetch(url, {
+      fallbackCacheDuration: getRecommendedCacheDuration(url),
+    });
 
     if (!response.ok) {
       console.error('Failed to search anime from Jikan API');
@@ -220,7 +266,10 @@ export async function getAnimeForAI(filters: TopAnimeFilters = {}): Promise<
       ? `https://api.jikan.moe/v4/top/anime?${queryString}`
       : 'https://api.jikan.moe/v4/top/anime';
 
-    const response = await fetch(url);
+    const response = await nextCacheAwareFetch(url, {
+      fallbackCacheDuration: getRecommendedCacheDuration(url),
+    });
+
     if (!response.ok) {
       throw new Error('Failed to fetch anime data from external API');
     }
@@ -312,7 +361,10 @@ export async function getAnimeRecommendations(
   try {
     const url = `https://api.jikan.moe/v4/recommendations/anime?page=${page}`;
 
-    const response = await fetch(url);
+    const response = await nextCacheAwareFetch(url, {
+      fallbackCacheDuration: getRecommendedCacheDuration(url),
+    });
+
     if (!response.ok) {
       console.error('Failed to fetch anime recommendations from Jikan API');
       return [];
