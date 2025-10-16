@@ -9,15 +9,21 @@ RUN apt-get update \
 	&& rm -rf /var/lib/apt/lists/* \
 	&& corepack enable
 
-# Step 1. Rebuild the source code only when needed
-FROM base AS builder
+# Step 1. Dependencies stage - cache yarn install separately
+FROM base AS dependencies
 
 WORKDIR /app
 
-# Install dependencies using yarn (Yarn Berry config)
+# Copy only dependency files first for optimal caching
 COPY package.json yarn.lock .yarnrc.yml ./
+
+# Install dependencies using yarn (Yarn Berry config)
 RUN yarn install --immutable
 
+# Step 2. Source code stage - adds source files after dependencies are cached
+FROM dependencies AS with-source
+
+# Copy all source files and configuration
 COPY src ./src
 COPY public ./public
 COPY next.config.ts .
@@ -25,6 +31,9 @@ COPY tsconfig.json .
 COPY tailwind.config.ts .
 COPY postcss.config.mjs .
 COPY components.json .
+
+# Step 3. Build stage - performs Next.js build
+FROM with-source AS builder
 
 # Environment variables must be present at build time
 # https://github.com/vercel/next.js/discussions/14030
@@ -37,9 +46,7 @@ COPY components.json .
 ENV NODE_OPTIONS="--max-old-space-size=1024"
 RUN yarn build
 
-# Note: It is not necessary to add an intermediate step that does a full copy of `node_modules` here
-
-# Step 2. Production image, copy all the files and run next
+# Step 4. Production image, copy all the files and run next
 FROM base AS runner
 
 WORKDIR /app
