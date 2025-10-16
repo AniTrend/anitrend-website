@@ -34,25 +34,21 @@ export async function initFirebaseAnalytics(): Promise<Analytics | null> {
 
   const { initializeApp, getApps, getApp } = firebaseAppModule;
 
+  const firebaseConfig = {
+    apiKey: apiKey,
+    authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+    projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+    appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
+    measurementId: measurementId,
+  };
+
   if (!getApps().length) {
-    firebaseApp = initializeApp({
-      apiKey: apiKey,
-      authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
-      projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
-      appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
-      measurementId: measurementId,
-    });
+    firebaseApp = initializeApp(firebaseConfig);
   } else {
     try {
       firebaseApp = getApp();
     } catch {
-      firebaseApp = initializeApp({
-        apiKey: apiKey,
-        authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
-        projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
-        appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
-        measurementId: measurementId,
-      });
+      firebaseApp = initializeApp(firebaseConfig);
     }
   }
 
