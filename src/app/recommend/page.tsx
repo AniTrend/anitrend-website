@@ -35,11 +35,15 @@ export default function RecommendPage() {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
-    const submittedPrompt = (formData.get('prompt') as string)?.trim();
+    const submittedPrompt = (
+      (formData.get('prompt') as string | null) || ''
+    ).trim();
 
     if (!submittedPrompt) {
       return;
     }
+
+    setPrompt(submittedPrompt);
 
     startTransition(async () => {
       setRecommendation(null);
