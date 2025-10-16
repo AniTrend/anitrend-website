@@ -7,6 +7,8 @@ import {
   recommendAnime,
   RecommendAnimeOutput,
 } from '@/ai/flows/recommend-anime-flow';
+import { logEvent } from '@/lib/firebase';
+import { ShareButton } from '@/components/anime-analytics';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2, Wand2, ArrowRight, Star, Users, Award } from 'lucide-react';
 import Balancer from 'react-wrap-balancer';
@@ -32,13 +34,24 @@ export default function RecommendPage() {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!prompt) return;
+    const form = e.currentTarget as HTMLFormElement;
+    const textarea = form.querySelector(
+      'textarea'
+    ) as HTMLTextAreaElement | null;
+    const submittedPrompt = (textarea?.value ?? '').trim() || prompt.trim();
+    if (!submittedPrompt) return;
+    setPrompt(submittedPrompt);
 
     startTransition(async () => {
       setRecommendation(null);
       setRecommendedAnime(null);
 
-      const result = await recommendAnime({ prompt });
+      // Record that a recommendation was requested; only send a privacy-safe summary
+      void logEvent('recommendation_request', {
+        prompt_length: submittedPrompt.length,
+      });
+
+      const result = await recommendAnime({ prompt: submittedPrompt });
       if (result) {
         setRecommendation(result);
 
@@ -47,6 +60,8 @@ export default function RecommendPage() {
           const fullAnimeData = await getAnimeById(result.animeId);
           if (fullAnimeData) {
             setRecommendedAnime(fullAnimeData);
+            // Record that the recommendation flow returned a result
+            void logEvent('recommendation_received');
           }
         } catch (error) {
           console.error('Failed to fetch anime details:', error);
@@ -191,13 +206,16 @@ export default function RecommendPage() {
                         <p className="text-sm text-muted-foreground capitalize text-center">
                           {recommendedAnime.status?.toLowerCase()}
                         </p>
-                        <div className="pt-2">
-                          <Button className="w-full" asChild>
+                        <div className="pt-2 flex gap-2">
+                          <Button className="flex-1" asChild>
                             <span>
                               View Details{' '}
                               <ArrowRight className="ml-2 h-4 w-4" />
                             </span>
                           </Button>
+                          <div className="w-36">
+                            <ShareButton anime={recommendedAnime} />
+                          </div>
                         </div>
                       </div>
                     </CardContent>

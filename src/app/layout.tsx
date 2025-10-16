@@ -4,6 +4,8 @@ import './globals.css';
 import { AppHeader } from '@/components/header';
 import { AppFooter } from '@/components/footer';
 import { Toaster } from '@/components/ui/toaster';
+import Analytics from '@/components/analytics';
+import AnalyticsConsentBanner from '@/components/consent/analytics-consent-banner';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -38,8 +40,10 @@ export default function RootLayout({
       >
         <div className="flex flex-col min-h-screen">
           <AppHeader />
+          <Analytics />
           <main className="flex-1">{children}</main>
           <AppFooter />
+          <AnalyticsConsentBanner />
           <Toaster />
         </div>
       </body>

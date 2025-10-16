@@ -1,4 +1,5 @@
 import { Compass, LayoutDashboard, Wand2, Menu } from 'lucide-react';
+import AnalyticsSettings from '@/components/settings/analytics-settings';
 import { siGithub } from 'simple-icons';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -103,6 +104,7 @@ export function AppHeader() {
                 <Link href="/recommend" className="flex items-center text-lg">
                   <Wand2 className="mr-2 h-5 w-5" /> Recommend
                 </Link>
+                <AnalyticsSettings />
                 <Link href="/#features" className="text-lg">
                   Features
                 </Link>
@@ -115,6 +117,7 @@ export function AppHeader() {
               </nav>
             </SheetContent>
           </Sheet>
+          <AnalyticsSettings />
           <Button asChild variant="ghost" size="icon">
             <Link
               href="https://github.com/AniTrend"
