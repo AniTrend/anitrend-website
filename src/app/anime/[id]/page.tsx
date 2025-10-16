@@ -1,10 +1,14 @@
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Star, Tv, Calendar, Smartphone, Users, Award } from 'lucide-react';
+import { Star, Tv, Calendar, Users, Award } from 'lucide-react';
 import Balancer from 'react-wrap-balancer';
 import { getAnimeById } from '@/lib/anime-service';
+import {
+  TrackAnimeView,
+  OpenInAppButton,
+  ShareButton,
+} from '@/components/anime-analytics';
 
 export default async function AnimeDetailPage({
   params,
@@ -33,15 +37,15 @@ export default async function AnimeDetailPage({
                 data-ai-hint={`${anime.title} anime poster`}
               />
               <div className="mt-4 space-y-2">
-                <Button asChild className="w-full" size="lg">
-                  <a href={`app.anitrend://action/anime/${anime.id}`}>
-                    <Smartphone className="mr-2 h-5 w-5" /> Open in App
-                  </a>
-                </Button>
+                <OpenInAppButton anime={anime} />
+                <div className="mt-2">
+                  <ShareButton anime={anime} />
+                </div>
               </div>
             </div>
           </aside>
           <div className="md:col-span-8 lg:col-span-9">
+            <TrackAnimeView anime={anime} />
             <h1 className="text-3xl font-bold tracking-tight md:text-4xl font-headline">
               <Balancer>{anime.title}</Balancer>
             </h1>

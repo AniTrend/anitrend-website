@@ -26,6 +26,7 @@ import { Search, Filter, ChevronDown, Loader2, RotateCcw } from 'lucide-react';
 import type { Anime } from '@/lib/types';
 import type { TopAnimeFilters } from '@/lib/anime-service';
 import { getTopAnime, searchAnime } from '@/lib/anime-service';
+import { logEvent } from '@/lib/firebase';
 
 interface DiscoverClientProps {
   initialAnime: Anime[];
@@ -130,6 +131,12 @@ export function DiscoverClient({ initialAnime }: DiscoverClientProps) {
           sfw: true,
         });
         setAnimeList(newAnime);
+        // Track that filters were applied and include a small summary
+        void logEvent('discover_filters_applied', {
+          type: 'all',
+          rating: 'all',
+          sfw: true,
+        });
         setCurrentPage(1);
         setHasMorePages(newAnime.length === 25);
       } catch (error) {
@@ -146,6 +153,12 @@ export function DiscoverClient({ initialAnime }: DiscoverClientProps) {
       try {
         const newAnime = await getTopAnime({ ...filters, page: 1 });
         setAnimeList(newAnime);
+        // Track that filters were applied and include a small summary
+        void logEvent('discover_filters_applied', {
+          type: filters.type ?? 'all',
+          rating: filters.rating ?? 'all',
+          sfw: filters.sfw ?? true,
+        });
         setCurrentPage(1);
         setHasMorePages(newAnime.length === (filters.limit || 25)); // Check if we got a full page
       } catch (error) {
@@ -172,6 +185,11 @@ export function DiscoverClient({ initialAnime }: DiscoverClientProps) {
           page: 1, // Always start from page 1 for search
         });
         setAnimeList(searchResults);
+        // Track search usage for business analytics
+        void logEvent('discover_search', {
+          query,
+          results_count: searchResults.length,
+        });
         setCurrentPage(1);
         setHasMorePages(searchResults.length === (filters.limit || 25));
       } catch (error) {
