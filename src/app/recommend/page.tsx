@@ -34,12 +34,15 @@ export default function RecommendPage() {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const form = e.currentTarget as HTMLFormElement;
-    const textarea = form.querySelector(
-      'textarea'
-    ) as HTMLTextAreaElement | null;
-    const submittedPrompt = (textarea?.value ?? '').trim() || prompt.trim();
-    if (!submittedPrompt) return;
+    const formData = new FormData(e.currentTarget);
+    const submittedPrompt = (
+      (formData.get('prompt') as string | null) || ''
+    ).trim();
+
+    if (!submittedPrompt) {
+      return;
+    }
+
     setPrompt(submittedPrompt);
 
     startTransition(async () => {
@@ -98,6 +101,7 @@ export default function RecommendPage() {
 
         <form onSubmit={handleSubmit} className="mt-8 space-y-4">
           <Textarea
+            name="prompt"
             placeholder="e.g., 'A sci-fi adventure with a witty crew and a jazzy soundtrack...'"
             rows={3}
             value={prompt}
