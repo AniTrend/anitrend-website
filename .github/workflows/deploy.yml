@@ -182,6 +182,7 @@ jobs:
             
             This should be merged after the release is confirmed to be working correctly.
           branch: version-bump/${{ needs.validate-release.outputs.version }}
+          base: main
           delete-branch: true
           labels: |
             version
