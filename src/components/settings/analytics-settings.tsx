@@ -84,7 +84,7 @@ export default function AnalyticsSettings() {
           </div>
           <Switch
             checked={Boolean(enabled)}
-            onCheckedChange={(v) => toggle(Boolean(v))}
+            onCheckedChange={toggle}
           />
         </div>
 
