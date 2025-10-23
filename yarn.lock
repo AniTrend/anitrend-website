@@ -6959,10 +6959,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-formatter-unix@npm:^8.40.0":
-  version: 8.40.0
-  resolution: "eslint-formatter-unix@npm:8.40.0"
-  checksum: 10c0/d059e598e1f38ec20af622eacc1980b71a5e1399725d2b67f58a6819f7787067812424a8c00bf8230cc2e963e1bfa8bd928addcc8dffcc34692910bbf73fe6aa
+"eslint-formatter-unix@npm:^9.0.0":
+  version: 9.0.1
+  resolution: "eslint-formatter-unix@npm:9.0.1"
+  checksum: 10c0/5b4ed019929fda33246da43f1ebc7a3749f7b9d0d71f29a6b663ce87b6f288c3ebb989840563c29707ee29c165163bf14c05ff279c7418e382734ad1ac52ae27
   languageName: node
   linkType: hard
 
@@ -9820,7 +9820,7 @@ __metadata:
     eslint: "npm:^9.32.0"
     eslint-config-next: "npm:^15.4.4"
     eslint-config-prettier: "npm:^10.1.8"
-    eslint-formatter-unix: "npm:^8.40.0"
+    eslint-formatter-unix: "npm:^9.0.0"
     eslint-plugin-prettier: "npm:^5.5.3"
     firebase: "npm:^12.4.0"
     genkit: "npm:^1.13.0"
