@@ -1250,13 +1250,13 @@ __metadata:
   linkType: hard
 
 "@genkit-ai/next@npm:^1.13.0":
-  version: 1.23.0
-  resolution: "@genkit-ai/next@npm:1.23.0"
+  version: 1.24.0
+  resolution: "@genkit-ai/next@npm:1.24.0"
   peerDependencies:
-    genkit: 1.23.0
+    genkit: 1.24.0
     next: ^15.0.0
     zod: ^3.24.1
-  checksum: 10c0/781dc788822c7e3130352efe6fa7b688a7f32aa5dc642bc1624e2a7460ca212d41c7e340239198ec9a2849068938e101e9f8873a16186b59e85c1f14e4ae9031
+  checksum: 10c0/84634629e92aa0182b124e70305e728adf4171f8fa4d3c1c9f15f490e01b1c355e7cc1a9ec61a229d7937858e48c2b91e5270016719345ea5c2051d6c014954e
   languageName: node
   linkType: hard
 
