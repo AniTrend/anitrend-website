@@ -1143,11 +1143,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@genkit-ai/ai@npm:1.24.0":
-  version: 1.24.0
-  resolution: "@genkit-ai/ai@npm:1.24.0"
+"@genkit-ai/ai@npm:1.25.0":
+  version: 1.25.0
+  resolution: "@genkit-ai/ai@npm:1.25.0"
   dependencies:
-    "@genkit-ai/core": "npm:1.24.0"
+    "@genkit-ai/core": "npm:1.25.0"
     "@opentelemetry/api": "npm:^1.9.0"
     "@types/node": "npm:^20.11.19"
     colorette: "npm:^2.0.20"
@@ -1157,13 +1157,13 @@ __metadata:
     partial-json: "npm:^0.1.7"
     uri-templates: "npm:^0.2.0"
     uuid: "npm:^10.0.0"
-  checksum: 10c0/a75e23360eb7f11ac02481a9844040282a9bc657417d85d817ea7028766d412efa6c6b69cf25fae7bfa0c4925b6989c875552491071f5e6cc7df9abb98409bed
+  checksum: 10c0/6c6d67ba5d933b507a51204914f9206fde3d2184c5459f7ff8dddcda3200d6dea676b85a97fd2a6ff2ecf7457416142f7526e685cfd71884d0faad582f8513f1
   languageName: node
   linkType: hard
 
-"@genkit-ai/core@npm:1.24.0":
-  version: 1.24.0
-  resolution: "@genkit-ai/core@npm:1.24.0"
+"@genkit-ai/core@npm:1.25.0":
+  version: 1.25.0
+  resolution: "@genkit-ai/core@npm:1.25.0"
   dependencies:
     "@genkit-ai/firebase": "npm:^1.16.1"
     "@opentelemetry/api": "npm:^1.9.0"
@@ -1188,7 +1188,7 @@ __metadata:
   dependenciesMeta:
     "@genkit-ai/firebase":
       optional: true
-  checksum: 10c0/0afe235f194f77e4544f309c68618b56c6ea252351a92a780dc208b5e412c5d1afb0d512dda4c8ffb1df003cd8866fb8d1b2fe190539381c7198e9cdce670b70
+  checksum: 10c0/50216ce67b673ae061a99bd86ae824691ee4badb65e6d66ed31421c67f60de1c6b995f07b59c406b1380b8bb92859250e88aceafdf190c77d9dd81b2f1b34057
   languageName: node
   linkType: hard
 
@@ -7956,13 +7956,13 @@ __metadata:
   linkType: hard
 
 "genkit@npm:^1.13.0":
-  version: 1.24.0
-  resolution: "genkit@npm:1.24.0"
+  version: 1.25.0
+  resolution: "genkit@npm:1.25.0"
   dependencies:
-    "@genkit-ai/ai": "npm:1.24.0"
-    "@genkit-ai/core": "npm:1.24.0"
+    "@genkit-ai/ai": "npm:1.25.0"
+    "@genkit-ai/core": "npm:1.25.0"
     uuid: "npm:^10.0.0"
-  checksum: 10c0/20537d630b29ef47e5b35c9cb9029e58fb4befbe338ca939cc48a2094e7594a9458d36ec48dc780b55b42d122bfb2950a84f847292e44f9f6c425718312ea269
+  checksum: 10c0/15a2af5dc15f2d9c6d9be3fe52a8416e10272907ee8acd9e348f88bce4cc1153d65edefbca174b8f355f510a4806ee35796dbc4f6d2a45533eef702e012396bd
   languageName: node
   linkType: hard
 
