@@ -2085,19 +2085,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@next/env@npm:15.5.7":
-  version: 15.5.7
-  resolution: "@next/env@npm:15.5.7"
-  checksum: 10c0/f92d99e5fa3516c6b7699abafd9bd813f5c1889dd257ab098f1b71f93137f5e4f49792e22f6dddf8a59efcb134e8e84277c983ff88607b2a42aac651bfde78ea
+"@next/env@npm:15.5.8":
+  version: 15.5.8
+  resolution: "@next/env@npm:15.5.8"
+  checksum: 10c0/77a33346f6350e8e68d4f308d9a40301e1c681b4b31f9ea2e2da15773433fa7e781b8351092bbf278bed07cee7a50f8351cbcb5107f999397d45c4959fc6ca0d
   languageName: node
   linkType: hard
 
-"@next/eslint-plugin-next@npm:15.5.7":
-  version: 15.5.7
-  resolution: "@next/eslint-plugin-next@npm:15.5.7"
+"@next/eslint-plugin-next@npm:15.5.8":
+  version: 15.5.8
+  resolution: "@next/eslint-plugin-next@npm:15.5.8"
   dependencies:
     fast-glob: "npm:3.3.1"
-  checksum: 10c0/a204cbf5d84f812591de2b43f81629025c07438873d30e0b8c4af55c4eef0651fec0ea057634f57cdbfa5e86a5c1c0e6e0a825f53d6a3d134d5855a9719f6bfa
+  checksum: 10c0/d1b251d9c596ec75440670d91820fc3185f0c50039a305ab6e179d2d9023b77379b14d6f23ed7a88d243cc90da2728a8eacd1013a3ceeaee0ce41a94e962607f
   languageName: node
   linkType: hard
 
@@ -6987,10 +6987,10 @@ __metadata:
   linkType: hard
 
 "eslint-config-next@npm:^15.4.4":
-  version: 15.5.7
-  resolution: "eslint-config-next@npm:15.5.7"
+  version: 15.5.8
+  resolution: "eslint-config-next@npm:15.5.8"
   dependencies:
-    "@next/eslint-plugin-next": "npm:15.5.7"
+    "@next/eslint-plugin-next": "npm:15.5.8"
     "@rushstack/eslint-patch": "npm:^1.10.3"
     "@typescript-eslint/eslint-plugin": "npm:^5.4.2 || ^6.0.0 || ^7.0.0 || ^8.0.0"
     "@typescript-eslint/parser": "npm:^5.4.2 || ^6.0.0 || ^7.0.0 || ^8.0.0"
@@ -7006,7 +7006,7 @@ __metadata:
   peerDependenciesMeta:
     typescript:
       optional: true
-  checksum: 10c0/80c573e0fe8d156c975fc3d6ea5c0a4425be5a2e067a47069835553d32369f9da32b7242d371e8a2a711792f0c621625dd5dcebb62c69ec177f7f5bfb7cfc5a5
+  checksum: 10c0/23f15e9f44e2e375f52017e479511d9dd96d7f1c17a30fb85cd2ae389929c74a005cfd24e4ffb2aab1458850ee121fc9f409e6ec5432cc056d3e20b21387b094
   languageName: node
   linkType: hard
 
@@ -9793,11 +9793,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"next@npm:15.5.7":
-  version: 15.5.7
-  resolution: "next@npm:15.5.7"
+"next@npm:15.5.8":
+  version: 15.5.8
+  resolution: "next@npm:15.5.8"
   dependencies:
-    "@next/env": "npm:15.5.7"
+    "@next/env": "npm:15.5.8"
     "@next/swc-darwin-arm64": "npm:15.5.7"
     "@next/swc-darwin-x64": "npm:15.5.7"
     "@next/swc-linux-arm64-gnu": "npm:15.5.7"
@@ -9848,7 +9848,7 @@ __metadata:
       optional: true
   bin:
     next: dist/bin/next
-  checksum: 10c0/baf5b9f42416c478702b3894479b3d7862bc4abf18afe0e43b7fc7ed35567b8dc6cb76cd94906505bab9013cb8d0f3370cdc0451c01ec15ae5a638d37b5ba7c7
+  checksum: 10c0/9f7732bc5782ec9701774cc0ba4d209e43d0d82611af3340db3144e7ac3fb4e39556ae8b37a8a4679b6e8754c6764814217c6fc15ddb2538a6e4ebe6a4aa42a9
   languageName: node
   linkType: hard
 
@@ -9906,7 +9906,7 @@ __metadata:
     husky: "npm:^9.1.7"
     lint-staged: "npm:^16.1.2"
     lucide-react: "npm:^0.560.0"
-    next: "npm:15.5.7"
+    next: "npm:15.5.8"
     patch-package: "npm:^8.0.0"
     postcss: "npm:^8"
     prettier: "npm:^3.6.2"
