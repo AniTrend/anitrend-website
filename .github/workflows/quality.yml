@@ -40,7 +40,7 @@ jobs:
           yarn lint --format unix
 
       - name: Upload ESLint report
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         if: always()
         with:
           name: eslint-report
@@ -83,7 +83,7 @@ jobs:
           fi
 
       - name: Upload audit report
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         if: always()
         with:
           name: audit-report
