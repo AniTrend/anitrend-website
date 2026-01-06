@@ -151,9 +151,6 @@ export function DiscoverClient({
   const initialSearchTermRef = useRef(initialSearchTerm ?? '');
   const initialAnimeRef = useRef(initialAnime);
 
-  // Filter states
-  const baseLimit = filters.limit ?? DEFAULT_FILTERS.limit;
-
   const pushStateToUrl = useCallback(
     (nextFilters: TopAnimeFilters, nextSearchTerm: string, page: number) => {
       const queryString = serializeStateToQuery(
@@ -180,10 +177,11 @@ export function DiscoverClient({
       const initialSearchTerm = initialSearchTermRef.current;
       const initialFilters = initialFiltersRef.current;
       const limit = initialFilters.limit ?? DEFAULT_FILTERS.limit ?? 25;
-      
+
       // Exclude 'filter' property when calling searchAnime (not supported by search API)
       const { filter: _filter, ...searchFilters } = initialFilters;
-      
+      void _filter; // search endpoint does not accept filter param
+
       let combinedList = [...initialList];
       let lastPageSize = combinedList.length;
 
