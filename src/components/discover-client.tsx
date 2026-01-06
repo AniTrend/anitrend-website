@@ -182,8 +182,7 @@ export function DiscoverClient({
       const limit = initialFilters.limit ?? DEFAULT_FILTERS.limit ?? 25;
       
       // Exclude 'filter' property when calling searchAnime (not supported by search API)
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { filter, ...searchFilters } = initialFilters;
+      const { filter: _filter, ...searchFilters } = initialFilters;
       
       let combinedList = [...initialList];
       let lastPageSize = combinedList.length;

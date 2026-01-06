@@ -126,8 +126,7 @@ export default async function DiscoverPage({
   // The 'filter' property is only supported by getTopAnime (e.g., 'airing', 'upcoming')
   // and must be excluded when calling searchAnime, which uses the search API endpoint
   // that doesn't support this parameter. This is enforced by searchAnime's type signature.
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { filter, ...searchFilters } = filtersWithDefaults;
+  const { filter: _filter, ...searchFilters } = filtersWithDefaults;
 
   const initialAnime = searchTerm
     ? await searchAnime(searchTerm, searchFilters)
