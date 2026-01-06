@@ -125,11 +125,15 @@ export function DiscoverClient({
   }));
 
   const [animeList, setAnimeList] = useState<Anime[]>(initialAnime);
-  const [currentPage, setCurrentPage] = useState(initialFilters.page ?? 1);
+  const [currentPage, setCurrentPage] = useState(
+    initialFilters.page ?? DEFAULT_FILTERS.page ?? 1
+  );
   const [isLoading, setIsLoading] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
+  const initialLimit: number =
+    initialFilters?.limit ?? DEFAULT_FILTERS.limit ?? 25;
   const [hasMorePages, setHasMorePages] = useState(
-    initialAnime.length >= (initialFilters.limit ?? DEFAULT_FILTERS.limit)
+    initialAnime.length >= initialLimit
   );
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
@@ -349,7 +353,9 @@ export function DiscoverClient({
           pushStateToUrl(filters, searchTerm, nextPage);
 
           // Check if we got fewer results than expected (last page)
-          if (moreAnime.length < (filters.limit ?? DEFAULT_FILTERS.limit)) {
+          const limitToUse: number =
+            filters.limit ?? DEFAULT_FILTERS.limit ?? 25;
+          if (moreAnime.length < limitToUse) {
             setHasMorePages(false);
           }
         } else {

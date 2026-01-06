@@ -24,7 +24,18 @@ export async function initFirebaseAnalytics(): Promise<Analytics | null> {
   const apiKey = process.env.NEXT_PUBLIC_FIREBASE_API_KEY;
 
   // Minimal sanity check: required values must be present for analytics to work.
-  if (!measurementId || !apiKey) {
+  const isPlaceholderKey =
+    apiKey?.toLowerCase().includes('your_') ||
+    apiKey?.toUpperCase().includes('INVALID');
+  const isPlaceholderMeasurementId =
+    measurementId?.startsWith('G-XXXX') || measurementId?.includes('YOUR_');
+
+  if (
+    !measurementId ||
+    !apiKey ||
+    isPlaceholderKey ||
+    isPlaceholderMeasurementId
+  ) {
     // Not configured for analytics (safe to skip in development)
     return null;
   }
@@ -53,7 +64,13 @@ export async function initFirebaseAnalytics(): Promise<Analytics | null> {
   }
 
   const { getAnalytics, setAnalyticsCollectionEnabled } = analyticsModule;
-  analyticsInstance = getAnalytics(firebaseApp);
+  try {
+    analyticsInstance = getAnalytics(firebaseApp);
+  } catch (err) {
+    // If Firebase rejects due to invalid key or other client errors, swallow and skip analytics
+    console.warn('[analytics] initialization skipped', err);
+    return null;
+  }
 
   // Respect environment override: analytics are ENABLED by default unless
   // NEXT_PUBLIC_ENABLE_ANALYTICS is explicitly set to "false".
@@ -99,9 +116,8 @@ export async function setAnalyticsEnabled(enabled: boolean) {
   const analytics = await initFirebaseAnalytics();
   if (!analytics) return;
   try {
-    const { setAnalyticsCollectionEnabled } = await import(
-      'firebase/analytics'
-    );
+    const { setAnalyticsCollectionEnabled } =
+      await import('firebase/analytics');
     setAnalyticsCollectionEnabled(analytics, enabled);
   } catch (err) {
     console.warn('[analytics] failed to set collection enabled', err);

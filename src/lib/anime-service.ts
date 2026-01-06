@@ -103,6 +103,42 @@ function removeDuplicateAnime(animeList: Anime[]): Anime[] {
   );
 }
 
+function delay(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+async function fetchWithRetry(
+  url: string,
+  options: RequestInit = {},
+  retries = 2,
+  backoffMs = 500
+): Promise<Response | null> {
+  for (let attempt = 0; attempt <= retries; attempt++) {
+    try {
+      const response = await fetch(url, {
+        cache: 'no-store',
+        ...options,
+      });
+
+      if (response.status === 429 && attempt < retries) {
+        // Back off on rate limits and retry
+        await delay(backoffMs * (attempt + 1));
+        continue;
+      }
+
+      return response;
+    } catch (error) {
+      if (attempt === retries) {
+        console.error('Failed to fetch from Jikan API:', error);
+        return null;
+      }
+      await delay(backoffMs * (attempt + 1));
+    }
+  }
+
+  return null;
+}
+
 /**
  * Fetch top anime from Jikan API with optional filters
  * @param filters - Filter options for the API request
@@ -117,8 +153,8 @@ export async function getTopAnime(
       ? `https://api.jikan.moe/v4/top/anime?${queryString}`
       : 'https://api.jikan.moe/v4/top/anime';
 
-    const response = await fetch(url);
-    if (!response.ok) {
+    const response = await fetchWithRetry(url);
+    if (!response || !response.ok) {
       console.error('Failed to fetch top anime from Jikan API');
       return [];
     }
@@ -140,8 +176,10 @@ export async function getTopAnime(
  */
 export async function getAnimeById(id: string): Promise<Anime | null> {
   try {
-    const response = await fetch(`https://api.jikan.moe/v4/anime/${id}`);
-    if (!response.ok) {
+    const response = await fetchWithRetry(
+      `https://api.jikan.moe/v4/anime/${id}`
+    );
+    if (!response || !response.ok) {
       return null;
     }
 
@@ -180,9 +218,9 @@ export async function searchAnime(
     });
 
     const url = `https://api.jikan.moe/v4/anime?${searchParams.toString()}`;
-    const response = await fetch(url);
+    const response = await fetchWithRetry(url);
 
-    if (!response.ok) {
+    if (!response || !response.ok) {
       console.error('Failed to search anime from Jikan API');
       return [];
     }
@@ -220,8 +258,8 @@ export async function getAnimeForAI(filters: TopAnimeFilters = {}): Promise<
       ? `https://api.jikan.moe/v4/top/anime?${queryString}`
       : 'https://api.jikan.moe/v4/top/anime';
 
-    const response = await fetch(url);
-    if (!response.ok) {
+    const response = await fetchWithRetry(url);
+    if (!response || !response.ok) {
       throw new Error('Failed to fetch anime data from external API');
     }
 
@@ -312,8 +350,8 @@ export async function getAnimeRecommendations(
   try {
     const url = `https://api.jikan.moe/v4/recommendations/anime?page=${page}`;
 
-    const response = await fetch(url);
-    if (!response.ok) {
+    const response = await fetchWithRetry(url);
+    if (!response || !response.ok) {
       console.error('Failed to fetch anime recommendations from Jikan API');
       return [];
     }

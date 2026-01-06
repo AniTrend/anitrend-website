@@ -112,7 +112,7 @@ export const metadata = {
 };
 
 export default async function DiscoverPage({
-  searchParams = {},
+  searchParams = Promise.resolve({}),
 }: DiscoverPageProps) {
   const resolvedParams = await Promise.resolve(searchParams ?? {});
   const { filters, searchTerm } = parseFiltersFromSearchParams(resolvedParams);
