@@ -28,6 +28,7 @@ yarn typecheck        # TypeScript validation
 yarn lint             # ESLint (disabled during CI builds)
 yarn build            # Next.js production build
 yarn start            # Start production server
+yarn test:e2e         # Playwright end-to-end tests (expects app running on :9002)
 ```
 
 ### Deployment (Self-hosted, Docker)
@@ -89,7 +90,7 @@ const anime: Anime = {
 ### Routing Structure
 
 - `/` - Landing page with marketing sections
-- `/dashboard` - Server-rendered overview page
+- `/dashboard` - Hub with Discover shortcuts, AI recommendation teaser, and app deep link
 - `/discover` - Server-rendered anime grid with client-side interactivity
 - `/recommend` - AI-powered recommendation interface
 - `/anime/[id]` - Dynamic anime detail pages fetching from Jikan API
