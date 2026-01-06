@@ -90,7 +90,7 @@ const anime: Anime = {
 ### Routing Structure
 
 - `/` - Landing page with marketing sections
-- `/dashboard` - Server-rendered overview page
+- `/dashboard` - Hub with Discover shortcuts, AI recommendation teaser, and app deep link
 - `/discover` - Server-rendered anime grid with client-side interactivity
 - `/recommend` - AI-powered recommendation interface
 - `/anime/[id]` - Dynamic anime detail pages fetching from Jikan API
