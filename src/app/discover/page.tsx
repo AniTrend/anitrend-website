@@ -1,5 +1,109 @@
 import { DiscoverClient } from '@/components/discover-client';
-import { getTopAnime } from '@/lib/anime-service';
+import {
+  getTopAnime,
+  searchAnime,
+  type TopAnimeFilters,
+} from '@/lib/anime-service';
+
+type DiscoverPageProps = {
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+};
+
+const DEFAULT_LIMIT = 25;
+
+const allowedTypes = new Set(['tv', 'movie', 'ova', 'special', 'ona', 'music']);
+
+const allowedFilters = new Set([
+  'airing',
+  'upcoming',
+  'bypopularity',
+  'favorite',
+]);
+
+const allowedRatings = new Set(['g', 'pg', 'pg13', 'r17', 'r', 'rx']);
+
+function getParamValue(
+  params: Record<string, string | string[] | undefined>,
+  key: string
+): string | undefined {
+  const value = params?.[key];
+  if (Array.isArray(value)) return value[0];
+  return value ?? undefined;
+}
+
+function parseNumberParam(
+  value: string | undefined,
+  { min, max, fallback }: { min?: number; max?: number; fallback?: number }
+): number | undefined {
+  const parsed = Number.parseFloat(value ?? '');
+  if (Number.isNaN(parsed)) return fallback;
+
+  if (min !== undefined && parsed < min) return min;
+  if (max !== undefined && parsed > max) return max;
+  return parsed;
+}
+
+function parseBooleanParam(
+  value: string | undefined,
+  fallback: boolean
+): boolean {
+  if (value === undefined) return fallback;
+  if (value === 'false') return false;
+  if (value === 'true') return true;
+  return fallback;
+}
+
+function parseFiltersFromSearchParams(
+  searchParams: Record<string, string | string[] | undefined>
+): { filters: TopAnimeFilters; searchTerm: string } {
+  const searchTerm = (getParamValue(searchParams, 'q') ?? '').trim();
+
+  const rawType = getParamValue(searchParams, 'type');
+  const rawFilter = getParamValue(searchParams, 'filter');
+  const rawRating = getParamValue(searchParams, 'rating');
+
+  const limit =
+    parseNumberParam(getParamValue(searchParams, 'limit'), {
+      min: 1,
+      max: DEFAULT_LIMIT,
+      fallback: DEFAULT_LIMIT,
+    }) ?? DEFAULT_LIMIT;
+
+  const page =
+    parseNumberParam(getParamValue(searchParams, 'page'), {
+      min: 1,
+      fallback: 1,
+    }) ?? 1;
+
+  const filters: TopAnimeFilters = {
+    type: allowedTypes.has(rawType ?? '')
+      ? (rawType as TopAnimeFilters['type'])
+      : undefined,
+    filter: allowedFilters.has(rawFilter ?? '')
+      ? (rawFilter as TopAnimeFilters['filter'])
+      : undefined,
+    rating: allowedRatings.has(rawRating ?? '')
+      ? (rawRating as TopAnimeFilters['rating'])
+      : undefined,
+    min_score: getParamValue(searchParams, 'min_score')
+      ? parseNumberParam(getParamValue(searchParams, 'min_score'), {
+          min: 0,
+          max: 10,
+        })
+      : undefined,
+    max_score: getParamValue(searchParams, 'max_score')
+      ? parseNumberParam(getParamValue(searchParams, 'max_score'), {
+          min: 0,
+          max: 10,
+        })
+      : undefined,
+    sfw: parseBooleanParam(getParamValue(searchParams, 'sfw'), true),
+    limit,
+    page,
+  };
+
+  return { filters, searchTerm };
+}
 
 export const metadata = {
   title: 'Discover Anime - AniTrend',
@@ -7,12 +111,30 @@ export const metadata = {
     'Explore and discover new anime series with advanced filtering options.',
 };
 
-export default async function DiscoverPage() {
-  // Fetch initial anime with default settings (SFW, 25 limit)
-  const topAnime = await getTopAnime({
-    limit: 25,
+export default async function DiscoverPage({
+  searchParams = {},
+}: DiscoverPageProps) {
+  const resolvedParams = await Promise.resolve(searchParams ?? {});
+  const { filters, searchTerm } = parseFiltersFromSearchParams(resolvedParams);
+  const filtersWithDefaults: TopAnimeFilters = {
+    limit: DEFAULT_LIMIT,
     sfw: true,
-  });
+    page: 1,
+    ...filters,
+  };
 
-  return <DiscoverClient initialAnime={topAnime} />;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { filter, ...searchFilters } = filtersWithDefaults;
+
+  const initialAnime = searchTerm
+    ? await searchAnime(searchTerm, searchFilters)
+    : await getTopAnime(filtersWithDefaults);
+
+  return (
+    <DiscoverClient
+      initialAnime={initialAnime}
+      initialFilters={filtersWithDefaults}
+      initialSearchTerm={searchTerm}
+    />
+  );
 }

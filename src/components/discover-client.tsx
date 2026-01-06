@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback, useTransition, useRef } from 'react';
+import { useState, useCallback, useTransition, useRef, useEffect } from 'react';
 import { Input } from '@/components/ui/input';
 import {
   Select,
@@ -27,10 +27,19 @@ import type { Anime } from '@/lib/types';
 import type { TopAnimeFilters } from '@/lib/anime-service';
 import { getTopAnime, searchAnime } from '@/lib/anime-service';
 import { logEvent } from '@/lib/firebase';
+import { usePathname, useRouter } from 'next/navigation';
 
 interface DiscoverClientProps {
   initialAnime: Anime[];
+  initialFilters: TopAnimeFilters;
+  initialSearchTerm?: string;
 }
+
+const DEFAULT_FILTERS: TopAnimeFilters = {
+  limit: 25,
+  page: 1,
+  sfw: true,
+};
 
 // Rate limiting utility
 class RateLimiter {
@@ -72,13 +81,56 @@ class RateLimiter {
   }
 }
 
-export function DiscoverClient({ initialAnime }: DiscoverClientProps) {
-  const [searchTerm, setSearchTerm] = useState('');
+function serializeStateToQuery(
+  filters: TopAnimeFilters,
+  searchTerm: string,
+  page: number
+): string {
+  const params = new URLSearchParams();
+
+  const trimmedQuery = searchTerm.trim();
+  if (trimmedQuery) {
+    params.set('q', trimmedQuery);
+  }
+
+  if (filters.type) params.set('type', filters.type);
+  if (filters.filter) params.set('filter', filters.filter);
+  if (filters.rating) params.set('rating', filters.rating);
+  if (filters.min_score !== undefined)
+    params.set('min_score', filters.min_score.toString());
+  if (filters.max_score !== undefined)
+    params.set('max_score', filters.max_score.toString());
+  if (filters.start_date) params.set('start_date', filters.start_date);
+  if (filters.end_date) params.set('end_date', filters.end_date);
+  if (filters.sfw === false) params.set('sfw', 'false');
+  if (filters.limit && filters.limit !== DEFAULT_FILTERS.limit)
+    params.set('limit', filters.limit.toString());
+  if (page > 1) params.set('page', page.toString());
+
+  return params.toString();
+}
+
+export function DiscoverClient({
+  initialAnime,
+  initialFilters,
+  initialSearchTerm,
+}: DiscoverClientProps) {
+  const pathname = usePathname();
+  const router = useRouter();
+
+  const [searchTerm, setSearchTerm] = useState(initialSearchTerm ?? '');
+  const [filters, setFilters] = useState<TopAnimeFilters>(() => ({
+    ...DEFAULT_FILTERS,
+    ...initialFilters,
+  }));
+
   const [animeList, setAnimeList] = useState<Anime[]>(initialAnime);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(initialFilters.page ?? 1);
   const [isLoading, setIsLoading] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
-  const [hasMorePages, setHasMorePages] = useState(true);
+  const [hasMorePages, setHasMorePages] = useState(
+    initialAnime.length >= (initialFilters.limit ?? DEFAULT_FILTERS.limit)
+  );
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
 
@@ -86,12 +138,64 @@ export function DiscoverClient({ initialAnime }: DiscoverClientProps) {
   const rateLimiter = useRef(new RateLimiter(1000)); // 1 second minimum between API calls
   const searchLimiter = useRef(new RateLimiter(800)); // 800ms for search debouncing
 
+  const initialPageRef = useRef(
+    initialFilters.page ?? DEFAULT_FILTERS.page ?? 1
+  );
+  const hydratedFromQueryRef = useRef(false);
+
   // Filter states
-  const [filters, setFilters] = useState<TopAnimeFilters>({
-    limit: 25,
-    page: 1,
-    sfw: true,
-  });
+  const baseLimit = filters.limit ?? DEFAULT_FILTERS.limit;
+
+  const pushStateToUrl = useCallback(
+    (nextFilters: TopAnimeFilters, nextSearchTerm: string, page: number) => {
+      const queryString = serializeStateToQuery(
+        nextFilters,
+        nextSearchTerm,
+        page
+      );
+      const nextUrl = queryString ? `${pathname}?${queryString}` : pathname;
+      router.replace(nextUrl, { scroll: false });
+    },
+    [pathname, router]
+  );
+
+  useEffect(() => {
+    const targetPage = initialPageRef.current;
+    if (hydratedFromQueryRef.current || targetPage <= 1) return;
+
+    hydratedFromQueryRef.current = true;
+    let cancelled = false;
+
+    const hydrateFromQuery = async () => {
+      setIsLoading(true);
+      let combinedList = [...initialAnime];
+      let lastPageSize = combinedList.length;
+
+      for (let page = 2; page <= targetPage; page++) {
+        const pageData = searchTerm.trim()
+          ? await searchAnime(searchTerm, { ...filters, page })
+          : await getTopAnime({ ...filters, page });
+
+        if (cancelled) return;
+
+        combinedList = [...combinedList, ...pageData];
+        lastPageSize = pageData.length;
+      }
+
+      if (cancelled) return;
+
+      setAnimeList(combinedList);
+      setCurrentPage(targetPage);
+      setHasMorePages(lastPageSize === baseLimit);
+      setIsLoading(false);
+    };
+
+    void hydrateFromQuery();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [baseLimit, filters, initialAnime, searchTerm]);
 
   const handleFilterChange = useCallback(
     (
@@ -110,11 +214,7 @@ export function DiscoverClient({ initialAnime }: DiscoverClientProps) {
   );
 
   const resetFilters = useCallback(() => {
-    setFilters({
-      limit: 25,
-      page: 1,
-      sfw: true,
-    });
+    setFilters({ ...DEFAULT_FILTERS });
     setCurrentPage(1);
     setSearchTerm('');
     setHasMorePages(true); // Reset pagination state
@@ -125,11 +225,7 @@ export function DiscoverClient({ initialAnime }: DiscoverClientProps) {
     setIsLoading(true);
     startTransition(async () => {
       try {
-        const newAnime = await getTopAnime({
-          limit: 25,
-          page: 1,
-          sfw: true,
-        });
+        const newAnime = await getTopAnime({ ...DEFAULT_FILTERS });
         setAnimeList(newAnime);
         // Track that filters were applied and include a small summary
         void logEvent('discover_filters_applied', {
@@ -138,14 +234,15 @@ export function DiscoverClient({ initialAnime }: DiscoverClientProps) {
           sfw: true,
         });
         setCurrentPage(1);
-        setHasMorePages(newAnime.length === 25);
+        setHasMorePages(newAnime.length === DEFAULT_FILTERS.limit);
+        pushStateToUrl(DEFAULT_FILTERS, '', 1);
       } catch (error) {
         console.error('Failed to reset and apply filters:', error);
       } finally {
         setIsLoading(false);
       }
     });
-  }, [resetFilters]);
+  }, [pushStateToUrl, resetFilters]);
 
   const applyFilters = useCallback(async () => {
     setIsLoading(true);
@@ -160,18 +257,22 @@ export function DiscoverClient({ initialAnime }: DiscoverClientProps) {
           sfw: filters.sfw ?? true,
         });
         setCurrentPage(1);
-        setHasMorePages(newAnime.length === (filters.limit || 25)); // Check if we got a full page
+        const limitToUse = filters.limit ?? DEFAULT_FILTERS.limit;
+        setHasMorePages(newAnime.length === limitToUse); // Check if we got a full page
+        pushStateToUrl({ ...filters, page: 1 }, searchTerm, 1);
       } catch (error) {
         console.error('Failed to apply filters:', error);
       } finally {
         setIsLoading(false);
       }
     });
-  }, [filters]);
+  }, [filters, pushStateToUrl, searchTerm]);
 
   // Search functionality with API calls and rate limiting
   const performSearch = useCallback(
     async (query: string) => {
+      const normalizedQuery = query.trim();
+
       if (!query.trim()) {
         // If search is cleared, reload with current filters
         await applyFilters();
@@ -180,25 +281,28 @@ export function DiscoverClient({ initialAnime }: DiscoverClientProps) {
 
       setIsSearching(true);
       try {
-        const searchResults = await searchAnime(query, {
+        const searchResults = await searchAnime(normalizedQuery, {
           ...filters,
           page: 1, // Always start from page 1 for search
         });
         setAnimeList(searchResults);
         // Track search usage for business analytics
         void logEvent('discover_search', {
-          query,
+          query: normalizedQuery,
           results_count: searchResults.length,
         });
         setCurrentPage(1);
-        setHasMorePages(searchResults.length === (filters.limit || 25));
+        setHasMorePages(
+          searchResults.length === (filters.limit ?? DEFAULT_FILTERS.limit)
+        );
+        pushStateToUrl(filters, normalizedQuery, 1);
       } catch (error) {
         console.error('Failed to search anime:', error);
       } finally {
         setIsSearching(false);
       }
     },
-    [filters, applyFilters]
+    [filters, applyFilters, pushStateToUrl]
   );
 
   // Debounced search function
@@ -242,8 +346,10 @@ export function DiscoverClient({ initialAnime }: DiscoverClientProps) {
           setAnimeList((prev) => [...prev, ...moreAnime]);
           setCurrentPage(nextPage);
 
+          pushStateToUrl(filters, searchTerm, nextPage);
+
           // Check if we got fewer results than expected (last page)
-          if (moreAnime.length < (filters.limit || 25)) {
+          if (moreAnime.length < (filters.limit ?? DEFAULT_FILTERS.limit)) {
             setHasMorePages(false);
           }
         } else {
@@ -257,7 +363,7 @@ export function DiscoverClient({ initialAnime }: DiscoverClientProps) {
         setIsLoading(false);
       }
     });
-  }, [filters, currentPage, hasMorePages, searchTerm]);
+  }, [filters, currentPage, hasMorePages, pushStateToUrl, searchTerm]);
 
   // Rate-limited filter application
   const throttledApplyFilters = useCallback(() => {
@@ -270,8 +376,10 @@ export function DiscoverClient({ initialAnime }: DiscoverClientProps) {
   }, [loadMore]);
 
   const hasActiveFilters = Object.entries(filters).some(([key, value]) => {
-    if (key === 'limit' || key === 'page') return false;
-    if (key === 'sfw' && value === true) return false;
+    if (key === 'page') return false;
+    if (key === 'limit')
+      return value !== undefined && value !== DEFAULT_FILTERS.limit;
+    if (key === 'sfw') return value === false;
     return value !== undefined && value !== 'all';
   });
 

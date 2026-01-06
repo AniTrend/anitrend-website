@@ -28,6 +28,7 @@ yarn typecheck        # TypeScript validation
 yarn lint             # ESLint (disabled during CI builds)
 yarn build            # Next.js production build
 yarn start            # Start production server
+yarn test:e2e         # Playwright end-to-end tests (expects app running on :9002)
 ```
 
 ### Deployment (Self-hosted, Docker)
