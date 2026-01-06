@@ -114,7 +114,7 @@ export const metadata = {
 export default async function DiscoverPage({
   searchParams = Promise.resolve({}),
 }: DiscoverPageProps) {
-  const resolvedParams = await Promise.resolve(searchParams ?? {});
+  const resolvedParams = await (searchParams ?? Promise.resolve({}));
   const { filters, searchTerm } = parseFiltersFromSearchParams(resolvedParams);
   const filtersWithDefaults: TopAnimeFilters = {
     limit: DEFAULT_LIMIT,
@@ -123,6 +123,9 @@ export default async function DiscoverPage({
     ...filters,
   };
 
+  // The 'filter' property is only supported by getTopAnime (e.g., 'airing', 'upcoming')
+  // and must be excluded when calling searchAnime, which uses the search API endpoint
+  // that doesn't support this parameter. This is enforced by searchAnime's type signature.
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { filter, ...searchFilters } = filtersWithDefaults;
 

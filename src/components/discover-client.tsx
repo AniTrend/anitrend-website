@@ -146,6 +146,10 @@ export function DiscoverClient({
     initialFilters.page ?? DEFAULT_FILTERS.page ?? 1
   );
   const hydratedFromQueryRef = useRef(false);
+  // Store initial filters and search term in refs to prevent unnecessary effect re-runs
+  const initialFiltersRef = useRef(initialFilters);
+  const initialSearchTermRef = useRef(initialSearchTerm ?? '');
+  const initialAnimeRef = useRef(initialAnime);
 
   // Filter states
   const baseLimit = filters.limit ?? DEFAULT_FILTERS.limit;
@@ -172,13 +176,18 @@ export function DiscoverClient({
 
     const hydrateFromQuery = async () => {
       setIsLoading(true);
-      let combinedList = [...initialAnime];
+      const initialList = initialAnimeRef.current;
+      const initialSearchTerm = initialSearchTermRef.current;
+      const initialFilters = initialFiltersRef.current;
+      const limit = initialFilters.limit ?? DEFAULT_FILTERS.limit ?? 25;
+      
+      let combinedList = [...initialList];
       let lastPageSize = combinedList.length;
 
       for (let page = 2; page <= targetPage; page++) {
-        const pageData = searchTerm.trim()
-          ? await searchAnime(searchTerm, { ...filters, page })
-          : await getTopAnime({ ...filters, page });
+        const pageData = initialSearchTerm.trim()
+          ? await searchAnime(initialSearchTerm, { ...initialFilters, page })
+          : await getTopAnime({ ...initialFilters, page });
 
         if (cancelled) return;
 
@@ -190,7 +199,7 @@ export function DiscoverClient({
 
       setAnimeList(combinedList);
       setCurrentPage(targetPage);
-      setHasMorePages(lastPageSize === baseLimit);
+      setHasMorePages(lastPageSize === limit);
       setIsLoading(false);
     };
 
@@ -199,7 +208,7 @@ export function DiscoverClient({
     return () => {
       cancelled = true;
     };
-  }, [baseLimit, filters, initialAnime, searchTerm]);
+  }, []); // Empty dependency array - this effect should only run once on mount
 
   const handleFilterChange = useCallback(
     (
