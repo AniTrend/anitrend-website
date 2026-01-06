@@ -31,8 +31,11 @@ test('applies search and filters then persists via URL reload', async ({
 test('updates page param when loading more results', async ({ page }) => {
   await page.goto('/discover');
 
+  // Wait for anime grid to be visible first
+  await expect(page.getByRole('img').first()).toBeVisible({ timeout: 20000 });
+
   const loadMore = page.getByRole('button', { name: 'Load More' });
-  await expect(loadMore).toBeVisible({ timeout: 20000 });
+  await expect(loadMore).toBeVisible({ timeout: 5000 });
 
   await loadMore.click();
   await expect(page).toHaveURL(/page=2/);
