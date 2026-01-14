@@ -4,6 +4,8 @@ import type {
   JikanGenre,
   JikanRecommendation,
   AnimeRecommendation,
+  Character,
+  JikanCharacter,
 } from '@/lib/types';
 
 /**
@@ -65,6 +67,28 @@ function transformJikanAnime(anime: JikanAnime): Anime {
     rank: anime.rank,
     popularity: anime.popularity,
     status: anime.status,
+    // New fields
+    trailer: anime.trailer?.embed_url
+      ? { embedUrl: anime.trailer.embed_url }
+      : undefined,
+    duration: anime.duration,
+    rating: anime.rating,
+    studios: anime.studios.map((s) => s.name),
+    producers: anime.producers.map((p) => p.name),
+    aired: anime.aired.string,
+    background: anime.background,
+  };
+}
+
+/**
+ * Transform Jikan character data to our internal Character type
+ */
+function transformJikanCharacter(jikanChar: JikanCharacter): Character {
+  return {
+    id: jikanChar.character.mal_id,
+    name: jikanChar.character.name,
+    imageUrl: jikanChar.character.images.jpg.image_url,
+    role: jikanChar.role,
   };
 }
 
@@ -190,6 +214,30 @@ export async function getAnimeById(id: string): Promise<Anime | null> {
   } catch (error) {
     console.error('Failed to fetch anime details:', error);
     return null;
+  }
+}
+
+/**
+ * Fetch characters for a specific anime
+ * @param id - The anime ID
+ * @returns Promise<Character[]>
+ */
+export async function getAnimeCharacters(id: string): Promise<Character[]> {
+  try {
+    const response = await fetchWithRetry(
+      `https://api.jikan.moe/v4/anime/${id}/characters`
+    );
+    if (!response || !response.ok) {
+      return [];
+    }
+
+    const { data }: { data: JikanCharacter[] } = await response.json();
+    return data
+      .map(transformJikanCharacter)
+      .sort((a) => (a.role === 'Main' ? -1 : 1)); // Sort Main characters first
+  } catch (error) {
+    console.error('Failed to fetch anime characters:', error);
+    return [];
   }
 }
 
