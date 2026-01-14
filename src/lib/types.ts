@@ -11,6 +11,23 @@ export interface Anime {
   rank: number;
   popularity: number;
   status: string;
+  // New fields
+  trailer?: {
+    embedUrl: string;
+  };
+  duration: string;
+  rating: string;
+  studios: string[];
+  producers: string[];
+  aired: string;
+  background: string;
+}
+
+export interface Character {
+  id: number;
+  name: string;
+  imageUrl: string;
+  role: string;
 }
 
 // Jikan API response types
@@ -47,6 +64,34 @@ export interface JikanAnime {
   rank: number;
   popularity: number;
   status: string;
+  duration: string;
+  rating: string;
+  background: string;
+  trailer: {
+    embed_url: string;
+  };
+  producers: {
+    name: string;
+  }[];
+  studios: {
+    name: string;
+  }[];
+  aired: {
+    string: string;
+  };
+}
+
+export interface JikanCharacter {
+  character: {
+    mal_id: number;
+    name: string;
+    images: {
+      jpg: {
+        image_url: string;
+      };
+    };
+  };
+  role: string;
 }
 
 // Jikan Recommendations API types
