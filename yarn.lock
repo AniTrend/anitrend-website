@@ -41,6 +41,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@cfworker/json-schema@npm:^4.1.1":
+  version: 4.1.1
+  resolution: "@cfworker/json-schema@npm:4.1.1"
+  checksum: 10c0/b5253486d346b7de6feec9c73954f612b11019dacb9023d710a5666df2f5fc145dd88b6b913c88726c6d97e2e258a515fa2cab177f58b18da6bac3738cbc4739
+  languageName: node
+  linkType: hard
+
 "@colors/colors@npm:1.6.0, @colors/colors@npm:^1.6.0":
   version: 1.6.0
   resolution: "@colors/colors@npm:1.6.0"
@@ -1150,11 +1157,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@genkit-ai/ai@npm:1.27.0":
-  version: 1.27.0
-  resolution: "@genkit-ai/ai@npm:1.27.0"
+"@genkit-ai/ai@npm:1.28.0":
+  version: 1.28.0
+  resolution: "@genkit-ai/ai@npm:1.28.0"
   dependencies:
-    "@genkit-ai/core": "npm:1.27.0"
+    "@genkit-ai/core": "npm:1.28.0"
     "@opentelemetry/api": "npm:^1.9.0"
     "@types/node": "npm:^20.11.19"
     colorette: "npm:^2.0.20"
@@ -1164,14 +1171,15 @@ __metadata:
     partial-json: "npm:^0.1.7"
     uri-templates: "npm:^0.2.0"
     uuid: "npm:^10.0.0"
-  checksum: 10c0/1b3918976fa7c788da1d5f1102b9e3e5b6b31515e545b2a7821a95de445ded3a061714f8b8dcfd2a20f3397dff496d77b53dfae106c239ecd522b65f08cdf419
+  checksum: 10c0/eeff64e1631d6264a0788722425219690c17bf8dfb20c3f44b752341c9fb3e2bd1c2e77baaa526b92ed0f31ea2c6bcb3b26cb7ccc3b87f8adcb1f0cb2fb87e25
   languageName: node
   linkType: hard
 
-"@genkit-ai/core@npm:1.27.0":
-  version: 1.27.0
-  resolution: "@genkit-ai/core@npm:1.27.0"
+"@genkit-ai/core@npm:1.28.0":
+  version: 1.28.0
+  resolution: "@genkit-ai/core@npm:1.28.0"
   dependencies:
+    "@cfworker/json-schema": "npm:^4.1.1"
     "@genkit-ai/firebase": "npm:^1.16.1"
     "@opentelemetry/api": "npm:^1.9.0"
     "@opentelemetry/context-async-hooks": "npm:~1.25.0"
@@ -1184,7 +1192,6 @@ __metadata:
     ajv: "npm:^8.12.0"
     ajv-formats: "npm:^3.0.1"
     async-mutex: "npm:^0.5.0"
-    body-parser: "npm:^1.20.3"
     cors: "npm:^2.8.5"
     dotprompt: "npm:^1.1.1"
     express: "npm:^4.21.0"
@@ -1193,9 +1200,11 @@ __metadata:
     zod: "npm:^3.23.8"
     zod-to-json-schema: "npm:^3.22.4"
   dependenciesMeta:
+    "@cfworker/json-schema":
+      optional: true
     "@genkit-ai/firebase":
       optional: true
-  checksum: 10c0/327f14dddbc68cb97727dbee9b1ca27138ea5ec6b986212fb6844a2c5138b8cc45a7224f64e83e3c5ac004826edeab7a5c1458befd704d453008bc09337d73fc
+  checksum: 10c0/4f87254151a20b7b78e224ac056c7973a3a36dcd15f18825f3c247d84f372b555c04d131a2b6594a45a30da387fadde338c5c71669369a6dcd13a37bb254eb6e
   languageName: node
   linkType: hard
 
@@ -5551,7 +5560,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"body-parser@npm:1.20.3, body-parser@npm:^1.20.2, body-parser@npm:^1.20.3":
+"body-parser@npm:1.20.3, body-parser@npm:^1.20.2":
   version: 1.20.3
   resolution: "body-parser@npm:1.20.3"
   dependencies:
@@ -8013,13 +8022,13 @@ __metadata:
   linkType: hard
 
 "genkit@npm:^1.13.0":
-  version: 1.27.0
-  resolution: "genkit@npm:1.27.0"
+  version: 1.28.0
+  resolution: "genkit@npm:1.28.0"
   dependencies:
-    "@genkit-ai/ai": "npm:1.27.0"
-    "@genkit-ai/core": "npm:1.27.0"
+    "@genkit-ai/ai": "npm:1.28.0"
+    "@genkit-ai/core": "npm:1.28.0"
     uuid: "npm:^10.0.0"
-  checksum: 10c0/327bc1cd036f9267f7e472066dd77b62aa94a4a043807baebd7ae30d26de5d2fdf32f9c648cc7fa1f9331e96108f0454330fc202d772a88d0b6eb41a6144bc9f
+  checksum: 10c0/b3deb899584932467e49867510457707f4483a399cf1f1795fd93d6b86d4626bcab202aba8f58b6013dfe4a94caf00e5f551c95325684710fcb5a584d1e302c9
   languageName: node
   linkType: hard
 
