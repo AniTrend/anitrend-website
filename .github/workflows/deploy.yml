@@ -18,12 +18,20 @@ on:
           - staging
   push:
     branches:
-      - dev
+      - main
     tags: 
       - '*'
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}-${{ github.event.inputs.environment || 'production' }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
 env:
   NODE_VERSION: '22'
+  IMAGE_NAME: ghcr.io/anitrend/website
 
 jobs:
   validate-release:
@@ -32,6 +40,8 @@ jobs:
     outputs:
       version: ${{ steps.version.outputs.version }}
       is_prerelease: ${{ steps.version.outputs.is_prerelease }}
+      platforms: ${{ steps.version.outputs.platforms }}
+      push_latest: ${{ steps.version.outputs.push_latest }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
@@ -58,6 +68,24 @@ jobs:
             echo "is_prerelease=false" >> $GITHUB_OUTPUT
             echo "🚀 This is a stable release: $VERSION"
           fi
+
+          # Build strategy:
+          # - non main branch pushes: amd64 only (fast)
+          # - tags & manual runs: amd64 + arm64 (release parity)
+          if [ "${{ github.event_name }}" = "push" ] && [ "${GITHUB_REF}" != "refs/heads/main" ]; then
+            echo "platforms=linux/amd64" >> $GITHUB_OUTPUT
+          else
+            echo "platforms=linux/amd64,linux/arm64" >> $GITHUB_OUTPUT
+          fi
+
+          # Only push :latest for stable, tag-based releases (or explicit manual latest)
+          PUSH_LATEST="false"
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "${{ github.event.inputs.tag }}" = "latest" ]; then
+            PUSH_LATEST="true"
+          elif [[ "${GITHUB_REF}" == refs/tags/* ]] && [[ ! $VERSION =~ (alpha|beta|rc) ]]; then
+            PUSH_LATEST="true"
+          fi
+          echo "push_latest=$PUSH_LATEST" >> $GITHUB_OUTPUT
 
       - name: Enable Corepack
         run: corepack enable
@@ -107,6 +135,7 @@ jobs:
         run: yarn install --immutable
 
       - name: Set up QEMU
+        if: contains(needs.validate-release.outputs.platforms, 'arm64')
         uses: docker/setup-qemu-action@v3
         
       - name: Set up Docker Buildx
@@ -119,33 +148,37 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build and push release image
+      - name: Prepare image tags
+        id: tags
         run: |
-          docker buildx create --use
-          
-          # Build with version tag and optimized cache strategy
-          docker buildx build \
-          --platform linux/amd64,linux/arm64 \
-          --cache-from type=registry,ref=ghcr.io/anitrend/website:cache \
-          --cache-to type=registry,ref=ghcr.io/anitrend/website:cache,mode=max \
-          --tag ghcr.io/anitrend/website:${{ needs.validate-release.outputs.version }} \
-          --push .
-          
-          # Also push latest tag for stable releases
-          if [ "${{ needs.validate-release.outputs.is_prerelease }}" = "false" ]; then
-            docker buildx build \
-            --platform linux/amd64,linux/arm64 \
-            --cache-from type=registry,ref=ghcr.io/anitrend/website:cache \
-            --tag ghcr.io/anitrend/website:latest \
-            --push .
+          IMAGE="${{ env.IMAGE_NAME }}"
+          VERSION="${{ needs.validate-release.outputs.version }}"
+
+          echo "tags<<EOF" >> "$GITHUB_OUTPUT"
+          echo "$IMAGE:$VERSION" >> "$GITHUB_OUTPUT"
+          if [ "${{ needs.validate-release.outputs.push_latest }}" = "true" ]; then
+            echo "$IMAGE:latest" >> "$GITHUB_OUTPUT"
           fi
-        working-directory: .
+          echo "EOF" >> "$GITHUB_OUTPUT"
+
+      - name: Build and push release image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          platforms: ${{ needs.validate-release.outputs.platforms }}
+          tags: ${{ steps.tags.outputs.tags }}
+          cache-from: type=gha,scope=anitrend-website
+          cache-to: type=gha,scope=anitrend-website,mode=max
 
   post-release:
     name: Post-Release Tasks
     runs-on: ubuntu-latest
     needs: [validate-release]
     if: needs.validate-release.outputs.is_prerelease == 'false'
+    permissions:
+      contents: write
+      pull-requests: write
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
