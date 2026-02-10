@@ -10810,15 +10810,15 @@ __metadata:
   linkType: hard
 
 "react-day-picker@npm:^9.0.0":
-  version: 9.13.1
-  resolution: "react-day-picker@npm:9.13.1"
+  version: 9.13.2
+  resolution: "react-day-picker@npm:9.13.2"
   dependencies:
     "@date-fns/tz": "npm:^1.4.1"
     date-fns: "npm:^4.1.0"
     date-fns-jalali: "npm:^4.1.0-0"
   peerDependencies:
     react: ">=16.8.0"
-  checksum: 10c0/7f5f78937da273aef628319175991b09c7cc873fb4cfd1b2b97f5e4da352374afdfba5d44eaf0e349e798c13a150c151930483569664d9c0be6e5ed4418491eb
+  checksum: 10c0/08bc8453d1743fd23644836acca3c655dbd442473b3b0a647a0599c2320998f1cf975dc607216bcdabaa2b09808e227fc6f2851cac9b323817d6838afe5e0759
   languageName: node
   linkType: hard
 
