@@ -24,7 +24,7 @@ function stripAnsi(value) {
   return value.replace(/\u001b\[[0-9;]*m/g, '');
 }
 
-function stripTimestamp(line) {
+function stripTimestampFromLine(line) {
   return line.replace(/^\d{4}-\d{2}-\d{2}T[^ ]+\s+/, '');
 }
 
@@ -104,6 +104,33 @@ function getDependencyRange(packageName, packageVersion, dependencyName) {
   return dependencies[dependencyName] ?? null;
 }
 
+/**
+ * Classifies whether a high/critical advisory can be fixed directly, through a
+ * normal dependency refresh, through a Yarn resolution override, or only by an
+ * upstream package release.
+ *
+ * @param {{
+ *   packageName: string;
+ * }} advisory
+ * @param {{
+ *   packageName: string;
+ *   packageVersion: string;
+ *   isWorkspaceRoot: boolean;
+ * }} dependent
+ * @param {string} fixVersion
+ * @returns {{
+ *   classification:
+ *     | 'direct-upgrade'
+ *     | 'workspace-lockfile-resolution'
+ *     | 'direct-dependency-refresh'
+ *     | 'transitive-lockfile-resolution'
+ *     | 'direct-dependent-upgrade'
+ *     | 'upstream-dependent-upgrade'
+ *     | 'workspace-resolution-override'
+ *     | 'upstream-blocked';
+ *   recommendation: string;
+ * }}
+ */
 function classifyDependent(advisory, dependent, fixVersion) {
   if (dependent.isWorkspaceRoot) {
     const directDependency = rootDependencies.has(advisory.packageName);
@@ -162,6 +189,9 @@ function classifyDependent(advisory, dependent, fixVersion) {
     }
   }
 
+  // Yarn lets the workspace pin transitive packages with `resolutions`, which
+  // gives us a pragmatic mitigation path even when an upstream package uses an
+  // exact or otherwise incompatible semver range.
   if ((rootPackageJson.packageManager || '').startsWith('yarn@')) {
     return {
       classification: 'workspace-resolution-override',
@@ -178,7 +208,7 @@ function classifyDependent(advisory, dependent, fixVersion) {
 function parseAuditReport(rawReport) {
   const lines = stripAnsi(rawReport)
     .split('\n')
-    .map(stripTimestamp);
+    .map(stripTimestampFromLine);
 
   const advisories = [];
   let current = null;
@@ -321,7 +351,9 @@ function main() {
     advisories.length === 0 &&
     AUDIT_TRANSPORT_FAILURE_PATTERN.test(rawReport)
   ) {
-    console.error('❌ Unable to complete the dependency audit');
+    console.error(
+      '❌ Unable to complete the dependency audit because the registry response looked like a transport failure; check npm registry availability or audit request handling.'
+    );
     process.exitCode = 1;
     return;
   }
