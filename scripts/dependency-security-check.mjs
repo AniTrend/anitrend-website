@@ -57,8 +57,8 @@ function normalizePackageVersion(specifier) {
 function execNpmView(args) {
   // Cache npm metadata lookups so repeated advisories for the same package don't
   // trigger duplicate registry requests during a single script execution.
-  // Use a separator that cannot appear in package names or npm subcommands so
-  // each argument list produces a stable, collision-resistant cache key.
+  // Use a null separator because it cannot appear in package names or npm
+  // subcommands, which keeps the cache key collision-resistant.
   const cacheKey = args.join('\0');
 
   if (npmInfoCache.has(cacheKey)) {
@@ -103,7 +103,7 @@ function getFixVersion(advisory) {
 
     if (currentTreeVersions.length > 0) {
       const isSameOrNewer = currentTreeVersions.some((currentVersion) =>
-        semver.gte(candidate, currentVersion)
+        semver.gt(candidate, currentVersion)
       );
 
       if (!isSameOrNewer) {
@@ -111,6 +111,9 @@ function getFixVersion(advisory) {
       }
     }
 
+    // Pre-release fixes are acceptable here because npm metadata sometimes
+    // publishes the first patched build behind a prerelease tag before a stable
+    // release is promoted.
     return !semver.satisfies(candidate, advisory.vulnerableVersions, {
       includePrerelease: true,
     });
