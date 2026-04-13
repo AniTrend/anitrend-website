@@ -3,9 +3,13 @@ import fs from 'node:fs';
 import path from 'node:path';
 import semver from 'semver';
 
+const DEFAULT_AUDIT_REPORT_FILE = 'audit-report.txt';
+const AUDIT_TRANSPORT_FAILURE_PATTERN =
+  /The remote server failed to provide the requested resource|Response code 400|HTTPError/;
+
 const auditReportPath = path.resolve(
   process.cwd(),
-  process.env.AUDIT_REPORT_FILE || 'audit-report.txt'
+  process.env.AUDIT_REPORT_FILE || DEFAULT_AUDIT_REPORT_FILE
 );
 const packageJsonPath = path.resolve(process.cwd(), 'package.json');
 const rootPackageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
@@ -40,7 +44,7 @@ function normalizePackageVersion(specifier) {
 }
 
 function execNpmView(args) {
-  const cacheKey = JSON.stringify(args);
+  const cacheKey = args.join('\0');
 
   if (npmInfoCache.has(cacheKey)) {
     return npmInfoCache.get(cacheKey);
@@ -60,6 +64,8 @@ function execNpmView(args) {
 function getFixVersion(advisory) {
   const versions = execNpmView([advisory.packageName, 'versions']);
   const candidates = Array.isArray(versions) ? versions : [];
+  // Audit output can include non-semver entries after metadata decoration, so only
+  // compare published versions that semver can reason about.
   const currentTreeVersions = advisory.treeVersions.filter((value) =>
     semver.valid(value)
   );
@@ -291,6 +297,12 @@ function getAuditReport() {
     const stderr = error.stderr?.toString() ?? '';
     const combinedOutput = [stdout, stderr].filter(Boolean).join('\n').trim();
 
+    if (combinedOutput) {
+      console.error(
+        '⚠️ yarn npm audit exited non-zero; analyzing the captured output for actionable vulnerabilities'
+      );
+    }
+
     fs.writeFileSync(auditReportPath, combinedOutput);
     return combinedOutput;
   }
@@ -307,9 +319,7 @@ function main() {
 
   if (
     advisories.length === 0 &&
-    /The remote server failed to provide the requested resource|Response code 400|HTTPError/.test(
-      rawReport
-    )
+    AUDIT_TRANSPORT_FAILURE_PATTERN.test(rawReport)
   ) {
     console.error('❌ Unable to complete the dependency audit');
     process.exitCode = 1;
