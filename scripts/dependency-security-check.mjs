@@ -1,7 +1,17 @@
 import {execFileSync} from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
-import semver from 'semver';
+
+let semver;
+
+try {
+  ({default: semver} = await import('semver'));
+} catch {
+  console.error(
+    '❌ Unable to load the semver package required for dependency security analysis'
+  );
+  process.exit(1);
+}
 
 const DEFAULT_AUDIT_REPORT_FILE = 'audit-report.txt';
 const AUDIT_TRANSPORT_FAILURE_PATTERN =
@@ -44,16 +54,29 @@ function normalizePackageVersion(specifier) {
 }
 
 function execNpmView(args) {
+  // Use a separator that cannot appear in package names or npm subcommands so
+  // each argument list produces a stable, collision-resistant cache key.
   const cacheKey = args.join('\0');
 
   if (npmInfoCache.has(cacheKey)) {
     return npmInfoCache.get(cacheKey);
   }
 
-  const raw = execFileSync('npm', ['view', ...args, '--json'], {
-    encoding: 'utf8',
-    stdio: ['ignore', 'pipe', 'pipe'],
-  }).trim();
+  let raw;
+
+  try {
+    raw = execFileSync('npm', ['view', ...args, '--json'], {
+      encoding: 'utf8',
+      stdio: ['ignore', 'pipe', 'pipe'],
+    }).trim();
+  } catch (error) {
+    const reason =
+      error.code === 'ENOENT'
+        ? 'npm is not available in PATH'
+        : `npm view ${args.join(' ')} failed`;
+
+    throw new Error(reason, {cause: error});
+  }
 
   const parsed = raw ? JSON.parse(raw) : null;
   npmInfoCache.set(cacheKey, parsed);
@@ -323,6 +346,10 @@ function getAuditReport() {
     fs.writeFileSync(auditReportPath, stdout);
     return stdout;
   } catch (error) {
+    if (error.code === 'ENOENT') {
+      throw new Error('yarn is not available in PATH', {cause: error});
+    }
+
     const stdout = error.stdout?.toString() ?? '';
     const stderr = error.stderr?.toString() ?? '';
     const combinedOutput = [stdout, stderr].filter(Boolean).join('\n').trim();
