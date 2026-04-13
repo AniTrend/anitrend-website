@@ -8,7 +8,7 @@ try {
   ({default: semver} = await import('semver'));
 } catch {
   console.error(
-    '❌ Unable to load the semver package required for dependency security analysis'
+    '❌ Unable to load the semver package required for dependency security analysis; run yarn install before retrying'
   );
   process.exit(1);
 }
@@ -16,6 +16,7 @@ try {
 const DEFAULT_AUDIT_REPORT_FILE = 'audit-report.txt';
 const AUDIT_TRANSPORT_FAILURE_PATTERN =
   /The remote server failed to provide the requested resource|Response code 400|HTTPError/;
+const ACTIONABLE_SEVERITIES = new Set(['high', 'critical']);
 
 const auditReportPath = path.resolve(
   process.cwd(),
@@ -54,6 +55,8 @@ function normalizePackageVersion(specifier) {
 }
 
 function execNpmView(args) {
+  // Cache npm metadata lookups so repeated advisories for the same package don't
+  // trigger duplicate registry requests during a single script execution.
   // Use a separator that cannot appear in package names or npm subcommands so
   // each argument list produces a stable, collision-resistant cache key.
   const cacheKey = args.join('\0');
@@ -371,7 +374,7 @@ function main() {
     (advisory) =>
       advisory.packageName &&
       advisory.vulnerableVersions &&
-      ['high', 'critical'].includes(advisory.severity)
+      ACTIONABLE_SEVERITIES.has(advisory.severity)
   );
 
   if (
