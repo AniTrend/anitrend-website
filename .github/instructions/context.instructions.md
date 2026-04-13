@@ -37,6 +37,7 @@ yarn test:e2e         # Playwright end-to-end tests (expects app running on :900
 - Deploys to a self-hosted server via SSH using Docker Compose (`compose.prod.yaml`)
 - Reverse proxy assumed (Traefik) with labels managed in compose files
 - Primary workflows: `ci.yml` (lint/build + docker build check), `deploy.yml` (build & push image, remote deploy), `release.yml` (versioned image publish + release)
+- `quality.yml` runs a metadata-aware dependency audit via `scripts/dependency-security-check.mjs`, which consumes `yarn npm audit` output and npm registry metadata to distinguish actionable fixes from upstream-blocked transitive advisories
 - Docker build uses Next.js standalone output and multi-stage builds for optimization
 - Always uses yarn as package manager with frozen lockfiles for consistent builds
 
