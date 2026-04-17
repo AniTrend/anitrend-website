@@ -106,9 +106,14 @@ function parseFiltersFromSearchParams(
 }
 
 export const metadata = {
-  title: 'Discover Anime - AniTrend',
+  title: 'Discover Anime',
   description:
     'Explore and discover new anime series with advanced filtering options.',
+  openGraph: {
+    title: 'Discover Anime | AniTrend',
+    description:
+      'Explore and discover new anime series with advanced filtering options.',
+  },
 };
 
 export default async function DiscoverPage({
