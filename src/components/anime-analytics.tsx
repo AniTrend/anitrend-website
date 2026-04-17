@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Smartphone } from 'lucide-react';
+import { deepLinks } from '@/config/links';
 import { logEvent } from '@/lib/firebase';
 import type { Anime } from '@/lib/types';
 
@@ -33,7 +34,7 @@ export function OpenInAppButton({
   return (
     <Button asChild className="w-full" size="lg">
       <a
-        href={`app.anitrend://action/anime/${anime.id}`}
+        href={deepLinks.anime(anime.id)}
         onClick={() => {
           void logEvent('open_in_app', { id: anime.id, title: anime.title });
         }}

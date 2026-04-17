@@ -1,13 +1,8 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import {
-  ArrowRight,
-  ListChecks,
-  Rocket,
-  Sparkles,
-  Smartphone,
-} from 'lucide-react';
+import { DashboardOpenListsButton } from '@/components/dashboard-open-lists-button';
+import { ArrowRight, ListChecks, Rocket, Sparkles } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { getTopAnime } from '@/lib/anime-service';
@@ -79,11 +74,7 @@ export default async function DashboardPage() {
             and grab AI-powered picks in one place.
           </p>
           <div className="flex items-center justify-center gap-3">
-            <Button asChild size="lg">
-              <Link href="app.anitrend://action/profile">
-                <Smartphone className="mr-2 h-5 w-5" /> Open My Lists in App
-              </Link>
-            </Button>
+            <DashboardOpenListsButton />
             <Button asChild variant="outline" size="lg">
               <Link href="/recommend">
                 <Sparkles className="mr-2 h-5 w-5" /> Get AI Recommendations

@@ -4,7 +4,7 @@ applyTo: '**'
 
 # Update Context Instructions Policy
 
-To ensure the AI agent always has accurate, up-to-date context, you MUST update `/.github/instructions/context.instructions.md` whenever fundamental changes are made to the codebase.
+To ensure the AI agent always has accurate, up-to-date context, you MUST update `.github/instructions/context.instructions.md` whenever fundamental changes are made to the codebase.
 
 ## When to update
 
@@ -19,7 +19,7 @@ To ensure the AI agent always has accurate, up-to-date context, you MUST update 
 
 ## How to update
 
-1. Open `/.github/instructions/context.instructions.md`
+1. Open `.github/instructions/context.instructions.md`
 2. Reflect your changes in the appropriate sections (Architecture, Routing Structure, Dev Workflows, etc.)
 3. Commit the update alongside your code changes
 

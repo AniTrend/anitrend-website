@@ -25,7 +25,7 @@ yarn dev              # Next.js dev server on port 9002 with Turbopack
 yarn genkit:dev       # Start Genkit AI development server
 yarn genkit:watch     # Watch mode for AI flow development
 yarn typecheck        # TypeScript validation
-yarn lint             # ESLint (disabled during CI builds)
+yarn lint             # ESLint validation (CI runs this explicitly)
 yarn build            # Next.js production build
 yarn start            # Start production server
 yarn test:e2e         # Playwright end-to-end tests (expects app running on :9002)
@@ -133,7 +133,7 @@ Next.js image domains configured for:
 ### TypeScript Settings
 
 - Build errors ignored (`ignoreBuildErrors: true`) for rapid prototyping
-- ESLint disabled during builds for CI/CD speed
+- ESLint disabled during `next build`; CI still runs `yarn lint` separately
 
 ## Common Tasks
 
@@ -150,7 +150,7 @@ Tip: Register flows by importing them in `src/ai/dev.ts` so the Genkit dev serve
 
 1. Follow Next.js 15 app router conventions
 2. Server Components for data fetching by default
-3. Use `AppHeader` and `AppFooter` for consistent layout
+3. Reuse the shared header and footer through the root layout instead of importing route chrome directly into pages
 4. Include appropriate meta tags and structured data
 
 ### Styling Components
@@ -173,3 +173,23 @@ Tip: Register flows by importing them in `src/ai/dev.ts` so the Genkit dev serve
 
 - `compose.dev.yaml` for local dev (bind-mount src/public)
 - `compose.prod.yaml` for server deployment pulling `ghcr.io/anitrend/website:latest`
+
+## Agent Customizations
+
+Project-scoped agent customizations live in `.agents/skills/` and `.github/instructions/`.
+
+### Core Skills
+
+- **`anitrend-agentic-workflow`** (`.agents/skills/anitrend-agentic-workflow/SKILL.md`) — Project-specific conventions, CI requirements, tool choices, and implementation patterns. Required before any autonomous work in the repo.
+- **`keeping-nextjs-react-tailwind-coherent`** (`.agents/skills/keeping-nextjs-react-tailwind-coherent/SKILL.md`) — Guidance on server vs. client boundaries, metadata placement, state management, shadcn/ui reuse, and token-based responsive styling for Next.js App Router pages and React components.
+
+### Customization Pack
+
+- **`anitrend-ecosystem-awareness`** (`.agents/skills/anitrend-ecosystem-awareness/SKILL.md`) — Website-to-app handoff, deeplink contract awareness, Open-in-App CTAs, and app parity decisions. Required when working on app-facing routes or handoff behavior.
+- **`anitrend-metadata-and-social-preview`** (`.agents/skills/anitrend-metadata-and-social-preview/SKILL.md`) — Next.js App Router metadata, Open Graph, Twitter cards, and social preview consistency. Required when adding or editing route-level `metadata` exports.
+- **`anitrend-shadcn-extension-patterns`** (`.agents/skills/anitrend-shadcn-extension-patterns/SKILL.md`) — Extending UI primitives with shadcn, `cva`, `cn`, `asChild`, and Tailwind tokens. Required when composing or extending shadcn components.
+
+### Instruction Files
+
+- **`.github/instructions/app-router.instructions.md`** — Next.js App Router conventions: server-first routes, metadata placement, `searchParams` handling, and API normalization. Applied to `src/app/**`.
+- **`.github/instructions/deeplink-contract.instructions.md`** — Centralized deep link URI generation, verified URI shapes, analytics, and fallback preservation. Applied to `src/{config,components,app}/**/*.{ts,tsx}`.

@@ -19,7 +19,18 @@ import { AppShowcaseSection } from '@/components/sections/app-showcase-section';
 import { AIRecommenderSection } from '@/components/sections/ai-recommender-section';
 import { GetTheAppSection } from '@/components/sections/get-the-app-section';
 import { CommunitySection } from '@/components/sections/community-section';
+import type { Metadata } from 'next';
 
+export const metadata: Metadata = {
+  title: 'AniTrend - The Ultimate Anime Companion',
+  description:
+    'Track anime and manga trends effortlessly, and manage your lists from one unified space.',
+  openGraph: {
+    title: 'AniTrend - The Ultimate Anime Companion',
+    description:
+      'Track anime and manga trends effortlessly, and manage your lists from one unified space.',
+  },
+};
 const features: FeatureItem[] = [
   {
     icon: TrendingUp,
