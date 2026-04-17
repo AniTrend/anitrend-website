@@ -20,8 +20,24 @@ const spaceGrotesk = Space_Grotesk({
 });
 
 export const metadata: Metadata = {
-  title: 'AniTrend',
+  metadataBase: new URL('https://anitrend.com'),
+  title: {
+    default: 'AniTrend',
+    template: '%s | AniTrend',
+  },
   description: 'The ultimate companion for tracking anime and manga.',
+  openGraph: {
+    title: 'AniTrend',
+    description: 'The ultimate companion for tracking anime and manga.',
+    url: '/',
+    siteName: 'AniTrend',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'AniTrend',
+    description: 'The ultimate companion for tracking anime and manga.',
+  },
   icons: {
     icon: '/favicon.ico',
     apple: '/apple-touch-icon.png',
