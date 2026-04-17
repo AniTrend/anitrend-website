@@ -37,28 +37,62 @@ jobs:
   validate-release:
     name: Validate Release
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
     outputs:
       version: ${{ steps.version.outputs.version }}
       is_prerelease: ${{ steps.version.outputs.is_prerelease }}
       platforms: ${{ steps.version.outputs.platforms }}
       push_latest: ${{ steps.version.outputs.push_latest }}
+      should_create_version_pr: ${{ steps.version.outputs.should_create_version_pr }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
 
+      - name: Create GitHub App token
+        if: github.ref == 'refs/heads/main'
+        id: app-token
+        uses: actions/create-github-app-token@v3
+        with:
+          client-id: ${{ secrets.APP_ID }}
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
+
+      - name: Resolve version from Release Drafter
+        if: github.ref == 'refs/heads/main'
+        id: release-drafter
+        uses: release-drafter/release-drafter@v7
+        with:
+          config-name: release-drafter-config.yml
+          disable-autolabeler: true
+        env:
+          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
+
       - name: Extract version
         id: version
         run: |
-          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+          SHOULD_CREATE_VERSION_PR="false"
+
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "${{ github.event.inputs.tag }}" != "latest" ]; then
             VERSION="${{ github.event.inputs.tag }}"
           elif [[ "${GITHUB_REF}" == refs/tags/* ]]; then
             VERSION=${GITHUB_REF#refs/tags/}
+            SHOULD_CREATE_VERSION_PR="true"
+          elif [ "${GITHUB_REF}" = "refs/heads/main" ]; then
+            VERSION="${{ steps.release-drafter.outputs.resolved_version }}"
+            SHOULD_CREATE_VERSION_PR="true"
+
+            if [ -z "$VERSION" ]; then
+              echo "::error::Release Drafter did not resolve a version for this run."
+              exit 1
+            fi
           else
             # Fallback for branch builds; use short SHA
             VERSION="sha-${GITHUB_SHA::7}"
           fi
           
           echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "should_create_version_pr=$SHOULD_CREATE_VERSION_PR" >> $GITHUB_OUTPUT
           
           # Check if this is a prerelease (contains alpha, beta, rc)
           if [[ $VERSION =~ (alpha|beta|rc) ]]; then
@@ -175,7 +209,7 @@ jobs:
     name: Post-Release Tasks
     runs-on: ubuntu-latest
     needs: [validate-release]
-    if: needs.validate-release.outputs.is_prerelease == 'false'
+    if: needs.validate-release.outputs.is_prerelease == 'false' && needs.validate-release.outputs.should_create_version_pr == 'true'
     permissions:
       contents: write
       pull-requests: write
