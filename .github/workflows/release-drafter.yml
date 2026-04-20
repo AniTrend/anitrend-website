@@ -4,9 +4,6 @@ on:
   push:
     branches:
       - main
-  pull_request:
-    # Only following types are handled by the action, but one can default to all as well
-    types: [opened, reopened, synchronize]
 
 permissions:
   contents: read
@@ -16,8 +13,8 @@ jobs:
     permissions:
       # write permission is required to create a github release
       contents: write
-      # write permission is required for autolabeler
-      pull-requests: write
+      # read permission is enough for release payload enrichment
+      pull-requests: read
     runs-on: ubuntu-latest
     steps:
       - uses: actions/create-github-app-token@v3
@@ -27,6 +24,6 @@ jobs:
           private-key: ${{ secrets.APP_PRIVATE_KEY }}
       - uses: release-drafter/release-drafter@v7
         with:
-           config-name: release-drafter-config.yml
-        env:
-          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
+          config-name: release-drafter-config.yml
+          commitish: main
+          token: ${{ steps.app-token.outputs.token }}

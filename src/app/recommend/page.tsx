@@ -17,6 +17,7 @@ import Image from 'next/image';
 import { Badge } from '@/components/ui/badge';
 import type { Anime } from '@/lib/types';
 import { getAnimeById } from '@/lib/anime-service';
+import { copy } from '@/copy';
 
 export default function RecommendPage() {
   const [prompt, setPrompt] = useState('');
@@ -26,11 +27,7 @@ export default function RecommendPage() {
   const [isPending, startTransition] = useTransition();
   const { toast } = useToast();
 
-  const examplePrompts = [
-    'A classic space opera with bounty hunters.',
-    'Something with complex psychological themes like Death Note.',
-    'A funny show about superheroes in high school.',
-  ];
+  const examplePrompts = copy.recommend.examples;
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -72,8 +69,8 @@ export default function RecommendPage() {
       } else {
         toast({
           variant: 'destructive',
-          title: 'Recommendation failed',
-          description: 'Could not generate a recommendation. Please try again.',
+          title: copy.recommend.toast.failedTitle,
+          description: copy.recommend.toast.failedDescription,
         });
       }
     });
@@ -89,27 +86,24 @@ export default function RecommendPage() {
         <div className="text-center">
           <Wand2 className="w-12 h-12 mx-auto text-primary mb-4" />
           <h1 className="text-4xl font-bold tracking-tight md:text-5xl font-headline">
-            AI Anime Recommender
+            {copy.recommend.hero.title}
           </h1>
           <p className="mt-4 text-lg text-muted-foreground">
-            <Balancer>
-              Describe what you&apos;re in the mood for, and our AI will suggest
-              an anime for you to watch from our catalog.
-            </Balancer>
+            <Balancer>{copy.recommend.hero.description}</Balancer>
           </p>
         </div>
 
         <form onSubmit={handleSubmit} className="mt-8 space-y-4">
           <Textarea
             name="prompt"
-            placeholder="e.g., 'A sci-fi adventure with a witty crew and a jazzy soundtrack...'"
+            placeholder={copy.recommend.form.placeholder}
             rows={3}
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
             className="text-base"
           />
           <div className="text-sm text-muted-foreground flex flex-wrap gap-2">
-            Try an example:
+            {copy.recommend.form.exampleLead}
             {examplePrompts.map((p) => (
               <button
                 key={p}
@@ -129,12 +123,12 @@ export default function RecommendPage() {
             {isPending ? (
               <>
                 <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                Thinking...
+                {copy.recommend.form.submitting}
               </>
             ) : (
               <>
                 <Wand2 className="mr-2 h-5 w-5" />
-                Get Recommendation
+                {copy.recommend.form.submit}
               </>
             )}
           </Button>
@@ -144,7 +138,7 @@ export default function RecommendPage() {
           <div className="mt-12 flex flex-col items-center text-center">
             <Loader2 className="w-12 h-12 animate-spin text-primary" />
             <p className="mt-4 text-muted-foreground">
-              Finding the perfect anime for you...
+              {copy.recommend.loading.recommendation}
             </p>
           </div>
         )}
@@ -153,11 +147,11 @@ export default function RecommendPage() {
           <div className="mt-12">
             <div className="text-center mb-8">
               <h2 className="text-2xl font-bold font-headline">
-                Our Recommendation
+                {copy.recommend.result.title}
               </h2>
               <p className="mt-2 text-muted-foreground">
                 <span className="font-semibold text-foreground">
-                  Why this match:
+                  {copy.recommend.result.whyThisMatch}
                 </span>{' '}
                 {recommendation.reason}
               </p>
@@ -186,7 +180,7 @@ export default function RecommendPage() {
                             <span className="font-bold">
                               {recommendedAnime.score
                                 ? recommendedAnime.score.toFixed(2)
-                                : 'N/A'}
+                                : copy.recommend.result.notAvailable}
                             </span>
                           </Badge>
                         </div>
@@ -198,7 +192,10 @@ export default function RecommendPage() {
                         <div className="flex justify-between text-xs text-muted-foreground">
                           <div className="flex items-center gap-1">
                             <Award className="w-3 h-3" />
-                            <span>Rank #{recommendedAnime.rank}</span>
+                            <span>
+                              {copy.recommend.result.rankPrefix}
+                              {recommendedAnime.rank}
+                            </span>
                           </div>
                           <div className="flex items-center gap-1">
                             <Users className="w-3 h-3" />
@@ -213,7 +210,7 @@ export default function RecommendPage() {
                         <div className="pt-2 flex gap-2">
                           <Button className="flex-1" asChild>
                             <span>
-                              View Details{' '}
+                              {copy.recommend.result.viewDetails}{' '}
                               <ArrowRight className="ml-2 h-4 w-4" />
                             </span>
                           </Button>

@@ -9,6 +9,7 @@ import {
   OpenInAppButton,
   ShareButton,
 } from '@/components/anime-analytics';
+import { copy } from '@/copy';
 
 export default async function AnimeDetailPage({
   params,
@@ -46,19 +47,19 @@ export default async function AnimeDetailPage({
 
               <div className="mt-8 space-y-4">
                 <h3 className="font-semibold text-lg font-headline border-b pb-2">
-                  Information
+                  {copy.anime.details.information}
                 </h3>
                 <div className="space-y-3 text-sm">
                   <div>
                     <span className="font-semibold block text-foreground/80">
-                      Aired
+                      {copy.anime.details.aired}
                     </span>
                     <span className="text-muted-foreground">{anime.aired}</span>
                   </div>
                   {anime.studios.length > 0 && (
                     <div>
                       <span className="font-semibold block text-foreground/80">
-                        Studios
+                        {copy.anime.details.studios}
                       </span>
                       <span className="text-muted-foreground">
                         {anime.studios.join(', ')}
@@ -68,7 +69,7 @@ export default async function AnimeDetailPage({
                   {anime.producers.length > 0 && (
                     <div>
                       <span className="font-semibold block text-foreground/80">
-                        Producers
+                        {copy.anime.details.producers}
                       </span>
                       <span className="text-muted-foreground">
                         {anime.producers.join(', ')}
@@ -77,7 +78,7 @@ export default async function AnimeDetailPage({
                   )}
                   <div>
                     <span className="font-semibold block text-foreground/80">
-                      Duration
+                      {copy.anime.details.duration}
                     </span>
                     <span className="text-muted-foreground">
                       {anime.duration}
@@ -85,7 +86,7 @@ export default async function AnimeDetailPage({
                   </div>
                   <div>
                     <span className="font-semibold block text-foreground/80">
-                      Rating
+                      {copy.anime.details.rating}
                     </span>
                     <span className="text-muted-foreground">
                       {anime.rating}
@@ -109,15 +110,23 @@ export default async function AnimeDetailPage({
               </div>
               <div className="flex items-center gap-1.5 text-muted-foreground">
                 <Award className="w-5 h-5" />
-                <span>Rank #{anime.rank}</span>
+                <span>
+                  {copy.anime.details.rankPrefix}
+                  {anime.rank}
+                </span>
               </div>
               <div className="flex items-center gap-1.5 text-muted-foreground">
                 <Users className="w-5 h-5" />
-                <span>{anime.popularity.toLocaleString()} users</span>
+                <span>
+                  {anime.popularity.toLocaleString()}{' '}
+                  {copy.anime.details.usersSuffix}
+                </span>
               </div>
               <div className="flex items-center gap-1.5 text-muted-foreground">
                 <Tv className="w-5 h-5" />
-                <span>{anime.episodes || '?'} episodes</span>
+                <span>
+                  {anime.episodes || '?'} {copy.anime.details.episodesSuffix}
+                </span>
               </div>
               <div className="flex items-center gap-1.5 text-muted-foreground">
                 <Calendar className="w-5 h-5" />
@@ -140,17 +149,17 @@ export default async function AnimeDetailPage({
             <div className="mt-8 space-y-8">
               <section>
                 <h2 className="text-xl font-semibold font-headline mb-3">
-                  Synopsis
+                  {copy.anime.details.synopsis}
                 </h2>
                 <p className="text-muted-foreground leading-relaxed">
-                  {anime.synopsis || 'No synopsis available.'}
+                  {anime.synopsis || copy.anime.details.synopsisFallback}
                 </p>
               </section>
 
               {anime.background && (
                 <section>
                   <h2 className="text-xl font-semibold font-headline mb-3">
-                    Background
+                    {copy.anime.details.background}
                   </h2>
                   <p className="text-muted-foreground leading-relaxed text-sm">
                     {anime.background}
@@ -161,7 +170,7 @@ export default async function AnimeDetailPage({
               {anime.trailer?.embedUrl && (
                 <section>
                   <h2 className="text-xl font-semibold font-headline mb-3">
-                    Trailer
+                    {copy.anime.details.trailer}
                   </h2>
                   <div className="aspect-video w-full overflow-hidden rounded-lg bg-muted">
                     <iframe
@@ -177,7 +186,7 @@ export default async function AnimeDetailPage({
               {characters.length > 0 && (
                 <section>
                   <h2 className="text-xl font-semibold font-headline mb-4">
-                    Characters
+                    {copy.anime.details.characters}
                   </h2>
                   <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
                     {characters.slice(0, 12).map((char) => (

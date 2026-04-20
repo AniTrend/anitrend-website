@@ -1,0 +1,57 @@
+export const discoverCopy = {
+  hero: {
+    title: 'Discover Anime',
+    description:
+      'Explore our vast collection of anime. Use filters and search to find your next favorite series.',
+  },
+  search: {
+    placeholder: 'Search for an anime...',
+  },
+  filters: {
+    trigger: 'Advanced Filters',
+    activeBadge: 'Active',
+    type: {
+      label: 'Type',
+      all: 'All types',
+      tv: 'TV Series',
+      movie: 'Movie',
+      ova: 'OVA',
+      special: 'Special',
+      ona: 'ONA',
+      music: 'Music',
+    },
+    status: {
+      label: 'Status',
+      all: 'All status',
+      airing: 'Currently Airing',
+      upcoming: 'Upcoming',
+      bypopularity: 'By Popularity',
+      favorite: 'Favorites',
+    },
+    rating: {
+      label: 'Rating',
+      all: 'All ratings',
+      g: 'G - All Ages',
+      pg: 'PG - Children',
+      pg13: 'PG-13 - Teens 13+',
+      r17: 'R - 17+ (violence & profanity)',
+      r: 'R+ - Mild Nudity',
+    },
+    scoreRange: 'Score Range',
+    sfw: 'Safe for Work only',
+    reset: 'Reset Filters',
+    apply: 'Apply Filters',
+  },
+  results: {
+    showing: (count: number) => `Showing ${count} anime`,
+    showingMatching: (count: number, term: string) =>
+      `Showing ${count} anime matching "${term}"`,
+    loading: 'Loading...',
+    loadMore: 'Load More',
+    noMore: 'No more anime to load',
+    browseAll: 'Browse all anime',
+    emptyFilters: 'No anime found with the current filters.',
+    emptySearch: (term: string) => `No anime found matching "${term}".`,
+    clearFilters: 'Clear all filters and search',
+  },
+} as const;

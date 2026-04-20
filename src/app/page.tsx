@@ -20,41 +20,36 @@ import { AIRecommenderSection } from '@/components/sections/ai-recommender-secti
 import { GetTheAppSection } from '@/components/sections/get-the-app-section';
 import { CommunitySection } from '@/components/sections/community-section';
 import type { Metadata } from 'next';
+import { copy } from '@/copy';
 
 export const metadata: Metadata = {
-  title: 'AniTrend - The Ultimate Anime Companion',
-  description:
-    'Track anime and manga trends effortlessly, and manage your lists from one unified space.',
+  title: copy.metadata.home.title,
+  description: copy.metadata.home.description,
   openGraph: {
-    title: 'AniTrend - The Ultimate Anime Companion',
-    description:
-      'Track anime and manga trends effortlessly, and manage your lists from one unified space.',
+    title: copy.metadata.home.title,
+    description: copy.metadata.home.description,
   },
 };
 const features: FeatureItem[] = [
   {
     icon: TrendingUp,
-    title: 'Stay in the Loop',
-    description:
-      'Track anime and manga trends effortlessly, and manage your lists from one unified space.',
+    title: copy.marketing.features[0].title,
+    description: copy.marketing.features[0].description,
   },
   {
     icon: Search,
-    title: 'Find Exactly What You Love',
-    description:
-      'Effortlessly search anime, manga, characters, and creators with our powerful search engine.',
+    title: copy.marketing.features[1].title,
+    description: copy.marketing.features[1].description,
   },
   {
     icon: Star,
-    title: 'Rate Your Way',
-    description:
-      'Personalize your experience with flexible rating systems tailored just for you.',
+    title: copy.marketing.features[2].title,
+    description: copy.marketing.features[2].description,
   },
   {
     icon: Feather,
-    title: 'Smart and Efficient',
-    description:
-      "AniTrend intelligently adapts to your device's settings to optimize battery and data usage.",
+    title: copy.marketing.features[3].title,
+    description: copy.marketing.features[3].description,
   },
 ];
 

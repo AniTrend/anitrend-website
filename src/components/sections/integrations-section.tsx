@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ArrowUpRight, GitFork, Heart, Layers, Star } from 'lucide-react';
 import { getLanguageColor } from '@/lib/github-service';
+import { copy } from '@/copy';
 
 export interface RepoForDisplay {
   name: string;
@@ -25,11 +26,10 @@ export function IntegrationsSection({
         <div className="grid lg:grid-cols-5 gap-12 items-start">
           <div className="lg:col-span-2 flex flex-col gap-6">
             <h2 className="text-3xl font-bold tracking-tight md:text-4xl font-headline">
-              Proudly Open Source
+              {copy.marketing.integrations.title}
             </h2>
             <p className="text-lg text-muted-foreground">
-              AniTrend is a passion project built by the community, for the
-              community. Explore our repositories and contribute.
+              {copy.marketing.integrations.description}
             </p>
             <div className="space-y-8 mt-4">
               <div className="flex items-start gap-4">
@@ -38,11 +38,10 @@ export function IntegrationsSection({
                 </div>
                 <div>
                   <h3 className="font-bold font-headline text-lg">
-                    By the community, for the community
+                    {copy.marketing.integrations.pillars[0].title}
                   </h3>
                   <p className="text-muted-foreground mt-1">
-                    Thanks to our contributors, AniTrend is built on open
-                    collaboration and passion.
+                    {copy.marketing.integrations.pillars[0].description}
                   </p>
                 </div>
               </div>
@@ -52,11 +51,10 @@ export function IntegrationsSection({
                 </div>
                 <div>
                   <h3 className="font-bold font-headline text-lg">
-                    Create or contribute
+                    {copy.marketing.integrations.pillars[1].title}
                   </h3>
                   <p className="text-muted-foreground mt-1">
-                    Get involved by writing or maintaining a part of the
-                    AniTrend ecosystem.
+                    {copy.marketing.integrations.pillars[1].description}
                   </p>
                 </div>
               </div>
@@ -66,11 +64,10 @@ export function IntegrationsSection({
                 </div>
                 <div>
                   <h3 className="font-bold font-headline text-lg">
-                    Modern Tech Stack
+                    {copy.marketing.integrations.pillars[2].title}
                   </h3>
                   <p className="text-muted-foreground mt-1">
-                    Built on a robust foundation of Kotlin, GraphQL, and modern
-                    Android practices.
+                    {copy.marketing.integrations.pillars[2].description}
                   </p>
                 </div>
               </div>

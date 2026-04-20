@@ -6,6 +6,7 @@ import { AppFooter } from '@/components/footer';
 import { Toaster } from '@/components/ui/toaster';
 import Analytics from '@/components/analytics';
 import AnalyticsConsentBanner from '@/components/consent/analytics-consent-banner';
+import { copy } from '@/copy';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -22,21 +23,21 @@ const spaceGrotesk = Space_Grotesk({
 export const metadata: Metadata = {
   metadataBase: new URL('https://anitrend.com'),
   title: {
-    default: 'AniTrend',
-    template: '%s | AniTrend',
+    default: copy.metadata.brandName,
+    template: `%s | ${copy.metadata.brandName}`,
   },
-  description: 'The ultimate companion for tracking anime and manga.',
+  description: copy.metadata.root.description,
   openGraph: {
-    title: 'AniTrend',
-    description: 'The ultimate companion for tracking anime and manga.',
+    title: copy.metadata.brandName,
+    description: copy.metadata.root.description,
     url: '/',
-    siteName: 'AniTrend',
+    siteName: copy.metadata.brandName,
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'AniTrend',
-    description: 'The ultimate companion for tracking anime and manga.',
+    title: copy.metadata.brandName,
+    description: copy.metadata.root.description,
   },
   icons: {
     icon: '/favicon.ico',
