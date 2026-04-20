@@ -16,6 +16,7 @@ import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { Settings } from 'lucide-react';
 import { setAnalyticsEnabled, logEvent } from '@/lib/firebase';
+import { copy } from '@/copy';
 
 const STORAGE_KEY = 'anitrend_analytics_consent';
 
@@ -64,34 +65,32 @@ export default function AnalyticsSettings() {
       <DialogTrigger asChild>
         <Button variant="ghost" size="icon">
           <Settings className="h-4 w-4" />
-          <span className="sr-only">Analytics settings</span>
+          <span className="sr-only">
+            {copy.common.analytics.settingsTriggerSr}
+          </span>
         </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Analytics Settings</DialogTitle>
+          <DialogTitle>{copy.common.analytics.dialog.title}</DialogTitle>
           <DialogDescription>
-            Control anonymous analytics collection for AniTrend. We only store
-            aggregated, non-identifying metrics.
+            {copy.common.analytics.dialog.description}
           </DialogDescription>
         </DialogHeader>
         <div className="mt-4 flex items-center justify-between">
           <div>
-            <Label>Enable anonymous analytics</Label>
+            <Label>{copy.common.analytics.dialog.label}</Label>
             <p className="text-sm text-muted-foreground">
-              Allow collection of anonymous, aggregated usage data.
+              {copy.common.analytics.dialog.sublabel}
             </p>
           </div>
-          <Switch
-            checked={Boolean(enabled)}
-            onCheckedChange={toggle}
-          />
+          <Switch checked={Boolean(enabled)} onCheckedChange={toggle} />
         </div>
 
         <DialogFooter>
           <div className="flex-1">
             <Button variant="ghost" onClick={clear}>
-              Clear consent
+              {copy.common.analytics.dialog.clearConsent}
             </Button>
           </div>
           <div>
@@ -99,7 +98,7 @@ export default function AnalyticsSettings() {
               <Button
                 onClick={() => void logEvent('analytics_settings_closed')}
               >
-                Done
+                {copy.common.analytics.dialog.done}
               </Button>
             </DialogClose>
           </div>

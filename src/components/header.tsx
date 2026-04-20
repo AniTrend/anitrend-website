@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Button, buttonVariants } from './ui/button';
 import { Sheet, SheetTrigger, SheetContent } from '@/components/ui/sheet';
+import { copy } from '@/copy';
 
 export function AppHeader() {
   return (
@@ -34,7 +35,7 @@ export function AppHeader() {
               })}
             >
               <LayoutDashboard className="mr-2 h-4 w-4" />
-              Dashboard
+              {copy.common.nav.dashboard}
             </Link>
             <Link
               href="/discover"
@@ -44,7 +45,7 @@ export function AppHeader() {
               })}
             >
               <Compass className="mr-2 h-4 w-4" />
-              Discover
+              {copy.common.nav.discover}
             </Link>
             <Link
               href="/recommend"
@@ -54,7 +55,7 @@ export function AppHeader() {
               })}
             >
               <Wand2 className="mr-2 h-4 w-4" />
-              Recommend
+              {copy.common.nav.recommend}
             </Link>
           </nav>
         </div>
@@ -70,7 +71,7 @@ export function AppHeader() {
                 className: 'text-foreground/60',
               })}
             >
-              Features
+              {copy.common.nav.features}
             </Link>
             <Link
               href="/#integrations"
@@ -79,10 +80,10 @@ export function AppHeader() {
                 className: 'text-foreground/60',
               })}
             >
-              Integrations
+              {copy.common.nav.integrations}
             </Link>
             <Button asChild>
-              <Link href="/#get-the-app">Get Started</Link>
+              <Link href="/#get-the-app">{copy.common.nav.getStarted}</Link>
             </Button>
           </nav>
           {/* Mobile menu trigger */}
@@ -90,29 +91,31 @@ export function AppHeader() {
             <SheetTrigger asChild>
               <Button variant="ghost" size="icon" className="md:hidden">
                 <Menu className="h-5 w-5" />
-                <span className="sr-only">Menu</span>
+                <span className="sr-only">{copy.common.nav.menu}</span>
               </Button>
             </SheetTrigger>
             <SheetContent side="left" className="w-full max-w-xs">
               <nav className="flex flex-col space-y-4 mt-4">
                 <Link href="/dashboard" className="flex items-center text-lg">
-                  <LayoutDashboard className="mr-2 h-5 w-5" /> Dashboard
+                  <LayoutDashboard className="mr-2 h-5 w-5" />{' '}
+                  {copy.common.nav.dashboard}
                 </Link>
                 <Link href="/discover" className="flex items-center text-lg">
-                  <Compass className="mr-2 h-5 w-5" /> Discover
+                  <Compass className="mr-2 h-5 w-5" />{' '}
+                  {copy.common.nav.discover}
                 </Link>
                 <Link href="/recommend" className="flex items-center text-lg">
-                  <Wand2 className="mr-2 h-5 w-5" /> Recommend
+                  <Wand2 className="mr-2 h-5 w-5" /> {copy.common.nav.recommend}
                 </Link>
                 <AnalyticsSettings />
                 <Link href="/#features" className="text-lg">
-                  Features
+                  {copy.common.nav.features}
                 </Link>
                 <Link href="/#integrations" className="text-lg">
-                  Integrations
+                  {copy.common.nav.integrations}
                 </Link>
                 <Button asChild className="w-full">
-                  <Link href="/#get-the-app">Get Started</Link>
+                  <Link href="/#get-the-app">{copy.common.nav.getStarted}</Link>
                 </Button>
               </nav>
             </SheetContent>

@@ -4,6 +4,7 @@ import { Smartphone } from 'lucide-react';
 
 import { deepLinks } from '@/config/links';
 import { logEvent } from '@/lib/firebase';
+import { copy } from '@/copy';
 
 import { Button } from '@/components/ui/button';
 
@@ -19,7 +20,8 @@ export function DashboardOpenListsButton() {
           });
         }}
       >
-        <Smartphone className="mr-2 h-5 w-5" /> Open My Lists in App
+        <Smartphone className="mr-2 h-5 w-5" />{' '}
+        {copy.common.actions.openMyListsInApp}
       </a>
     </Button>
   );

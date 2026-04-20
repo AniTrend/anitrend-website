@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { setAnalyticsEnabled, logEvent } from '@/lib/firebase';
+import { copy } from '@/copy';
 
 const STORAGE_KEY = 'anitrend_analytics_consent';
 
@@ -68,16 +69,14 @@ export default function AnalyticsConsentBanner() {
     <div className="fixed bottom-6 left-1/2 z-50 w-[min(96%,900px)] -translate-x-1/2 rounded-lg bg-popover p-4 shadow-lg border">
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
         <div className="text-sm text-muted-foreground">
-          AniTrend uses anonymous analytics to improve the product. By accepting
-          you allow anonymous usage data to be collected. You can change this
-          later in your browser settings.
+          {copy.common.analytics.consentBanner.message}
         </div>
         <div className="flex items-center gap-2 justify-end">
           <Button variant="outline" size="sm" onClick={decline}>
-            Decline
+            {copy.common.analytics.consentBanner.decline}
           </Button>
           <Button size="sm" onClick={accept}>
-            Accept
+            {copy.common.analytics.consentBanner.accept}
           </Button>
         </div>
       </div>

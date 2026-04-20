@@ -6,6 +6,7 @@ import { Smartphone } from 'lucide-react';
 import { deepLinks } from '@/config/links';
 import { logEvent } from '@/lib/firebase';
 import type { Anime } from '@/lib/types';
+import { copy } from '@/copy';
 
 export function TrackAnimeView({
   anime,
@@ -39,7 +40,7 @@ export function OpenInAppButton({
           void logEvent('open_in_app', { id: anime.id, title: anime.title });
         }}
       >
-        <Smartphone className="mr-2 h-5 w-5" /> Open in App
+        <Smartphone className="mr-2 h-5 w-5" /> {copy.anime.actions.openInApp}
       </a>
     </Button>
   );
@@ -55,7 +56,7 @@ export function ShareButton({ anime }: { anime: Pick<Anime, 'id' | 'title'> }) {
       if (navigator.share) {
         await navigator.share({
           title: anime.title,
-          text: `Check out ${anime.title} on AniTrend`,
+          text: copy.anime.actions.shareText(anime.title),
           url: window.location.href,
         });
         setStatus('shared');
@@ -82,10 +83,12 @@ export function ShareButton({ anime }: { anime: Pick<Anime, 'id' | 'title'> }) {
   return (
     <div>
       <Button onClick={handleShare} variant="outline" className="w-full">
-        Share
+        {copy.anime.actions.share}
       </Button>
       {status === 'copied' && (
-        <p className="text-xs text-muted-foreground mt-1">Link copied</p>
+        <p className="text-xs text-muted-foreground mt-1">
+          {copy.anime.actions.linkCopied}
+        </p>
       )}
     </div>
   );
