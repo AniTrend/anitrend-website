@@ -11,6 +11,7 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Github } from 'lucide-react';
+import { copy } from '@/copy';
 
 export function GetTheAppSection({
   playStoreUrl,
@@ -24,13 +25,10 @@ export function GetTheAppSection({
       <div className="container">
         <div className="text-center">
           <h2 className="text-3xl font-bold tracking-tight md:text-4xl font-headline">
-            Take AniTrend Anywhere
+            {copy.marketing.getTheApp.title}
           </h2>
           <p className="mt-4 max-w-2xl mx-auto text-lg text-muted-foreground">
-            <Balancer>
-              Choose your preferred download method. Get the official release
-              from Google Play or grab the latest build from GitHub.
-            </Balancer>
+            <Balancer>{copy.marketing.getTheApp.description}</Balancer>
           </p>
         </div>
         <div className="mt-12 grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
@@ -46,16 +44,18 @@ export function GetTheAppSection({
                   <path d={siGoogleplay.path} />
                 </svg>
                 <div>
-                  <CardTitle>Google Play</CardTitle>
-                  <CardDescription>Recommended for most users</CardDescription>
+                  <CardTitle>
+                    {copy.marketing.getTheApp.googlePlay.title}
+                  </CardTitle>
+                  <CardDescription>
+                    {copy.marketing.getTheApp.googlePlay.subtitle}
+                  </CardDescription>
                 </div>
               </div>
             </CardHeader>
             <CardContent className="flex-1">
               <p className="text-sm text-muted-foreground">
-                Get the official, stable release from the Google Play Store.
-                This version includes automatic updates to ensure you always
-                have the latest features and bug fixes.
+                {copy.marketing.getTheApp.googlePlay.description}
               </p>
             </CardContent>
             <CardFooter>
@@ -73,7 +73,7 @@ export function GetTheAppSection({
                   >
                     <path d={siGoogleplay.path} />
                   </svg>
-                  Get it on Google Play
+                  {copy.marketing.getTheApp.googlePlay.cta}
                 </Link>
               </Button>
             </CardFooter>
@@ -84,24 +84,22 @@ export function GetTheAppSection({
               <div className="flex items-center gap-4">
                 <Github className="h-10 w-10 text-muted-foreground" />
                 <div>
-                  <CardTitle>GitHub</CardTitle>
+                  <CardTitle>{copy.marketing.getTheApp.github.title}</CardTitle>
                   <CardDescription>
-                    For developers & early adopters
+                    {copy.marketing.getTheApp.github.subtitle}
                   </CardDescription>
                 </div>
               </div>
             </CardHeader>
             <CardContent className="flex-1">
               <p className="text-sm text-muted-foreground">
-                Download the latest release directly from our GitHub repository.
-                Ideal for those who want the newest builds or to contribute to
-                the project.
+                {copy.marketing.getTheApp.github.description}
               </p>
             </CardContent>
             <CardFooter>
               <Button asChild className="w-full" size="lg" variant="secondary">
                 <Link href={githubReleasesUrl} target="_blank" rel="noreferrer">
-                  Go to Releases
+                  {copy.marketing.getTheApp.github.cta}
                 </Link>
               </Button>
             </CardFooter>

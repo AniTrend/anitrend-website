@@ -2,6 +2,7 @@ import Balancer from 'react-wrap-balancer';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, Wand2 } from 'lucide-react';
+import { copy } from '@/copy';
 
 export function AIRecommenderSection() {
   return (
@@ -14,19 +15,16 @@ export function AIRecommenderSection() {
           <Wand2 className="w-8 h-8 text-primary" />
         </div>
         <h2 className="text-3xl font-bold tracking-tight md:text-4xl font-headline">
-          Discover Your Next Favorite with AI
+          {copy.marketing.aiRecommender.title}
         </h2>
         <p className="mt-4 max-w-2xl mx-auto text-lg text-muted-foreground">
-          <Balancer>
-            Tired of endless scrolling? Describe what you&apos;re in the mood
-            for, and let our AI find the perfect anime for you from a massive
-            catalog of titles.
-          </Balancer>
+          <Balancer>{copy.marketing.aiRecommender.description}</Balancer>
         </p>
         <div className="mt-8">
           <Button asChild size="lg">
             <Link href="/recommend">
-              Try the AI Recommender <ArrowRight className="ml-2 h-5 w-5" />
+              {copy.marketing.aiRecommender.cta}{' '}
+              <ArrowRight className="ml-2 h-5 w-5" />
             </Link>
           </Button>
         </div>
