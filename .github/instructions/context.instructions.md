@@ -87,6 +87,13 @@ const anime: Anime = {
 - **Color scheme**: Dark theme with purple primary (`#BB86FC`) and teal accents
 - **Responsive**: Mobile-first with container-based layouts
 
+### Copy and Content Conventions
+
+- **Centralized English copy**: User-facing static copy is centralized under `src/copy/en/` and re-exported via `src/copy/index.ts`
+- **Domain-based modules**: Keep copy grouped by domain (`metadata`, `marketing`, `dashboard`, `recommend`, `anime`) to avoid mixed route/component constants
+- **No new inline UI strings**: When touching pages and sections, prefer importing `copy` from `@/copy` over adding fresh inline literals
+- **Metadata alignment**: Route metadata copy should use centralized values from the copy modules for Open Graph and Twitter consistency
+
 ### Routing Structure
 
 - `/` - Landing page with marketing sections
