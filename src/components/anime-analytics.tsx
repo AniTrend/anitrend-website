@@ -1,12 +1,13 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Button } from '@/components/ui/button';
+import { useTranslations } from 'next-intl';
 import { Smartphone } from 'lucide-react';
-import { deepLinks } from '@/config/links';
+import { appIntentStatus } from '@/config/links';
+import { OpenInAppButton as AppHandoffButton } from '@/components/app-handoff/open-in-app-button';
+import { Button } from '@/components/ui/button';
 import { logEvent } from '@/lib/firebase';
 import type { Anime } from '@/lib/types';
-import { copy } from '@/copy';
 
 export function TrackAnimeView({
   anime,
@@ -32,21 +33,25 @@ export function OpenInAppButton({
 }: {
   anime: Pick<Anime, 'id' | 'title'>;
 }) {
+  const t = useTranslations('anime');
+
   return (
-    <Button asChild className="w-full" size="lg">
-      <a
-        href={deepLinks.anime(anime.id)}
-        onClick={() => {
-          void logEvent('open_in_app', { id: anime.id, title: anime.title });
-        }}
-      >
-        <Smartphone className="mr-2 h-5 w-5" /> {copy.anime.actions.openInApp}
-      </a>
-    </Button>
+    <AppHandoffButton
+      className="w-full"
+      size="lg"
+      intent={{ type: 'anime-detail', animeId: anime.id }}
+      intentStatus={appIntentStatus['anime-detail']}
+      onAttempt={() => {
+        void logEvent('open_in_app', { id: anime.id, title: anime.title });
+      }}
+    >
+      <Smartphone className="mr-2 h-5 w-5" /> {t('actions.openInApp')}
+    </AppHandoffButton>
   );
 }
 
 export function ShareButton({ anime }: { anime: Pick<Anime, 'id' | 'title'> }) {
+  const t = useTranslations('anime');
   const [status, setStatus] = useState<'idle' | 'shared' | 'copied' | 'error'>(
     'idle'
   );
@@ -56,7 +61,7 @@ export function ShareButton({ anime }: { anime: Pick<Anime, 'id' | 'title'> }) {
       if (navigator.share) {
         await navigator.share({
           title: anime.title,
-          text: copy.anime.actions.shareText(anime.title),
+          text: t('actions.shareText', { title: anime.title }),
           url: window.location.href,
         });
         setStatus('shared');
@@ -83,11 +88,11 @@ export function ShareButton({ anime }: { anime: Pick<Anime, 'id' | 'title'> }) {
   return (
     <div>
       <Button onClick={handleShare} variant="outline" className="w-full">
-        {copy.anime.actions.share}
+        {t('actions.share')}
       </Button>
       {status === 'copied' && (
         <p className="text-xs text-muted-foreground mt-1">
-          {copy.anime.actions.linkCopied}
+          {t('actions.linkCopied')}
         </p>
       )}
     </div>

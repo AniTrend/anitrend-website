@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { getTranslations } from 'next-intl/server';
 import Balancer from 'react-wrap-balancer';
 import { siGoogleplay } from 'simple-icons';
 import { Button } from '@/components/ui/button';
@@ -11,24 +12,25 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Github } from 'lucide-react';
-import { copy } from '@/copy';
 
-export function GetTheAppSection({
+export async function GetTheAppSection({
   playStoreUrl,
   githubReleasesUrl,
 }: {
   playStoreUrl: string;
   githubReleasesUrl: string;
 }) {
+  const t = await getTranslations('marketing');
+
   return (
     <section id="get-the-app" className="py-20 scroll-mt-20">
       <div className="container">
         <div className="text-center">
           <h2 className="text-3xl font-bold tracking-tight md:text-4xl font-headline">
-            {copy.marketing.getTheApp.title}
+            {t('getTheApp.title')}
           </h2>
           <p className="mt-4 max-w-2xl mx-auto text-lg text-muted-foreground">
-            <Balancer>{copy.marketing.getTheApp.description}</Balancer>
+            <Balancer>{t('getTheApp.description')}</Balancer>
           </p>
         </div>
         <div className="mt-12 grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
@@ -44,18 +46,16 @@ export function GetTheAppSection({
                   <path d={siGoogleplay.path} />
                 </svg>
                 <div>
-                  <CardTitle>
-                    {copy.marketing.getTheApp.googlePlay.title}
-                  </CardTitle>
+                  <CardTitle>{t('getTheApp.googlePlay.title')}</CardTitle>
                   <CardDescription>
-                    {copy.marketing.getTheApp.googlePlay.subtitle}
+                    {t('getTheApp.googlePlay.subtitle')}
                   </CardDescription>
                 </div>
               </div>
             </CardHeader>
             <CardContent className="flex-1">
               <p className="text-sm text-muted-foreground">
-                {copy.marketing.getTheApp.googlePlay.description}
+                {t('getTheApp.googlePlay.description')}
               </p>
             </CardContent>
             <CardFooter>
@@ -73,7 +73,7 @@ export function GetTheAppSection({
                   >
                     <path d={siGoogleplay.path} />
                   </svg>
-                  {copy.marketing.getTheApp.googlePlay.cta}
+                  {t('getTheApp.googlePlay.cta')}
                 </Link>
               </Button>
             </CardFooter>
@@ -84,22 +84,22 @@ export function GetTheAppSection({
               <div className="flex items-center gap-4">
                 <Github className="h-10 w-10 text-muted-foreground" />
                 <div>
-                  <CardTitle>{copy.marketing.getTheApp.github.title}</CardTitle>
+                  <CardTitle>{t('getTheApp.github.title')}</CardTitle>
                   <CardDescription>
-                    {copy.marketing.getTheApp.github.subtitle}
+                    {t('getTheApp.github.subtitle')}
                   </CardDescription>
                 </div>
               </div>
             </CardHeader>
             <CardContent className="flex-1">
               <p className="text-sm text-muted-foreground">
-                {copy.marketing.getTheApp.github.description}
+                {t('getTheApp.github.description')}
               </p>
             </CardContent>
             <CardFooter>
               <Button asChild className="w-full" size="lg" variant="secondary">
                 <Link href={githubReleasesUrl} target="_blank" rel="noreferrer">
-                  {copy.marketing.getTheApp.github.cta}
+                  {t('getTheApp.github.cta')}
                 </Link>
               </Button>
             </CardFooter>

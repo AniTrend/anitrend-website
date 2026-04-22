@@ -20,40 +20,46 @@ import { AIRecommenderSection } from '@/components/sections/ai-recommender-secti
 import { GetTheAppSection } from '@/components/sections/get-the-app-section';
 import { CommunitySection } from '@/components/sections/community-section';
 import type { Metadata } from 'next';
-import { copy } from '@/copy';
+import { getTranslations } from 'next-intl/server';
 
-export const metadata: Metadata = {
-  title: copy.metadata.home.title,
-  description: copy.metadata.home.description,
-  openGraph: {
-    title: copy.metadata.home.title,
-    description: copy.metadata.home.description,
-  },
-};
-const features: FeatureItem[] = [
-  {
-    icon: TrendingUp,
-    title: copy.marketing.features[0].title,
-    description: copy.marketing.features[0].description,
-  },
-  {
-    icon: Search,
-    title: copy.marketing.features[1].title,
-    description: copy.marketing.features[1].description,
-  },
-  {
-    icon: Star,
-    title: copy.marketing.features[2].title,
-    description: copy.marketing.features[2].description,
-  },
-  {
-    icon: Feather,
-    title: copy.marketing.features[3].title,
-    description: copy.marketing.features[3].description,
-  },
-];
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations('metadata');
+
+  return {
+    title: t('home.title'),
+    description: t('home.description'),
+    openGraph: {
+      title: t('home.title'),
+      description: t('home.description'),
+    },
+  };
+}
 
 export default async function Home() {
+  const marketing = await getTranslations('marketing');
+  const features: FeatureItem[] = [
+    {
+      icon: TrendingUp,
+      title: marketing('features.stayInLoop.title'),
+      description: marketing('features.stayInLoop.description'),
+    },
+    {
+      icon: Search,
+      title: marketing('features.findExactlyWhatYouLove.title'),
+      description: marketing('features.findExactlyWhatYouLove.description'),
+    },
+    {
+      icon: Star,
+      title: marketing('features.rateYourWay.title'),
+      description: marketing('features.rateYourWay.description'),
+    },
+    {
+      icon: Feather,
+      title: marketing('features.smartAndEfficient.title'),
+      description: marketing('features.smartAndEfficient.description'),
+    },
+  ];
+
   // Fetch repositories from GitHub API
   let repositories;
   try {

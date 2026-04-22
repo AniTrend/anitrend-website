@@ -1,4 +1,5 @@
 import Balancer from 'react-wrap-balancer';
+import { getTranslations } from 'next-intl/server';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 export type FeatureItem = {
@@ -7,7 +8,13 @@ export type FeatureItem = {
   description: string;
 };
 
-export function FeaturesSection({ features }: { features: FeatureItem[] }) {
+export async function FeaturesSection({
+  features,
+}: {
+  features: FeatureItem[];
+}) {
+  const t = await getTranslations('marketing');
+
   return (
     <section
       id="features"
@@ -16,13 +23,10 @@ export function FeaturesSection({ features }: { features: FeatureItem[] }) {
       <div className="container">
         <div className="text-center max-w-3xl mx-auto">
           <h2 className="text-3xl font-bold tracking-tight md:text-4xl font-headline">
-            All-in-One Anime & Manga Tracker
+            {t('featuresSection.title')}
           </h2>
           <p className="mt-4 max-w-2xl mx-auto text-lg text-muted-foreground">
-            <Balancer>
-              AniTrend is packed with features to help you organize your lists,
-              discover new favorites, and connect with other fans.
-            </Balancer>
+            <Balancer>{t('featuresSection.description')}</Balancer>
           </p>
         </div>
         <div className="mt-12 grid gap-8 md:grid-cols-2 lg:grid-cols-4">

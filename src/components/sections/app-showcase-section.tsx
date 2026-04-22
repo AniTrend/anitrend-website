@@ -1,6 +1,7 @@
 import Balancer from 'react-wrap-balancer';
 import Image from 'next/image';
 import { Palette } from 'lucide-react';
+import { getTranslations } from 'next-intl/server';
 import {
   Carousel,
   CarouselContent,
@@ -10,11 +11,13 @@ import {
 } from '@/components/ui/carousel';
 import type { AppScreenshot } from '@/lib/screenshots-service';
 
-export function AppShowcaseSection({
+export async function AppShowcaseSection({
   screenshots,
 }: {
   screenshots: AppScreenshot[];
 }) {
+  const t = await getTranslations('marketing');
+
   return (
     <section id="app-showcase" className="py-20 md:py-24 scroll-mt-20">
       <div className="container">
@@ -23,14 +26,10 @@ export function AppShowcaseSection({
             <Palette className="w-8 h-8 text-primary" />
           </div>
           <h2 className="text-3xl font-bold tracking-tight md:text-4xl font-headline">
-            Beautifully Crafted Interface
+            {t('appShowcase.title')}
           </h2>
           <p className="mt-4 max-w-2xl mx-auto text-lg text-muted-foreground">
-            <Balancer>
-              Explore a meticulously designed interface that&apos;s both
-              intuitive and visually stunning. Every screen is built to enhance
-              your anime and manga journey.
-            </Balancer>
+            <Balancer>{t('appShowcase.description')}</Balancer>
           </p>
         </div>
         <div className="mt-12">

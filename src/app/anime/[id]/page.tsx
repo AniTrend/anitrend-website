@@ -3,19 +3,20 @@ import Image from 'next/image';
 import { Badge } from '@/components/ui/badge';
 import { Star, Tv, Calendar, Users, Award } from 'lucide-react';
 import Balancer from 'react-wrap-balancer';
+import { getTranslations } from 'next-intl/server';
 import { getAnimeById, getAnimeCharacters } from '@/lib/anime-service';
 import {
   TrackAnimeView,
   OpenInAppButton,
   ShareButton,
 } from '@/components/anime-analytics';
-import { copy } from '@/copy';
 
 export default async function AnimeDetailPage({
   params,
 }: {
   params: Promise<{ id: string }>;
 }) {
+  const t = await getTranslations('anime');
   const { id } = await params;
   const anime = await getAnimeById(id);
   const characters = await getAnimeCharacters(id);
@@ -47,19 +48,19 @@ export default async function AnimeDetailPage({
 
               <div className="mt-8 space-y-4">
                 <h3 className="font-semibold text-lg font-headline border-b pb-2">
-                  {copy.anime.details.information}
+                  {t('details.information')}
                 </h3>
                 <div className="space-y-3 text-sm">
                   <div>
                     <span className="font-semibold block text-foreground/80">
-                      {copy.anime.details.aired}
+                      {t('details.aired')}
                     </span>
                     <span className="text-muted-foreground">{anime.aired}</span>
                   </div>
                   {anime.studios.length > 0 && (
                     <div>
                       <span className="font-semibold block text-foreground/80">
-                        {copy.anime.details.studios}
+                        {t('details.studios')}
                       </span>
                       <span className="text-muted-foreground">
                         {anime.studios.join(', ')}
@@ -69,7 +70,7 @@ export default async function AnimeDetailPage({
                   {anime.producers.length > 0 && (
                     <div>
                       <span className="font-semibold block text-foreground/80">
-                        {copy.anime.details.producers}
+                        {t('details.producers')}
                       </span>
                       <span className="text-muted-foreground">
                         {anime.producers.join(', ')}
@@ -78,7 +79,7 @@ export default async function AnimeDetailPage({
                   )}
                   <div>
                     <span className="font-semibold block text-foreground/80">
-                      {copy.anime.details.duration}
+                      {t('details.duration')}
                     </span>
                     <span className="text-muted-foreground">
                       {anime.duration}
@@ -86,7 +87,7 @@ export default async function AnimeDetailPage({
                   </div>
                   <div>
                     <span className="font-semibold block text-foreground/80">
-                      {copy.anime.details.rating}
+                      {t('details.rating')}
                     </span>
                     <span className="text-muted-foreground">
                       {anime.rating}
@@ -105,27 +106,28 @@ export default async function AnimeDetailPage({
               <div className="flex items-center gap-1.5">
                 <Star className="w-5 h-5 text-amber-400 fill-amber-400" />
                 <span className="font-bold text-lg">
-                  {anime.score ? anime.score.toFixed(2) : 'N/A'}
+                  {anime.score
+                    ? anime.score.toFixed(2)
+                    : t('details.notAvailable')}
                 </span>
               </div>
               <div className="flex items-center gap-1.5 text-muted-foreground">
                 <Award className="w-5 h-5" />
                 <span>
-                  {copy.anime.details.rankPrefix}
+                  {t('details.rankPrefix')}
                   {anime.rank}
                 </span>
               </div>
               <div className="flex items-center gap-1.5 text-muted-foreground">
                 <Users className="w-5 h-5" />
                 <span>
-                  {anime.popularity.toLocaleString()}{' '}
-                  {copy.anime.details.usersSuffix}
+                  {anime.popularity.toLocaleString()} {t('details.usersSuffix')}
                 </span>
               </div>
               <div className="flex items-center gap-1.5 text-muted-foreground">
                 <Tv className="w-5 h-5" />
                 <span>
-                  {anime.episodes || '?'} {copy.anime.details.episodesSuffix}
+                  {anime.episodes || '?'} {t('details.episodesSuffix')}
                 </span>
               </div>
               <div className="flex items-center gap-1.5 text-muted-foreground">
@@ -149,17 +151,17 @@ export default async function AnimeDetailPage({
             <div className="mt-8 space-y-8">
               <section>
                 <h2 className="text-xl font-semibold font-headline mb-3">
-                  {copy.anime.details.synopsis}
+                  {t('details.synopsis')}
                 </h2>
                 <p className="text-muted-foreground leading-relaxed">
-                  {anime.synopsis || copy.anime.details.synopsisFallback}
+                  {anime.synopsis || t('details.synopsisFallback')}
                 </p>
               </section>
 
               {anime.background && (
                 <section>
                   <h2 className="text-xl font-semibold font-headline mb-3">
-                    {copy.anime.details.background}
+                    {t('details.background')}
                   </h2>
                   <p className="text-muted-foreground leading-relaxed text-sm">
                     {anime.background}
@@ -170,12 +172,12 @@ export default async function AnimeDetailPage({
               {anime.trailer?.embedUrl && (
                 <section>
                   <h2 className="text-xl font-semibold font-headline mb-3">
-                    {copy.anime.details.trailer}
+                    {t('details.trailer')}
                   </h2>
                   <div className="aspect-video w-full overflow-hidden rounded-lg bg-muted">
                     <iframe
                       src={anime.trailer.embedUrl}
-                      title={`${anime.title} Trailer`}
+                      title={t('details.trailerTitle', { title: anime.title })}
                       className="w-full h-full"
                       allowFullScreen
                     />
@@ -186,7 +188,7 @@ export default async function AnimeDetailPage({
               {characters.length > 0 && (
                 <section>
                   <h2 className="text-xl font-semibold font-headline mb-4">
-                    {copy.anime.details.characters}
+                    {t('details.characters')}
                   </h2>
                   <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
                     {characters.slice(0, 12).map((char) => (

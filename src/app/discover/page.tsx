@@ -4,6 +4,7 @@ import {
   searchAnime,
   type TopAnimeFilters,
 } from '@/lib/anime-service';
+import { getTranslations } from 'next-intl/server';
 
 type DiscoverPageProps = {
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
@@ -105,16 +106,18 @@ function parseFiltersFromSearchParams(
   return { filters, searchTerm };
 }
 
-export const metadata = {
-  title: 'Discover Anime',
-  description:
-    'Explore and discover new anime series with advanced filtering options.',
-  openGraph: {
-    title: 'Discover Anime | AniTrend',
-    description:
-      'Explore and discover new anime series with advanced filtering options.',
-  },
-};
+export async function generateMetadata() {
+  const t = await getTranslations('metadata');
+
+  return {
+    title: t('discover.title'),
+    description: t('discover.description'),
+    openGraph: {
+      title: `${t('discover.title')} | ${t('brandName')}`,
+      description: t('discover.description'),
+    },
+  };
+}
 
 export default async function DiscoverPage({
   searchParams = Promise.resolve({}),

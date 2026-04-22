@@ -14,12 +14,13 @@ import { Loader2, Wand2, ArrowRight, Star, Users, Award } from 'lucide-react';
 import Balancer from 'react-wrap-balancer';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useTranslations } from 'next-intl';
 import { Badge } from '@/components/ui/badge';
 import type { Anime } from '@/lib/types';
 import { getAnimeById } from '@/lib/anime-service';
-import { copy } from '@/copy';
 
 export default function RecommendPage() {
+  const t = useTranslations('recommend');
   const [prompt, setPrompt] = useState('');
   const [recommendation, setRecommendation] =
     useState<RecommendAnimeOutput | null>(null);
@@ -27,7 +28,11 @@ export default function RecommendPage() {
   const [isPending, startTransition] = useTransition();
   const { toast } = useToast();
 
-  const examplePrompts = copy.recommend.examples;
+  const examplePrompts = [
+    t('examples.spaceOpera'),
+    t('examples.psychological'),
+    t('examples.superheroes'),
+  ];
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -69,8 +74,8 @@ export default function RecommendPage() {
       } else {
         toast({
           variant: 'destructive',
-          title: copy.recommend.toast.failedTitle,
-          description: copy.recommend.toast.failedDescription,
+          title: t('toast.failedTitle'),
+          description: t('toast.failedDescription'),
         });
       }
     });
@@ -86,24 +91,24 @@ export default function RecommendPage() {
         <div className="text-center">
           <Wand2 className="w-12 h-12 mx-auto text-primary mb-4" />
           <h1 className="text-4xl font-bold tracking-tight md:text-5xl font-headline">
-            {copy.recommend.hero.title}
+            {t('hero.title')}
           </h1>
           <p className="mt-4 text-lg text-muted-foreground">
-            <Balancer>{copy.recommend.hero.description}</Balancer>
+            <Balancer>{t('hero.description')}</Balancer>
           </p>
         </div>
 
         <form onSubmit={handleSubmit} className="mt-8 space-y-4">
           <Textarea
             name="prompt"
-            placeholder={copy.recommend.form.placeholder}
+            placeholder={t('form.placeholder')}
             rows={3}
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
             className="text-base"
           />
           <div className="text-sm text-muted-foreground flex flex-wrap gap-2">
-            {copy.recommend.form.exampleLead}
+            {t('form.exampleLead')}
             {examplePrompts.map((p) => (
               <button
                 key={p}
@@ -123,12 +128,12 @@ export default function RecommendPage() {
             {isPending ? (
               <>
                 <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                {copy.recommend.form.submitting}
+                {t('form.submitting')}
               </>
             ) : (
               <>
                 <Wand2 className="mr-2 h-5 w-5" />
-                {copy.recommend.form.submit}
+                {t('form.submit')}
               </>
             )}
           </Button>
@@ -138,7 +143,7 @@ export default function RecommendPage() {
           <div className="mt-12 flex flex-col items-center text-center">
             <Loader2 className="w-12 h-12 animate-spin text-primary" />
             <p className="mt-4 text-muted-foreground">
-              {copy.recommend.loading.recommendation}
+              {t('loading.recommendation')}
             </p>
           </div>
         )}
@@ -147,11 +152,11 @@ export default function RecommendPage() {
           <div className="mt-12">
             <div className="text-center mb-8">
               <h2 className="text-2xl font-bold font-headline">
-                {copy.recommend.result.title}
+                {t('result.title')}
               </h2>
               <p className="mt-2 text-muted-foreground">
                 <span className="font-semibold text-foreground">
-                  {copy.recommend.result.whyThisMatch}
+                  {t('result.whyThisMatch')}
                 </span>{' '}
                 {recommendation.reason}
               </p>
@@ -180,7 +185,7 @@ export default function RecommendPage() {
                             <span className="font-bold">
                               {recommendedAnime.score
                                 ? recommendedAnime.score.toFixed(2)
-                                : copy.recommend.result.notAvailable}
+                                : t('result.notAvailable')}
                             </span>
                           </Badge>
                         </div>
@@ -193,7 +198,7 @@ export default function RecommendPage() {
                           <div className="flex items-center gap-1">
                             <Award className="w-3 h-3" />
                             <span>
-                              {copy.recommend.result.rankPrefix}
+                              {t('result.rankPrefix')}
                               {recommendedAnime.rank}
                             </span>
                           </div>
@@ -210,7 +215,7 @@ export default function RecommendPage() {
                         <div className="pt-2 flex gap-2">
                           <Button className="flex-1" asChild>
                             <span>
-                              {copy.recommend.result.viewDetails}{' '}
+                              {t('result.viewDetails')}{' '}
                               <ArrowRight className="ml-2 h-4 w-4" />
                             </span>
                           </Button>

@@ -1,0 +1,41 @@
+{
+  "actions": {
+    "openInApp": "Open in App",
+    "share": "Share",
+    "linkCopied": "Link copied",
+    "shareText": "Check out {title} on AniTrend"
+  },
+  "details": {
+    "information": "Information",
+    "aired": "Aired",
+    "studios": "Studios",
+    "producers": "Producers",
+    "duration": "Duration",
+    "rating": "Rating",
+    "rankPrefix": "Rank #",
+    "usersSuffix": "users",
+    "episodesSuffix": "episodes",
+    "synopsis": "Synopsis",
+    "synopsisFallback": "No synopsis available.",
+    "background": "Background",
+    "trailer": "Trailer",
+    "characters": "Characters",
+    "notAvailable": "N/A",
+    "trailerTitle": "{title} Trailer"
+  },
+  "handoff": {
+    "openFallback": {
+      "title": "Couldn't open this anime in AniTrend",
+      "description": "Your browser stayed on this page, so the app may not be installed or may not support this handoff yet.",
+      "actions": {
+        "playStore": "Install AniTrend to open anime details",
+        "github": "Try the latest AniTrend build",
+        "dismiss": "Stay on this anime page"
+      }
+    }
+  },
+  "card": {
+    "rank": "Rank #{rank}",
+    "popularity": "{value}k"
+  }
+}

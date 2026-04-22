@@ -133,15 +133,19 @@ function delay(ms: number) {
 
 async function fetchWithRetry(
   url: string,
-  options: RequestInit = {},
+  options: RequestInit & { next?: { revalidate?: number } } = {},
   retries = 2,
   backoffMs = 500
 ): Promise<Response | null> {
+  const { next, ...requestOptions } = options;
+
   for (let attempt = 0; attempt <= retries; attempt++) {
     try {
       const response = await fetch(url, {
-        cache: 'no-store',
-        ...options,
+        next: {
+          revalidate: next?.revalidate ?? 300,
+        },
+        ...requestOptions,
       });
 
       if (response.status === 429 && attempt < retries) {

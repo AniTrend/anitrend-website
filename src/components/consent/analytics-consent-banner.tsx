@@ -1,9 +1,9 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
 import { setAnalyticsEnabled, logEvent } from '@/lib/firebase';
-import { copy } from '@/copy';
 
 const STORAGE_KEY = 'anitrend_analytics_consent';
 
@@ -13,6 +13,7 @@ const STORAGE_KEY = 'anitrend_analytics_consent';
  * - Calls setAnalyticsEnabled(...) so Firebase respects the preference
  */
 export default function AnalyticsConsentBanner() {
+  const t = useTranslations('common');
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
@@ -69,14 +70,14 @@ export default function AnalyticsConsentBanner() {
     <div className="fixed bottom-6 left-1/2 z-50 w-[min(96%,900px)] -translate-x-1/2 rounded-lg bg-popover p-4 shadow-lg border">
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
         <div className="text-sm text-muted-foreground">
-          {copy.common.analytics.consentBanner.message}
+          {t('analytics.consentBanner.message')}
         </div>
         <div className="flex items-center gap-2 justify-end">
           <Button variant="outline" size="sm" onClick={decline}>
-            {copy.common.analytics.consentBanner.decline}
+            {t('analytics.consentBanner.decline')}
           </Button>
           <Button size="sm" onClick={accept}>
-            {copy.common.analytics.consentBanner.accept}
+            {t('analytics.consentBanner.accept')}
           </Button>
         </div>
       </div>

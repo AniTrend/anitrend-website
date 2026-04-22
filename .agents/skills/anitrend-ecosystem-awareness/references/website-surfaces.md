@@ -8,11 +8,13 @@ This inventory captures current website surfaces that either centralize or emit 
 
 - `deepLinks.profile`: `app.anitrend://action/profile`
 - `deepLinks.anime(id)`: `app.anitrend://action/anime/${id}`
+- `getAppIntentHref(intent)`: typed app intent to URI resolution
+- `appIntentStatus`: current contract confidence for shared app handoff surfaces
 
 Notes:
 
 - This file is the current source of truth for reusable deeplink constants.
-- Not all emitting surfaces currently consume this helper yet.
+- Shared app-intent resolution now lives here even when UI surfaces delegate opening behavior to `src/components/app-handoff/`.
 
 ## Emitting Surfaces
 
@@ -24,12 +26,14 @@ Component:
 
 Behavior:
 
-- Emits app handoff via `href={deepLinks.anime(anime.id)}`
+- Delegates app handoff through `src/components/app-handoff/open-in-app-button.tsx`
+- Emits anime detail app intent `{ type: 'anime-detail', animeId }`
 - Logs analytics event `open_in_app` with `{ id, title }`
+- Shows a shared fallback dialog when the browser remains on the current page
 
 Implication:
 
-- Surface is app-aware, measurable, and reuses the centralized anime deep link helper.
+- Surface is app-aware, measurable, and reuses centralized intent-to-URI resolution.
 
 ### `src/app/dashboard/page.tsx` + `src/components/dashboard-open-lists-button.tsx`
 
@@ -39,12 +43,14 @@ Surface:
 
 Behavior:
 
-- Emits app handoff via `href={deepLinks.profile}`
+- Delegates app handoff through `src/components/app-handoff/open-in-app-button.tsx`
+- Emits profile app intent `{ type: 'profile' }`
 - Logs analytics event `open_in_app` with `{ source: 'dashboard', target: 'profile' }`
+- Shows a shared fallback dialog when the browser remains on the current page
 
 Implication:
 
-- Profile handoff is present in dashboard UX, reuses the centralized profile deep link, and keeps app-handoff analytics attached at the emitting component.
+- Profile handoff is present in dashboard UX, reuses centralized intent resolution, and keeps app-handoff analytics attached at the emitting component.
 
 ## Discovery Quality Notes
 

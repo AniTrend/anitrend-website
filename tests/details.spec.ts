@@ -29,3 +29,15 @@ test('loads anime details with rich information', async ({ page }) => {
   // Check if at least one character image is present
   await expect(page.getByRole('img', { name: 'Spike' })).toBeVisible(); // Spike Spiegel
 });
+
+test('shows anime-specific fallback copy when app handoff does not open', async ({
+  page,
+}) => {
+  await page.goto('/anime/1');
+
+  await page.getByRole('link', { name: /open in app/i }).click();
+
+  await expect(
+    page.getByRole('heading', { name: /couldn't open this anime in anitrend/i })
+  ).toBeVisible({ timeout: 3000 });
+});

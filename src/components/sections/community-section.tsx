@@ -1,9 +1,9 @@
 import Link from 'next/link';
+import { getTranslations } from 'next-intl/server';
 import Balancer from 'react-wrap-balancer';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Rocket } from 'lucide-react';
-import { copy } from '@/copy';
 
 export function DiscordIcon({ className }: { className?: string }) {
   return (
@@ -18,18 +18,20 @@ export function DiscordIcon({ className }: { className?: string }) {
   );
 }
 
-export function CommunitySection({
+export async function CommunitySection({
   supabaseBannerUrl,
   discordInviteUrl,
 }: {
   supabaseBannerUrl: string;
   discordInviteUrl: string;
 }) {
+  const t = await getTranslations('marketing');
+
   return (
     <section id="community" className="py-20 md:py-32 relative">
       <Image
         src={supabaseBannerUrl}
-        alt={copy.marketing.community.backgroundAlt}
+        alt={t('community.backgroundAlt')}
         fill
         className="absolute inset-0 w-full h-full object-cover -z-10 opacity-20"
         data-ai-hint="anime community"
@@ -40,16 +42,16 @@ export function CommunitySection({
           <Rocket className="w-8 h-8 text-primary" />
         </div>
         <h2 className="text-3xl font-bold tracking-tight md:text-4xl font-headline">
-          {copy.marketing.community.title}
+          {t('community.title')}
         </h2>
         <p className="mt-4 max-w-2xl mx-auto text-lg text-muted-foreground">
-          <Balancer>{copy.marketing.community.description}</Balancer>
+          <Balancer>{t('community.description')}</Balancer>
         </p>
         <div className="mt-8">
           <Button asChild size="lg" variant="discord">
             <Link href={discordInviteUrl} target="_blank" rel="noreferrer">
               <DiscordIcon className="mr-2 h-5 w-5" />
-              {copy.marketing.community.cta}
+              {t('community.cta')}
             </Link>
           </Button>
         </div>

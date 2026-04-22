@@ -15,12 +15,13 @@ import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { Settings } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { setAnalyticsEnabled, logEvent } from '@/lib/firebase';
-import { copy } from '@/copy';
 
 const STORAGE_KEY = 'anitrend_analytics_consent';
 
 export default function AnalyticsSettings() {
+  const t = useTranslations('common');
   const [enabled, setEnabled] = useState<boolean | null>(null);
 
   useEffect(() => {
@@ -65,23 +66,21 @@ export default function AnalyticsSettings() {
       <DialogTrigger asChild>
         <Button variant="ghost" size="icon">
           <Settings className="h-4 w-4" />
-          <span className="sr-only">
-            {copy.common.analytics.settingsTriggerSr}
-          </span>
+          <span className="sr-only">{t('analytics.settingsTriggerSr')}</span>
         </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>{copy.common.analytics.dialog.title}</DialogTitle>
+          <DialogTitle>{t('analytics.dialog.title')}</DialogTitle>
           <DialogDescription>
-            {copy.common.analytics.dialog.description}
+            {t('analytics.dialog.description')}
           </DialogDescription>
         </DialogHeader>
         <div className="mt-4 flex items-center justify-between">
           <div>
-            <Label>{copy.common.analytics.dialog.label}</Label>
+            <Label>{t('analytics.dialog.label')}</Label>
             <p className="text-sm text-muted-foreground">
-              {copy.common.analytics.dialog.sublabel}
+              {t('analytics.dialog.sublabel')}
             </p>
           </div>
           <Switch checked={Boolean(enabled)} onCheckedChange={toggle} />
@@ -90,7 +89,7 @@ export default function AnalyticsSettings() {
         <DialogFooter>
           <div className="flex-1">
             <Button variant="ghost" onClick={clear}>
-              {copy.common.analytics.dialog.clearConsent}
+              {t('analytics.dialog.clearConsent')}
             </Button>
           </div>
           <div>
@@ -98,7 +97,7 @@ export default function AnalyticsSettings() {
               <Button
                 onClick={() => void logEvent('analytics_settings_closed')}
               >
-                {copy.common.analytics.dialog.done}
+                {t('analytics.dialog.done')}
               </Button>
             </DialogClose>
           </div>

@@ -5,8 +5,8 @@ import { DashboardOpenListsButton } from '@/components/dashboard-open-lists-butt
 import { ArrowRight, ListChecks, Rocket, Sparkles } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { getTranslations } from 'next-intl/server';
 import { getTopAnime } from '@/lib/anime-service';
-import { copy } from '@/copy';
 
 type Recommendation = {
   id: string;
@@ -14,29 +14,6 @@ type Recommendation = {
   imageUrl?: string;
   synopsis?: string | null;
 };
-
-const discoverShortcuts = [
-  {
-    title: copy.dashboard.shortcuts.items[0].title,
-    description: copy.dashboard.shortcuts.items[0].description,
-    href: '/discover?filter=airing&sfw=true',
-  },
-  {
-    title: copy.dashboard.shortcuts.items[1].title,
-    description: copy.dashboard.shortcuts.items[1].description,
-    href: '/discover?filter=upcoming&sfw=true',
-  },
-  {
-    title: copy.dashboard.shortcuts.items[2].title,
-    description: copy.dashboard.shortcuts.items[2].description,
-    href: '/discover?min_score=8&sfw=true',
-  },
-  {
-    title: copy.dashboard.shortcuts.items[3].title,
-    description: copy.dashboard.shortcuts.items[3].description,
-    href: '/discover?type=movie&sfw=true',
-  },
-];
 
 async function fetchRecommendationTeasers(): Promise<Recommendation[]> {
   try {
@@ -58,6 +35,29 @@ async function fetchRecommendationTeasers(): Promise<Recommendation[]> {
 }
 
 export default async function DashboardPage() {
+  const t = await getTranslations('dashboard');
+  const discoverShortcuts = [
+    {
+      title: t('shortcuts.items.topAiring.title'),
+      description: t('shortcuts.items.topAiring.description'),
+      href: '/discover?filter=airing&sfw=true',
+    },
+    {
+      title: t('shortcuts.items.upcoming.title'),
+      description: t('shortcuts.items.upcoming.description'),
+      href: '/discover?filter=upcoming&sfw=true',
+    },
+    {
+      title: t('shortcuts.items.highlyRated.title'),
+      description: t('shortcuts.items.highlyRated.description'),
+      href: '/discover?min_score=8&sfw=true',
+    },
+    {
+      title: t('shortcuts.items.moviesOnly.title'),
+      description: t('shortcuts.items.moviesOnly.description'),
+      href: '/discover?type=movie&sfw=true',
+    },
+  ];
   const recs = await fetchRecommendationTeasers();
 
   return (
@@ -68,17 +68,17 @@ export default async function DashboardPage() {
             <ListChecks className="w-14 h-14 text-primary" />
           </div>
           <h1 className="text-4xl font-bold tracking-tight md:text-5xl font-headline">
-            {copy.dashboard.hero.title}
+            {t('hero.title')}
           </h1>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            {copy.dashboard.hero.description}
+            {t('hero.description')}
           </p>
           <div className="flex items-center justify-center gap-3">
             <DashboardOpenListsButton />
             <Button asChild variant="outline" size="lg">
               <Link href="/recommend">
                 <Sparkles className="mr-2 h-5 w-5" />
-                {copy.dashboard.hero.cta.aiRecommendations}
+                {t('hero.cta.aiRecommendations')}
               </Link>
             </Button>
           </div>
@@ -87,10 +87,8 @@ export default async function DashboardPage() {
         <section className="space-y-4">
           <div className="flex items-center gap-2">
             <Rocket className="h-5 w-5 text-primary" />
-            <h2 className="text-xl font-semibold">
-              {copy.dashboard.shortcuts.title}
-            </h2>
-            <Badge variant="secondary">{copy.dashboard.shortcuts.badge}</Badge>
+            <h2 className="text-xl font-semibold">{t('shortcuts.title')}</h2>
+            <Badge variant="secondary">{t('shortcuts.badge')}</Badge>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             {discoverShortcuts.map((shortcut) => (
@@ -106,9 +104,7 @@ export default async function DashboardPage() {
                 </CardHeader>
                 <CardContent>
                   <Button asChild variant="secondary" className="w-full">
-                    <Link href={shortcut.href}>
-                      {copy.dashboard.shortcuts.cta}
-                    </Link>
+                    <Link href={shortcut.href}>{t('shortcuts.cta')}</Link>
                   </Button>
                 </CardContent>
               </Card>
@@ -119,10 +115,8 @@ export default async function DashboardPage() {
         <section className="space-y-4">
           <div className="flex items-center gap-2">
             <Sparkles className="h-5 w-5 text-primary" />
-            <h2 className="text-xl font-semibold">
-              {copy.dashboard.upcoming.title}
-            </h2>
-            <Badge variant="outline">{copy.dashboard.upcoming.badge}</Badge>
+            <h2 className="text-xl font-semibold">{t('upcoming.title')}</h2>
+            <Badge variant="outline">{t('upcoming.badge')}</Badge>
           </div>
           {recs.length > 0 ? (
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-6">
@@ -154,7 +148,7 @@ export default async function DashboardPage() {
                           </p>
                         ) : null}
                         <div className="flex items-center justify-between text-xs text-muted-foreground">
-                          <span>{copy.dashboard.upcoming.itemStatus}</span>
+                          <span>{t('upcoming.itemStatus')}</span>
                           <ArrowRight className="h-3.5 w-3.5" />
                         </div>
                       </div>
@@ -166,7 +160,7 @@ export default async function DashboardPage() {
           ) : (
             <Card>
               <CardContent className="py-10 text-center text-muted-foreground">
-                {copy.dashboard.upcoming.emptyState}
+                {t('upcoming.emptyState')}
               </CardContent>
             </Card>
           )}
