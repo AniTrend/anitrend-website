@@ -1,0 +1,490 @@
+
+=== DIRECTORY TREE (max depth 3, source files only) ===
+.agents
+.agents/skills
+.agents/skills/anitrend-agentic-workflow
+.agents/skills/anitrend-agentic-workflow/SKILL.md
+.agents/skills/anitrend-ecosystem-awareness
+.agents/skills/anitrend-ecosystem-awareness/SKILL.md
+.agents/skills/anitrend-ecosystem-awareness/references
+.agents/skills/anitrend-metadata-and-social-preview
+.agents/skills/anitrend-metadata-and-social-preview/SKILL.md
+.agents/skills/anitrend-metadata-and-social-preview/references
+.agents/skills/anitrend-shadcn-extension-patterns
+.agents/skills/anitrend-shadcn-extension-patterns/SKILL.md
+.agents/skills/anitrend-shadcn-extension-patterns/references
+.agents/skills/keeping-nextjs-react-tailwind-coherent
+.agents/skills/keeping-nextjs-react-tailwind-coherent/SKILL.md
+.agents/skills/keeping-nextjs-react-tailwind-coherent/references
+.claude
+.claude/settings.json
+.claude/skills
+.claude/skills/debug-issue.md
+.claude/skills/explore-codebase.md
+.claude/skills/refactor-safely.md
+.claude/skills/review-changes.md
+.code-review-graph
+.code-review-graph/.gitignore
+.code-review-graph/graph.db
+.dockerignore
+.env
+.env.example
+.eslintrc.js
+.github
+.github/ISSUE_TEMPLATE
+.github/ISSUE_TEMPLATE/bug-report.md
+.github/ISSUE_TEMPLATE/config.yml
+.github/ISSUE_TEMPLATE/enhancement-request.md
+.github/ISSUE_TEMPLATE/feature-request.md
+.github/ISSUE_TEMPLATE/question.md
+.github/PULL_REQUEST_TEMPLATE.md
+.github/branch-lint.sh
+.github/instructions
+.github/instructions/app-router.instructions.md
+.github/instructions/context.instructions.md
+.github/instructions/deeplink-contract.instructions.md
+.github/instructions/update-context.instructions.md
+.github/release-drafter-config.yml
+.github/renovate.json
+.github/workflows
+.github/workflows/auto-approve.yml
+.github/workflows/ci.yml
+.github/workflows/deploy.yml
+.github/workflows/quality.yml
+.github/workflows/release-drafter-autolabeler.yml
+.github/workflows/release-drafter.yml
+.gitignore
+.husky
+.husky/_
+.husky/_/.gitignore
+.husky/_/applypatch-msg
+.husky/_/commit-msg
+.husky/_/h
+.husky/_/husky.sh
+.husky/_/post-applypatch
+.husky/_/post-checkout
+.husky/_/post-commit
+.husky/_/post-merge
+.husky/_/post-rewrite
+.husky/_/pre-applypatch
+.husky/_/pre-auto-gc
+.husky/_/pre-commit
+.husky/_/pre-merge-commit
+.husky/_/pre-push
+.husky/_/pre-rebase
+.husky/_/prepare-commit-msg
+.husky/commit-msg
+.husky/pre-commit
+.husky/pre-push
+.lintstagedrc
+.mcp.json
+.nvmrc
+.opencode.json
+.prettierrc
+.vscode
+.yarnrc.yml
+AGENTS.md
+Dockerfile
+LICENSE
+README.md
+commitlint.config.js
+components.json
+compose.dev.yaml
+compose.prod.yaml
+docs
+docs/blueprint.md
+docs/codebase
+docs/codebase/.codebase-scan.txt
+docs/superpowers
+docs/superpowers/plans
+docs/superpowers/plans/2026-04-17-anitrend-customization-pack.md
+docs/superpowers/specs
+docs/superpowers/specs/2026-04-17-anitrend-customization-pack-design.md
+eslint.config.js
+next-env.d.ts
+next.config.ts
+package.json
+playwright.config.ts
+postcss.config.mjs
+public
+public/.DS_Store
+public/apple-touch-icon.png
+public/favicon.ico
+public/icon-192.png
+public/icon-512.png
+public/logo.png
+public/screenshots
+public/screenshots/.DS_Store
+public/screenshots/anime-detail-2.png
+public/screenshots/anime-detail.png
+public/screenshots/app-home-dark.png
+public/screenshots/app-home-light.png
+public/screenshots/discover.png
+public/screenshots/dual-theme-1.png
+public/screenshots/dual-theme-2.png
+public/screenshots/feeds-1.png
+public/screenshots/feeds-2.png
+public/screenshots/feeds-3.png
+public/screenshots/manga-detail.png
+public/screenshots/more-1.png
+public/screenshots/more-2.png
+public/screenshots/more-3.png
+public/screenshots/more-4.png
+public/screenshots/more-5.png
+public/screenshots/more-6.png
+public/screenshots/reviews-1.png
+public/screenshots/reviews-2.png
+public/screenshots/reviews-3.png
+public/screenshots/user-profile.png
+public/screenshots/v2
+public/screenshots/v2/anime-detail-1-light.png
+public/screenshots/v2/anime-detail-2-light.png
+public/screenshots/v2/app-auth-light.png
+public/screenshots/v2/app-drawer-accounts-light.png
+public/screenshots/v2/app-drawer-expanded-light.png
+public/screenshots/v2/app-drawer-light.png
+public/screenshots/v2/app-home-light-1.png
+public/screenshots/v2/app-home-light-2.png
+public/screenshots/v2/app-home-light.png
+public/screenshots/v2/app-splash.png
+src
+src/.DS_Store
+src/ai
+src/ai/dev.ts
+src/ai/flows
+src/ai/flows/recommend-anime-flow.ts
+src/ai/genkit.ts
+src/app
+src/app/actions.ts
+src/app/anime
+src/app/anime/[id]
+src/app/api
+src/app/api/analytics
+src/app/api/repositories
+src/app/dashboard
+src/app/dashboard/page.tsx
+src/app/discover
+src/app/discover/page.tsx
+src/app/globals.css
+src/app/layout.tsx
+src/app/loading.tsx
+src/app/page.tsx
+src/app/recommend
+src/app/recommend/layout.tsx
+src/app/recommend/page.tsx
+src/components
+src/components/analytics.tsx
+src/components/anime-analytics.tsx
+src/components/anime-card.tsx
+src/components/anime-preview.tsx
+src/components/consent
+src/components/consent/analytics-consent-banner.tsx
+src/components/dashboard-open-lists-button.tsx
+src/components/discover-client.tsx
+src/components/footer.tsx
+src/components/header.tsx
+src/components/repository-showcase.tsx
+src/components/sections
+src/components/sections/ai-recommender-section.tsx
+src/components/sections/app-showcase-section.tsx
+src/components/sections/community-section.tsx
+src/components/sections/features-section.tsx
+src/components/sections/get-the-app-section.tsx
+src/components/sections/hero-section.tsx
+src/components/sections/integrations-section.tsx
+src/components/settings
+src/components/settings/analytics-settings.tsx
+src/components/ui
+src/components/ui/accordion.tsx
+src/components/ui/alert-dialog.tsx
+src/components/ui/alert.tsx
+src/components/ui/avatar.tsx
+
+=== STACK DETECTION (manifest files) ===
+
+--- package.json ---
+{
+  "name": "nextn",
+  "version": "0.4.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --turbopack -p 9002",
+    "genkit:dev": "genkit start -- tsx src/ai/dev.ts",
+    "genkit:watch": "genkit start -- tsx --watch src/ai/dev.ts",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "typecheck": "tsc --noEmit",
+    "prepare": "husky",
+    "test:e2e": "playwright test"
+  },
+  "dependencies": {
+    "@genkit-ai/googleai": "^1.13.0",
+    "@genkit-ai/next": "^1.13.0",
+    "@hookform/resolvers": "^5.0.0",
+    "@radix-ui/react-accordion": "^1.2.3",
+    "@radix-ui/react-alert-dialog": "^1.1.6",
+    "@radix-ui/react-avatar": "^1.1.3",
+    "@radix-ui/react-checkbox": "^1.1.4",
+    "@radix-ui/react-collapsible": "^1.1.11",
+    "@radix-ui/react-dialog": "^1.1.6",
+    "@radix-ui/react-dropdown-menu": "^2.1.6",
+    "@radix-ui/react-label": "^2.1.2",
+    "@radix-ui/react-menubar": "^1.1.6",
+    "@radix-ui/react-popover": "^1.1.6",
+    "@radix-ui/react-progress": "^1.1.2",
+    "@radix-ui/react-radio-group": "^1.2.3",
+    "@radix-ui/react-scroll-area": "^1.2.3",
+    "@radix-ui/react-select": "^2.1.6",
+    "@radix-ui/react-separator": "^1.1.2",
+    "@radix-ui/react-slider": "^1.2.3",
+    "@radix-ui/react-slot": "^1.2.3",
+    "@radix-ui/react-switch": "^1.1.3",
+    "@radix-ui/react-tabs": "^1.1.3",
+    "@radix-ui/react-toast": "^1.2.6",
+    "@radix-ui/react-tooltip": "^1.1.8",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "date-fns": "^4.0.0",
+    "dotenv": "^17.0.0",
+    "embla-carousel-react": "^8.6.0",
+    "firebase": "^12.4.0",
+    "genkit": "^1.13.0",
+    "lucide-react": "^0.577.0",
+    "next": "15.5.15",
+    "patch-package": "^8.0.0",
+    "react": "^19.0.0",
+    "react-day-picker": "^9.0.0",
+    "react-dom": "^19.0.0",
+    "react-hook-form": "^7.54.2",
+    "react-is": "^19.0.0",
+    "react-wrap-balancer": "^1.1.1",
+    "recharts": "^3.0.0",
+    "simple-icons": "^16.0.0",
+    "tailwind-merge": "^3.0.1",
+    "tailwindcss-animate": "^1.0.7",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^20.0.0",
+    "@commitlint/config-conventional": "^20.0.0",
+    "@eslint/eslintrc": "^3.3.1",
+    "@eslint/js": "^9.32.0",
+    "@playwright/test": "^1.49.1",
+    "@types/node": "^24.0.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "@typescript-eslint/eslint-plugin": "^8.38.0",
+    "@typescript-eslint/parser": "^8.38.0",
+    "autoprefixer": "^10.4.20",
+    "eslint": "^9.32.0",
+    "eslint-config-next": "^15.4.4",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-formatter-unix": "^9.0.0",
+    "eslint-plugin-prettier": "^5.5.3",
+    "genkit-cli": "^1.13.0",
+
+[TRUNCATED] Showing first 80 of 89 lines.
+--- yarn.lock ---
+# This file is generated by running "yarn install" inside your project.
+# Manual changes might be lost - proceed with caution!
+
+__metadata:
+  version: 8
+  cacheKey: 10c0
+
+"@alloc/quick-lru@npm:^5.2.0":
+  version: 5.2.0
+  resolution: "@alloc/quick-lru@npm:5.2.0"
+  checksum: 10c0/7b878c48b9d25277d0e1a9b8b2f2312a314af806b4129dc902f2bc29ab09b58236e53964689feec187b28c80d2203aff03829754773a707a8a5987f1b7682d92
+  languageName: node
+  linkType: hard
+
+"@asteasolutions/zod-to-openapi@npm:^7.0.0":
+  version: 7.3.4
+  resolution: "@asteasolutions/zod-to-openapi@npm:7.3.4"
+  dependencies:
+    openapi3-ts: "npm:^4.1.2"
+  peerDependencies:
+    zod: ^3.20.2
+  checksum: 10c0/e94f63adce051f11b0ff417865c00973c8596a7c32917b05ba38c8c4a006bd325825fd8d0278b34af70836a7321f732bd6df8ce4c4e70cb11ac6c5cace7cfe5c
+  languageName: node
+  linkType: hard
+
+"@babel/code-frame@npm:^7.0.0":
+  version: 7.27.1
+  resolution: "@babel/code-frame@npm:7.27.1"
+  dependencies:
+    "@babel/helper-validator-identifier": "npm:^7.27.1"
+    js-tokens: "npm:^4.0.0"
+    picocolors: "npm:^1.1.1"
+  checksum: 10c0/5dd9a18baa5fce4741ba729acc3a3272c49c25cb8736c4b18e113099520e7ef7b545a4096a26d600e4416157e63e87d66db46aa3fbf0a5f2286da2705c12da00
+  languageName: node
+  linkType: hard
+
+"@babel/helper-validator-identifier@npm:^7.27.1":
+  version: 7.27.1
+  resolution: "@babel/helper-validator-identifier@npm:7.27.1"
+  checksum: 10c0/c558f11c4871d526498e49d07a84752d1800bf72ac0d3dad100309a2eaba24efbf56ea59af5137ff15e3a00280ebe588560534b0e894a4750f8b1411d8f78b84
+  languageName: node
+  linkType: hard
+
+"@cfworker/json-schema@npm:^4.1.1":
+  version: 4.1.1
+  resolution: "@cfworker/json-schema@npm:4.1.1"
+  checksum: 10c0/b5253486d346b7de6feec9c73954f612b11019dacb9023d710a5666df2f5fc145dd88b6b913c88726c6d97e2e258a515fa2cab177f58b18da6bac3738cbc4739
+  languageName: node
+  linkType: hard
+
+"@colors/colors@npm:1.6.0, @colors/colors@npm:^1.6.0":
+  version: 1.6.0
+  resolution: "@colors/colors@npm:1.6.0"
+  checksum: 10c0/9328a0778a5b0db243af54455b79a69e3fb21122d6c15ef9e9fcc94881d8d17352d8b2b2590f9bdd46fac5c2d6c1636dcfc14358a20c70e22daf89e1a759b629
+  languageName: node
+  linkType: hard
+
+"@commitlint/cli@npm:^20.0.0":
+  version: 20.5.0
+  resolution: "@commitlint/cli@npm:20.5.0"
+  dependencies:
+    "@commitlint/format": "npm:^20.5.0"
+    "@commitlint/lint": "npm:^20.5.0"
+    "@commitlint/load": "npm:^20.5.0"
+    "@commitlint/read": "npm:^20.5.0"
+    "@commitlint/types": "npm:^20.5.0"
+    tinyexec: "npm:^1.0.0"
+    yargs: "npm:^17.0.0"
+  bin:
+    commitlint: ./cli.js
+  checksum: 10c0/9676c2544f6b73c71ba2fcfe531333c0f0e6b687acbf1c8f616b605bba0e55e60b1896f4400c57f9fe7f6676d2b8b2b36ffb8e6c89509740f26e0bae1437667c
+  languageName: node
+  linkType: hard
+
+"@commitlint/config-conventional@npm:^20.0.0":
+  version: 20.5.0
+  resolution: "@commitlint/config-conventional@npm:20.5.0"
+  dependencies:
+    "@commitlint/types": "npm:^20.5.0"
+    conventional-changelog-conventionalcommits: "npm:^9.2.0"
+
+[TRUNCATED] Showing first 80 of 13089 lines.
+
+=== ENTRY POINTS ===
+No common entry points found. Check 'main' or 'scripts.start' in manifest files above.
+
+=== LINTING AND FORMATTING CONFIG ===
+Found: .eslintrc.js
+Found: eslint.config.js
+Found: .prettierrc
+Found: tsconfig.json
+
+=== ENVIRONMENT VARIABLE TEMPLATES ===
+--- .env.example ---
+# Firebase web app configuration (placeholders). Do NOT commit real secrets.
+# Copy this file to .env.local and replace with your Firebase project's values.
+NEXT_PUBLIC_FIREBASE_API_KEY=your_api_key_here
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=your-project.firebaseapp.com
+NEXT_PUBLIC_FIREBASE_PROJECT_ID=your-project-id
+NEXT_PUBLIC_FIREBASE_APP_ID=1:000000000000:web:000000000000000
+NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID=G-XXXXXXXXXX
+
+# Opt-in/opt-out toggle for analytics collection. Default is `false` in examples.
+# Setting this to "true" will enable collection when the app initializes. You can
+# also control collection at runtime with the helpers exported from src/lib/firebase.ts
+NEXT_PUBLIC_ENABLE_ANALYTICS=false
+# Traefik Configuration
+TRAEFIK_ENABLE=true
+CERT_RESOLVER=staging
+HOST=website.docker.local
+PORT=9800
+
+# Supabase storage base URL
+NEXT_PUBLIC_SUPABASE_BASE_URL=NEXT_PUBLIC_SUPABASE_BASE_URL
+# Discord invite code (only code, URL assembled in config)
+NEXT_PUBLIC_DISCORD_INVITE_CODE=NEXT_PUBLIC_DISCORD_INVITE_CODE
+
+=== TODO / FIXME / HACK (production code only, test dirs excluded) ===
+None found.
+
+=== GIT RECENT COMMITS (last 20) ===
+4db16d2 refactor: centralise copy en (#460)
+eca566a chore: bump version to 0.4.0 (#458)
+3391ce2 ci: resolve deploy version from release drafter
+ab216ce Bump the npm_and_yarn group across 1 directory with 5 updates
+222c3be chore(deps): update typescript-eslint monorepo to v8.58.2 (#450)
+16363ab chore(deps): update node.js to v24.15.0 (#449)
+ae77a19 chore: optimize deployment workflow (#342)
+2e99f1c chore(deps): update dependency genkit-cli to v1.32.0 (#445)
+7461215 chore(deps): update dependency simple-icons to v16.16.0
+cc9ad35 chore(deps): update dependency react-hook-form to v7.72.1
+cb41767 chore(deps): update dependency genkit to v1.32.0
+befc4c7 chore(deps): update dependency firebase to v12.12.0
+f1d6158 chore(deps): update dependency dotenv to v17.4.2 (#442)
+00cd9ff feat: add Open Graph support and enhance metadata for discover and recommend pages (#447)
+c8e1cfa chore(deps): update dependency @playwright/test to v1.59.1 (#440)
+4f9e471 chore(deps): update dependency autoprefixer to v10.5.0 (#441)
+ef387e7 chore(deps): update dependency @genkit-ai/next to v1.32.0 (#439)
+5ec4657 chore(deps): update react monorepo to v19.2.5 (#438)
+0152ff3 chore(deps): update dependency recharts to v3.8.1 (#437)
+f0d9f73 chore(deps): update dependency prettier to v3.8.3 (#436)
+
+=== HIGH-CHURN FILES (last 90 days, top 20) ===
+  94 yarn.lock
+  13 package.json
+   5 .github/workflows/deploy.yml
+   4 .github/workflows/release-drafter.yml
+   3 .nvmrc
+   2 .github/instructions/context.instructions.md
+   2 src/app/dashboard/page.tsx
+   2 src/app/layout.tsx
+   2 src/app/page.tsx
+   2 src/components/anime-analytics.tsx
+   2 src/components/dashboard-open-lists-button.tsx
+   1 .github/workflows/release-drafter-autolabeler.yml
+   1 next.config.ts
+   1 src/app/anime/[id]/page.tsx
+   1 src/app/recommend/page.tsx
+   1 src/components/consent/analytics-consent-banner.tsx
+   1 src/components/discover-client.tsx
+   1 src/components/footer.tsx
+   1 src/components/header.tsx
+   1 src/components/sections/ai-recommender-section.tsx
+
+=== MONOREPO SIGNALS ===
+No monorepo signals detected.
+
+=== CODE METRICS ===
+Total files scanned: 188
+Total lines of code: 9250
+
+Files by language:
+  Other: 97
+  TypeScript/React: 60
+  TypeScript: 28
+  JavaScript: 3
+
+Top 10 largest files:
+public/screenshots/feeds-3.png: 3371.5KB
+public/screenshots/anime-detail.png: 3186.7KB
+public/screenshots/discover.png: 3062.0KB
+public/screenshots/more-5.png: 2970.4KB
+public/screenshots/reviews-1.png: 2885.2KB
+public/screenshots/reviews-2.png: 2834.1KB
+public/screenshots/reviews-3.png: 2787.4KB
+public/screenshots/more-1.png: 2619.0KB
+public/screenshots/v2/app-home-light-1.png: 2610.4KB
+public/screenshots/v2/app-home-light-2.png: 2522.1KB
+
+=== CI/CD PIPELINES ===
+CI/CD: GitHub Actions
+
+=== CONTAINERS & ORCHESTRATION ===
+Container: Docker found
+
+=== SECURITY & COMPLIANCE ===
+No security configs detected.
+
+=== PERFORMANCE & TESTING ===
+No performance testing configs detected.
+
+=== SCAN COMPLETE ===
