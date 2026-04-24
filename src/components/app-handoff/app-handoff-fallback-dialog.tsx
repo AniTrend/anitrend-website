@@ -68,7 +68,7 @@ export function AppHandoffFallbackDialog({
             </p>
           ) : null}
         </DialogHeader>
-        <DialogFooter className="flex-col gap-2 sm:flex-row sm:justify-end">
+        <DialogFooter className="flex-col gap-2 sm:flex-col sm:items-stretch sm:space-x-0">
           <Button asChild variant="outline">
             <Link href={playStoreUrl} target="_blank" rel="noreferrer">
               {copy.playStoreLabel}
