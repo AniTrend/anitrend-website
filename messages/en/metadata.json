@@ -1,0 +1,14 @@
+{
+  "brandName": "AniTrend",
+  "root": {
+    "description": "The ultimate companion for tracking anime and manga."
+  },
+  "home": {
+    "title": "AniTrend - The Ultimate Anime Companion",
+    "description": "Track anime and manga trends effortlessly, and manage your lists from one unified space."
+  },
+  "discover": {
+    "title": "Discover Anime",
+    "description": "Explore and discover new anime series with advanced filtering options."
+  }
+}

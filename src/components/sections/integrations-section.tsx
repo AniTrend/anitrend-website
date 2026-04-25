@@ -1,8 +1,8 @@
 import Link from 'next/link';
+import { getTranslations } from 'next-intl/server';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ArrowUpRight, GitFork, Heart, Layers, Star } from 'lucide-react';
 import { getLanguageColor } from '@/lib/github-service';
-import { copy } from '@/copy';
 
 export interface RepoForDisplay {
   name: string;
@@ -15,21 +15,23 @@ export interface RepoForDisplay {
   updatedAt: string;
 }
 
-export function IntegrationsSection({
+export async function IntegrationsSection({
   repositories,
 }: {
   repositories: RepoForDisplay[];
 }) {
+  const t = await getTranslations('marketing');
+
   return (
     <section id="integrations" className="py-20 scroll-mt-20">
       <div className="container">
         <div className="grid lg:grid-cols-5 gap-12 items-start">
           <div className="lg:col-span-2 flex flex-col gap-6">
             <h2 className="text-3xl font-bold tracking-tight md:text-4xl font-headline">
-              {copy.marketing.integrations.title}
+              {t('integrations.title')}
             </h2>
             <p className="text-lg text-muted-foreground">
-              {copy.marketing.integrations.description}
+              {t('integrations.description')}
             </p>
             <div className="space-y-8 mt-4">
               <div className="flex items-start gap-4">
@@ -38,10 +40,10 @@ export function IntegrationsSection({
                 </div>
                 <div>
                   <h3 className="font-bold font-headline text-lg">
-                    {copy.marketing.integrations.pillars[0].title}
+                    {t('integrations.pillars.community.title')}
                   </h3>
                   <p className="text-muted-foreground mt-1">
-                    {copy.marketing.integrations.pillars[0].description}
+                    {t('integrations.pillars.community.description')}
                   </p>
                 </div>
               </div>
@@ -51,10 +53,10 @@ export function IntegrationsSection({
                 </div>
                 <div>
                   <h3 className="font-bold font-headline text-lg">
-                    {copy.marketing.integrations.pillars[1].title}
+                    {t('integrations.pillars.contribute.title')}
                   </h3>
                   <p className="text-muted-foreground mt-1">
-                    {copy.marketing.integrations.pillars[1].description}
+                    {t('integrations.pillars.contribute.description')}
                   </p>
                 </div>
               </div>
@@ -64,10 +66,10 @@ export function IntegrationsSection({
                 </div>
                 <div>
                   <h3 className="font-bold font-headline text-lg">
-                    {copy.marketing.integrations.pillars[2].title}
+                    {t('integrations.pillars.modernTech.title')}
                   </h3>
                   <p className="text-muted-foreground mt-1">
-                    {copy.marketing.integrations.pillars[2].description}
+                    {t('integrations.pillars.modernTech.description')}
                   </p>
                 </div>
               </div>
@@ -128,7 +130,7 @@ export function IntegrationsSection({
                         {repo.forks}
                       </div>
                       <div className="ml-auto text-xs text-muted-foreground">
-                        Updated{' '}
+                        {t('integrations.updatedPrefix')}{' '}
                         {new Date(repo.updatedAt).toLocaleDateString('en-US', {
                           month: 'short',
                           day: 'numeric',

@@ -89,10 +89,10 @@ const anime: Anime = {
 
 ### Copy and Content Conventions
 
-- **Centralized English copy**: User-facing static copy is centralized under `src/copy/en/` and re-exported via `src/copy/index.ts`
-- **Domain-based modules**: Keep copy grouped by domain (`metadata`, `marketing`, `dashboard`, `recommend`, `anime`) to avoid mixed route/component constants
-- **No new inline UI strings**: When touching pages and sections, prefer importing `copy` from `@/copy` over adding fresh inline literals
-- **Metadata alignment**: Route metadata copy should use centralized values from the copy modules for Open Graph and Twitter consistency
+- **Localized copy framework**: User-facing copy is served through `next-intl` request config in `src/i18n/` and locale catalogs under `messages/en/`
+- **Domain-based namespaces**: Keep messages grouped by domain (`metadata`, `marketing`, `dashboard`, `discover`, `recommend`, `anime`, `common`) to avoid mixed route/component constants
+- **No new inline UI strings**: When touching pages and components, move user-facing literals into the message catalogs instead of adding fresh inline strings
+- **Metadata alignment**: Route metadata copy should use centralized localized values so Open Graph and Twitter stay aligned with page copy
 
 ### Routing Structure
 
@@ -169,6 +169,12 @@ Tip: Register flows by importing them in `src/ai/dev.ts` so the Genkit dev serve
 ### API Routes
 
 - Add server routes under `src/app/api/*`. Example already present: `GET /api/repositories` delegates to `getRepositoriesForDisplay()` and supports pinned/starred/limit/sort/username query params.
+
+### App Handoff
+
+- App-opening CTAs should delegate to the shared handoff components under `src/components/app-handoff/` instead of owning custom-scheme logic inline
+- Typed app intent resolution lives in `src/config/links.ts`, with browser-side open orchestration in `src/lib/app-handoff.ts`
+- If a custom-scheme handoff does not cause the document to lose visibility, keep the user on the current page and show the action-specific fallback prompt
 
 ## CI/CD & Secrets
 

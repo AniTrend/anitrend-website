@@ -1,28 +1,28 @@
 'use client';
 
 import { Smartphone } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
-import { deepLinks } from '@/config/links';
+import { appIntentStatus } from '@/config/links';
+import { OpenInAppButton } from '@/components/app-handoff/open-in-app-button';
 import { logEvent } from '@/lib/firebase';
-import { copy } from '@/copy';
-
-import { Button } from '@/components/ui/button';
 
 export function DashboardOpenListsButton() {
+  const t = useTranslations('common');
+
   return (
-    <Button asChild size="lg">
-      <a
-        href={deepLinks.profile}
-        onClick={() => {
-          void logEvent('open_in_app', {
-            source: 'dashboard',
-            target: 'profile',
-          });
-        }}
-      >
-        <Smartphone className="mr-2 h-5 w-5" />{' '}
-        {copy.common.actions.openMyListsInApp}
-      </a>
-    </Button>
+    <OpenInAppButton
+      size="lg"
+      intent={{ type: 'profile' }}
+      intentStatus={appIntentStatus.profile}
+      onAttempt={() => {
+        void logEvent('open_in_app', {
+          source: 'dashboard',
+          target: 'profile',
+        });
+      }}
+    >
+      <Smartphone className="mr-2 h-5 w-5" /> {t('actions.openMyListsInApp')}
+    </OpenInAppButton>
   );
 }

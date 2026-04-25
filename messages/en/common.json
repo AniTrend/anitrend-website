@@ -1,0 +1,73 @@
+{
+  "brand": {
+    "logoAlt": "AniTrend Logo",
+    "wordmarkPrefix": "Ani",
+    "wordmarkHighlight": "Trend"
+  },
+  "external": {
+    "github": "GitHub"
+  },
+  "a11y": {
+    "close": "Close",
+    "toggleSidebar": "Toggle Sidebar",
+    "previousSlide": "Previous slide",
+    "nextSlide": "Next slide"
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "discover": "Discover",
+    "recommend": "Recommend",
+    "features": "Features",
+    "integrations": "Integrations",
+    "getStarted": "Get Started",
+    "menu": "Menu"
+  },
+  "footer": {
+    "copyright": "© {year} AniTrend",
+    "faq": "FAQ",
+    "termsOfService": "Terms of Service",
+    "privacyPolicy": "Privacy Policy"
+  },
+  "actions": {
+    "openInApp": "Open in App",
+    "openMyListsInApp": "Open My Lists in App",
+    "share": "Share",
+    "linkCopied": "Link copied"
+  },
+  "analytics": {
+    "settingsTriggerSr": "Analytics settings",
+    "dialog": {
+      "title": "Analytics Settings",
+      "description": "Control anonymous analytics collection for AniTrend. We only store aggregated, non-identifying metrics.",
+      "label": "Enable anonymous analytics",
+      "sublabel": "Allow collection of anonymous, aggregated usage data.",
+      "clearConsent": "Clear consent",
+      "done": "Done"
+    },
+    "consentBanner": {
+      "message": "AniTrend uses anonymous analytics to improve the product. By accepting you allow anonymous usage data to be collected. You can change this later in your browser settings.",
+      "decline": "Decline",
+      "accept": "Accept"
+    }
+  },
+  "contactForm": {
+    "invalid": "Invalid form data.",
+    "success": "Message sent successfully!",
+    "serverError": "Failed to send message due to a server error."
+  },
+  "handoff": {
+    "dismiss": "Not now",
+    "installOnPlayStore": "Get it on Google Play",
+    "getLatestBuild": "Latest GitHub build",
+    "pendingVerificationNote": "This app handoff is still being verified against the native AniTrend route contract.",
+    "profileFallback": {
+      "title": "Couldn't open AniTrend",
+      "description": "If the AniTrend app is installed, try opening your lists again. Otherwise you can stay here and continue on the web.",
+      "actions": {
+        "playStore": "Install AniTrend for your lists",
+        "github": "Get the latest AniTrend build",
+        "dismiss": "Keep browsing on the web"
+      }
+    }
+  }
+}

@@ -3,11 +3,14 @@ import type { Anime } from '@/lib/types';
 import { logEvent } from '@/lib/firebase';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Star, Users, Award } from 'lucide-react';
 
 export function AnimeCard({ anime }: { anime: Anime }) {
+  const t = useTranslations('anime');
+
   return (
     <Link
       href={`/anime/${anime.id}`}
@@ -34,7 +37,9 @@ export function AnimeCard({ anime }: { anime: Anime }) {
               <Badge className="flex items-center gap-1.5" variant="secondary">
                 <Star className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />
                 <span className="font-bold">
-                  {anime.score ? anime.score.toFixed(2) : 'N/A'}
+                  {anime.score
+                    ? anime.score.toFixed(2)
+                    : t('details.notAvailable')}
                 </span>
               </Badge>
             </div>
@@ -46,11 +51,15 @@ export function AnimeCard({ anime }: { anime: Anime }) {
             <div className="flex justify-between text-xs text-muted-foreground">
               <div className="flex items-center gap-1">
                 <Award className="w-3 h-3" />
-                <span>Rank #{anime.rank}</span>
+                <span>{t('card.rank', { rank: anime.rank })}</span>
               </div>
               <div className="flex items-center gap-1">
                 <Users className="w-3 h-3" />
-                <span>{(anime.popularity / 1000).toFixed(1)}k</span>
+                <span>
+                  {t('card.popularity', {
+                    value: (anime.popularity / 1000).toFixed(1),
+                  })}
+                </span>
               </div>
             </div>
             <p className="text-sm text-muted-foreground capitalize">

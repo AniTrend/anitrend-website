@@ -3,11 +3,13 @@ import AnalyticsSettings from '@/components/settings/analytics-settings';
 import { siGithub } from 'simple-icons';
 import Link from 'next/link';
 import Image from 'next/image';
+import { getTranslations } from 'next-intl/server';
 import { Button, buttonVariants } from './ui/button';
 import { Sheet, SheetTrigger, SheetContent } from '@/components/ui/sheet';
-import { copy } from '@/copy';
 
-export function AppHeader() {
+export async function AppHeader() {
+  const t = await getTranslations('common');
+
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-14 max-w-screen-2xl items-center">
@@ -16,14 +18,16 @@ export function AppHeader() {
           <Link href="/" className="mr-6 flex items-center space-x-2">
             <Image
               src="/logo.png"
-              alt="AniTrend Logo"
+              alt={t('brand.logoAlt')}
               width={24}
               height={24}
               className="h-6 w-6 rounded-full"
             />
             <span className="font-headline text-lg">
-              <span className="font-medium">Ani</span>
-              <span className="font-bold text-primary">Trend</span>
+              <span className="font-medium">{t('brand.wordmarkPrefix')}</span>
+              <span className="font-bold text-primary">
+                {t('brand.wordmarkHighlight')}
+              </span>
             </span>
           </Link>
           <nav className="hidden items-center gap-1 text-sm md:flex">
@@ -35,7 +39,7 @@ export function AppHeader() {
               })}
             >
               <LayoutDashboard className="mr-2 h-4 w-4" />
-              {copy.common.nav.dashboard}
+              {t('nav.dashboard')}
             </Link>
             <Link
               href="/discover"
@@ -45,7 +49,7 @@ export function AppHeader() {
               })}
             >
               <Compass className="mr-2 h-4 w-4" />
-              {copy.common.nav.discover}
+              {t('nav.discover')}
             </Link>
             <Link
               href="/recommend"
@@ -55,7 +59,7 @@ export function AppHeader() {
               })}
             >
               <Wand2 className="mr-2 h-4 w-4" />
-              {copy.common.nav.recommend}
+              {t('nav.recommend')}
             </Link>
           </nav>
         </div>
@@ -71,7 +75,7 @@ export function AppHeader() {
                 className: 'text-foreground/60',
               })}
             >
-              {copy.common.nav.features}
+              {t('nav.features')}
             </Link>
             <Link
               href="/#integrations"
@@ -80,10 +84,10 @@ export function AppHeader() {
                 className: 'text-foreground/60',
               })}
             >
-              {copy.common.nav.integrations}
+              {t('nav.integrations')}
             </Link>
             <Button asChild>
-              <Link href="/#get-the-app">{copy.common.nav.getStarted}</Link>
+              <Link href="/#get-the-app">{t('nav.getStarted')}</Link>
             </Button>
           </nav>
           {/* Mobile menu trigger */}
@@ -91,31 +95,30 @@ export function AppHeader() {
             <SheetTrigger asChild>
               <Button variant="ghost" size="icon" className="md:hidden">
                 <Menu className="h-5 w-5" />
-                <span className="sr-only">{copy.common.nav.menu}</span>
+                <span className="sr-only">{t('nav.menu')}</span>
               </Button>
             </SheetTrigger>
             <SheetContent side="left" className="w-full max-w-xs">
               <nav className="flex flex-col space-y-4 mt-4">
                 <Link href="/dashboard" className="flex items-center text-lg">
                   <LayoutDashboard className="mr-2 h-5 w-5" />{' '}
-                  {copy.common.nav.dashboard}
+                  {t('nav.dashboard')}
                 </Link>
                 <Link href="/discover" className="flex items-center text-lg">
-                  <Compass className="mr-2 h-5 w-5" />{' '}
-                  {copy.common.nav.discover}
+                  <Compass className="mr-2 h-5 w-5" /> {t('nav.discover')}
                 </Link>
                 <Link href="/recommend" className="flex items-center text-lg">
-                  <Wand2 className="mr-2 h-5 w-5" /> {copy.common.nav.recommend}
+                  <Wand2 className="mr-2 h-5 w-5" /> {t('nav.recommend')}
                 </Link>
                 <AnalyticsSettings />
                 <Link href="/#features" className="text-lg">
-                  {copy.common.nav.features}
+                  {t('nav.features')}
                 </Link>
                 <Link href="/#integrations" className="text-lg">
-                  {copy.common.nav.integrations}
+                  {t('nav.integrations')}
                 </Link>
                 <Button asChild className="w-full">
-                  <Link href="/#get-the-app">{copy.common.nav.getStarted}</Link>
+                  <Link href="/#get-the-app">{t('nav.getStarted')}</Link>
                 </Button>
               </nav>
             </SheetContent>
@@ -135,7 +138,7 @@ export function AppHeader() {
               >
                 <path d={siGithub.path} />
               </svg>
-              <span className="sr-only">GitHub</span>
+              <span className="sr-only">{t('external.github')}</span>
             </Link>
           </Button>
         </div>

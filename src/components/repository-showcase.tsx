@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ArrowUpRight, Star, GitFork, RefreshCw } from 'lucide-react';
@@ -28,6 +29,7 @@ export function RepositoryShowcase({
   initialRepos,
   showStarredToggle = false,
 }: RepositoryShowcaseProps) {
+  const t = useTranslations('marketing');
   const [repos, setRepos] = useState<Repository[]>(initialRepos);
   const [isStarred, setIsStarred] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -66,7 +68,7 @@ export function RepositoryShowcase({
               onClick={() => !isStarred || handleToggle()}
               disabled={isLoading}
             >
-              Organization Repos
+              {t('repositoryShowcase.organizationRepos')}
             </Button>
             <Button
               variant={isStarred ? 'default' : 'outline'}
@@ -75,7 +77,7 @@ export function RepositoryShowcase({
               disabled={isLoading}
             >
               <Star className="w-4 h-4 mr-2" />
-              Starred Repos
+              {t('repositoryShowcase.starredRepos')}
             </Button>
           </div>
           {isLoading && <RefreshCw className="w-4 h-4 animate-spin" />}

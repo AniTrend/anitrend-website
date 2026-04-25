@@ -23,12 +23,12 @@ import {
 import { AnimeCard } from '@/components/anime-card';
 import Balancer from 'react-wrap-balancer';
 import { Search, Filter, ChevronDown, Loader2, RotateCcw } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import type { Anime } from '@/lib/types';
 import type { TopAnimeFilters } from '@/lib/anime-service';
 import { getTopAnime, searchAnime } from '@/lib/anime-service';
 import { logEvent } from '@/lib/firebase';
 import { usePathname, useRouter } from 'next/navigation';
-import { copy } from '@/copy';
 
 interface DiscoverClientProps {
   initialAnime: Anime[];
@@ -116,6 +116,7 @@ export function DiscoverClient({
   initialFilters,
   initialSearchTerm,
 }: DiscoverClientProps) {
+  const t = useTranslations('discover');
   const pathname = usePathname();
   const router = useRouter();
 
@@ -406,10 +407,10 @@ export function DiscoverClient({
         <div className="container">
           <div className="text-center max-w-2xl mx-auto">
             <h1 className="text-4xl font-bold tracking-tight md:text-5xl font-headline">
-              {copy.discover.hero.title}
+              {t('hero.title')}
             </h1>
             <p className="mt-4 text-lg text-muted-foreground">
-              <Balancer>{copy.discover.hero.description}</Balancer>
+              <Balancer>{t('hero.description')}</Balancer>
             </p>
           </div>
 
@@ -419,7 +420,7 @@ export function DiscoverClient({
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
               <Input
                 type="search"
-                placeholder={copy.discover.search.placeholder}
+                placeholder={t('search.placeholder')}
                 className="w-full pl-10"
                 value={searchTerm}
                 onChange={(e) => handleSearchChange(e.target.value)}
@@ -439,10 +440,10 @@ export function DiscoverClient({
                 <Button variant="outline" className="w-full justify-between">
                   <div className="flex items-center gap-2">
                     <Filter className="h-4 w-4" />
-                    {copy.discover.filters.trigger}
+                    {t('filters.trigger')}
                     {hasActiveFilters && (
                       <Badge variant="secondary" className="ml-2">
-                        {copy.discover.filters.activeBadge}
+                        {t('filters.activeBadge')}
                       </Badge>
                     )}
                   </div>
@@ -457,9 +458,7 @@ export function DiscoverClient({
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {/* Type Filter */}
                     <div className="space-y-2">
-                      <Label htmlFor="type">
-                        {copy.discover.filters.type.label}
-                      </Label>
+                      <Label htmlFor="type">{t('filters.type.label')}</Label>
                       <Select
                         value={filters.type || 'all'}
                         onValueChange={(value) =>
@@ -467,31 +466,29 @@ export function DiscoverClient({
                         }
                       >
                         <SelectTrigger>
-                          <SelectValue
-                            placeholder={copy.discover.filters.type.all}
-                          />
+                          <SelectValue placeholder={t('filters.type.all')} />
                         </SelectTrigger>
                         <SelectContent>
                           <SelectItem value="all">
-                            {copy.discover.filters.type.all}
+                            {t('filters.type.all')}
                           </SelectItem>
                           <SelectItem value="tv">
-                            {copy.discover.filters.type.tv}
+                            {t('filters.type.tv')}
                           </SelectItem>
                           <SelectItem value="movie">
-                            {copy.discover.filters.type.movie}
+                            {t('filters.type.movie')}
                           </SelectItem>
                           <SelectItem value="ova">
-                            {copy.discover.filters.type.ova}
+                            {t('filters.type.ova')}
                           </SelectItem>
                           <SelectItem value="special">
-                            {copy.discover.filters.type.special}
+                            {t('filters.type.special')}
                           </SelectItem>
                           <SelectItem value="ona">
-                            {copy.discover.filters.type.ona}
+                            {t('filters.type.ona')}
                           </SelectItem>
                           <SelectItem value="music">
-                            {copy.discover.filters.type.music}
+                            {t('filters.type.music')}
                           </SelectItem>
                         </SelectContent>
                       </Select>
@@ -500,7 +497,7 @@ export function DiscoverClient({
                     {/* Status Filter */}
                     <div className="space-y-2">
                       <Label htmlFor="filter">
-                        {copy.discover.filters.status.label}
+                        {t('filters.status.label')}
                       </Label>
                       <Select
                         value={filters.filter || 'all'}
@@ -509,25 +506,23 @@ export function DiscoverClient({
                         }
                       >
                         <SelectTrigger>
-                          <SelectValue
-                            placeholder={copy.discover.filters.status.all}
-                          />
+                          <SelectValue placeholder={t('filters.status.all')} />
                         </SelectTrigger>
                         <SelectContent>
                           <SelectItem value="all">
-                            {copy.discover.filters.status.all}
+                            {t('filters.status.all')}
                           </SelectItem>
                           <SelectItem value="airing">
-                            {copy.discover.filters.status.airing}
+                            {t('filters.status.airing')}
                           </SelectItem>
                           <SelectItem value="upcoming">
-                            {copy.discover.filters.status.upcoming}
+                            {t('filters.status.upcoming')}
                           </SelectItem>
                           <SelectItem value="bypopularity">
-                            {copy.discover.filters.status.bypopularity}
+                            {t('filters.status.bypopularity')}
                           </SelectItem>
                           <SelectItem value="favorite">
-                            {copy.discover.filters.status.favorite}
+                            {t('filters.status.favorite')}
                           </SelectItem>
                         </SelectContent>
                       </Select>
@@ -536,7 +531,7 @@ export function DiscoverClient({
                     {/* Rating Filter */}
                     <div className="space-y-2">
                       <Label htmlFor="rating">
-                        {copy.discover.filters.rating.label}
+                        {t('filters.rating.label')}
                       </Label>
                       <Select
                         value={filters.rating || 'all'}
@@ -545,28 +540,26 @@ export function DiscoverClient({
                         }
                       >
                         <SelectTrigger>
-                          <SelectValue
-                            placeholder={copy.discover.filters.rating.all}
-                          />
+                          <SelectValue placeholder={t('filters.rating.all')} />
                         </SelectTrigger>
                         <SelectContent>
                           <SelectItem value="all">
-                            {copy.discover.filters.rating.all}
+                            {t('filters.rating.all')}
                           </SelectItem>
                           <SelectItem value="g">
-                            {copy.discover.filters.rating.g}
+                            {t('filters.rating.g')}
                           </SelectItem>
                           <SelectItem value="pg">
-                            {copy.discover.filters.rating.pg}
+                            {t('filters.rating.pg')}
                           </SelectItem>
                           <SelectItem value="pg13">
-                            {copy.discover.filters.rating.pg13}
+                            {t('filters.rating.pg13')}
                           </SelectItem>
                           <SelectItem value="r17">
-                            {copy.discover.filters.rating.r17}
+                            {t('filters.rating.r17')}
                           </SelectItem>
                           <SelectItem value="r">
-                            {copy.discover.filters.rating.r}
+                            {t('filters.rating.r')}
                           </SelectItem>
                         </SelectContent>
                       </Select>
@@ -574,7 +567,7 @@ export function DiscoverClient({
 
                     {/* Score Range */}
                     <div className="space-y-2 md:col-span-2">
-                      <Label>{copy.discover.filters.scoreRange}</Label>
+                      <Label>{t('filters.scoreRange')}</Label>
                       <div className="px-3">
                         <Slider
                           value={[
@@ -612,7 +605,7 @@ export function DiscoverClient({
                           handleFilterChange('sfw', checked)
                         }
                       />
-                      <Label htmlFor="sfw">{copy.discover.filters.sfw}</Label>
+                      <Label htmlFor="sfw">{t('filters.sfw')}</Label>
                     </div>
                   </div>
 
@@ -624,7 +617,7 @@ export function DiscoverClient({
                       className="flex items-center gap-2"
                     >
                       <RotateCcw className="h-4 w-4" />
-                      {copy.discover.filters.reset}
+                      {t('filters.reset')}
                     </Button>
 
                     <Button
@@ -635,7 +628,7 @@ export function DiscoverClient({
                       {(isPending || isLoading) && (
                         <Loader2 className="h-4 w-4 animate-spin" />
                       )}
-                      {copy.discover.filters.apply}
+                      {t('filters.apply')}
                     </Button>
                   </div>
                 </Card>
@@ -652,11 +645,11 @@ export function DiscoverClient({
           <div className="mb-6">
             <p className="text-sm text-muted-foreground">
               {searchTerm
-                ? copy.discover.results.showingMatching(
-                    animeList.length,
-                    searchTerm
-                  )
-                : copy.discover.results.showing(animeList.length)}
+                ? t('results.showingMatching', {
+                    count: animeList.length,
+                    term: searchTerm,
+                  })
+                : t('results.showing', { count: animeList.length })}
             </p>
           </div>
 
@@ -681,17 +674,17 @@ export function DiscoverClient({
                     {isLoading || isSearching ? (
                       <>
                         <Loader2 className="h-4 w-4 animate-spin mr-2" />
-                        {copy.discover.results.loading}
+                        {t('results.loading')}
                       </>
                     ) : (
-                      copy.discover.results.loadMore
+                      t('results.loadMore')
                     )}
                   </Button>
                 </div>
               ) : (
                 <div className="mt-12 text-center">
                   <p className="text-muted-foreground text-sm">
-                    {copy.discover.results.noMore}
+                    {t('results.noMore')}
                   </p>
                   <Button
                     variant="ghost"
@@ -699,7 +692,7 @@ export function DiscoverClient({
                     className="mt-2"
                     disabled={isLoading}
                   >
-                    {copy.discover.results.browseAll}
+                    {t('results.browseAll')}
                   </Button>
                 </div>
               )}
@@ -708,8 +701,8 @@ export function DiscoverClient({
             <div className="text-center py-16">
               <p className="text-muted-foreground">
                 {searchTerm
-                  ? copy.discover.results.emptySearch(searchTerm)
-                  : copy.discover.results.emptyFilters}
+                  ? t('results.emptySearch', { term: searchTerm })
+                  : t('results.emptyFilters')}
               </p>
               {(hasActiveFilters || searchTerm) && (
                 <Button
@@ -718,7 +711,7 @@ export function DiscoverClient({
                   className="mt-4"
                   disabled={isLoading}
                 >
-                  {copy.discover.results.clearFilters}
+                  {t('results.clearFilters')}
                 </Button>
               )}
             </div>

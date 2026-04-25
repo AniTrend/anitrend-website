@@ -11,10 +11,31 @@ export const discordInviteUrl = `https://discord.gg/${discordCode}`;
 // Organization and community
 export const githubOrgUrl = 'https://github.com/AniTrend';
 
+export type AppIntent =
+  | { type: 'profile' }
+  | { type: 'anime-detail'; animeId: string };
+
+export type AppIntentStatus = 'verified' | 'pendingVerification';
+
+export const appIntentStatus: Record<AppIntent['type'], AppIntentStatus> = {
+  profile: 'verified',
+  'anime-detail': 'pendingVerification',
+};
+
+export function getAppIntentHref(intent: AppIntent): string {
+  switch (intent.type) {
+    case 'profile':
+      return 'app.anitrend://action/profile';
+    case 'anime-detail':
+      return `app.anitrend://action/anime/${intent.animeId}`;
+  }
+}
+
 // Deep links to the native app
 export const deepLinks = {
-  profile: 'app.anitrend://action/profile',
-  anime: (id: string) => `app.anitrend://action/anime/${id}`,
+  profile: getAppIntentHref({ type: 'profile' }),
+  anime: (id: string) =>
+    getAppIntentHref({ type: 'anime-detail', animeId: id }),
 };
 
 // Supabase banner image URL built from base URL in env

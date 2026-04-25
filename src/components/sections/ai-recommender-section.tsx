@@ -1,10 +1,12 @@
 import Balancer from 'react-wrap-balancer';
 import Link from 'next/link';
+import { getTranslations } from 'next-intl/server';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, Wand2 } from 'lucide-react';
-import { copy } from '@/copy';
 
-export function AIRecommenderSection() {
+export async function AIRecommenderSection() {
+  const t = await getTranslations('marketing');
+
   return (
     <section
       id="ai-recommender"
@@ -15,16 +17,15 @@ export function AIRecommenderSection() {
           <Wand2 className="w-8 h-8 text-primary" />
         </div>
         <h2 className="text-3xl font-bold tracking-tight md:text-4xl font-headline">
-          {copy.marketing.aiRecommender.title}
+          {t('aiRecommender.title')}
         </h2>
         <p className="mt-4 max-w-2xl mx-auto text-lg text-muted-foreground">
-          <Balancer>{copy.marketing.aiRecommender.description}</Balancer>
+          <Balancer>{t('aiRecommender.description')}</Balancer>
         </p>
         <div className="mt-8">
           <Button asChild size="lg">
             <Link href="/recommend">
-              {copy.marketing.aiRecommender.cta}{' '}
-              <ArrowRight className="ml-2 h-5 w-5" />
+              {t('aiRecommender.cta')} <ArrowRight className="ml-2 h-5 w-5" />
             </Link>
           </Button>
         </div>
