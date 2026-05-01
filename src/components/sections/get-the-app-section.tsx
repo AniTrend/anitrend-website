@@ -1,6 +1,5 @@
 import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
-import Balancer from 'react-wrap-balancer';
 import { siGoogleplay } from 'simple-icons';
 import { Button } from '@/components/ui/button';
 import {
@@ -12,6 +11,7 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Github } from 'lucide-react';
+import { SectionIntro } from '@/components/sections/section-intro';
 
 export async function GetTheAppSection({
   playStoreUrl,
@@ -23,18 +23,16 @@ export async function GetTheAppSection({
   const t = await getTranslations('marketing');
 
   return (
-    <section id="get-the-app" className="py-20 scroll-mt-20">
+    <section id="get-the-app" className="scroll-mt-24 py-20">
       <div className="container">
-        <div className="text-center">
-          <h2 className="text-3xl font-bold tracking-tight md:text-4xl font-headline">
-            {t('getTheApp.title')}
-          </h2>
-          <p className="mt-4 max-w-2xl mx-auto text-lg text-muted-foreground">
-            <Balancer>{t('getTheApp.description')}</Balancer>
-          </p>
-        </div>
-        <div className="mt-12 grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-          <Card className="flex flex-col border-primary/20">
+        <SectionIntro
+          badge={t('getTheApp.badge')}
+          title={t('getTheApp.title')}
+          description={t('getTheApp.description')}
+          align="center"
+        />
+        <div className="mx-auto mt-12 grid max-w-5xl grid-cols-1 gap-8 md:grid-cols-2">
+          <Card className="flex flex-col rounded-[1.75rem] border-primary/20 bg-[linear-gradient(180deg,rgba(20,24,52,0.92),rgba(10,12,26,0.98))] text-white shadow-[0_24px_80px_rgba(4,6,20,0.3)]">
             <CardHeader>
               <div className="flex items-center gap-4">
                 <svg
@@ -54,7 +52,7 @@ export async function GetTheAppSection({
               </div>
             </CardHeader>
             <CardContent className="flex-1">
-              <p className="text-sm text-muted-foreground">
+              <p className="text-sm text-slate-300">
                 {t('getTheApp.googlePlay.description')}
               </p>
             </CardContent>
@@ -79,7 +77,7 @@ export async function GetTheAppSection({
             </CardFooter>
           </Card>
 
-          <Card className="flex flex-col">
+          <Card className="flex flex-col rounded-[1.75rem] border-white/10 bg-card/85 shadow-[0_24px_80px_rgba(4,6,20,0.2)]">
             <CardHeader>
               <div className="flex items-center gap-4">
                 <Github className="h-10 w-10 text-muted-foreground" />

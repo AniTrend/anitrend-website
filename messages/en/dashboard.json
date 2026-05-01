@@ -1,7 +1,30 @@
 {
   "hero": {
+    "badge": "Editorial launchpad",
     "title": "Your AniTrend Hub",
     "description": "Jump back into the anime you care about, open your lists in app, and explore curated filters in one place."
+  },
+  "appShortcuts": {
+    "title": "Open the app where it fits best",
+    "badge": "Verified routes",
+    "description": "Jump into the native AniTrend surfaces that work best on mobile while keeping web discovery one tap away.",
+    "items": {
+      "profile": {
+        "description": "Pick up your lists, progress, and watch status in the native app."
+      },
+      "discover": {
+        "description": "Open AniTrend's native discovery view when you want a mobile-first browse session."
+      },
+      "suggestions": {
+        "description": "Jump straight into curated AniTrend suggestions without leaving the dashboard trail."
+      },
+      "social": {
+        "description": "Continue into AniTrend's social feed and community-focused mobile surfaces."
+      },
+      "settings": {
+        "description": "Open AniTrend settings on mobile for account and app-level preferences."
+      }
+    }
   },
   "shortcuts": {
     "title": "Discover shortcuts",

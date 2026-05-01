@@ -13,12 +13,20 @@ export const githubOrgUrl = 'https://github.com/AniTrend';
 
 export type AppIntent =
   | { type: 'profile' }
+  | { type: 'discover' }
+  | { type: 'suggestions' }
+  | { type: 'social' }
+  | { type: 'settings' }
   | { type: 'anime-detail'; animeId: string };
 
 export type AppIntentStatus = 'verified' | 'pendingVerification';
 
 export const appIntentStatus: Record<AppIntent['type'], AppIntentStatus> = {
   profile: 'verified',
+  discover: 'verified',
+  suggestions: 'verified',
+  social: 'verified',
+  settings: 'verified',
   'anime-detail': 'pendingVerification',
 };
 
@@ -26,6 +34,14 @@ export function getAppIntentHref(intent: AppIntent): string {
   switch (intent.type) {
     case 'profile':
       return 'app.anitrend://action/profile';
+    case 'discover':
+      return 'app.anitrend://action/discover';
+    case 'suggestions':
+      return 'app.anitrend://action/suggestions';
+    case 'social':
+      return 'app.anitrend://action/social';
+    case 'settings':
+      return 'app.anitrend://action/settings';
     case 'anime-detail':
       return `app.anitrend://action/anime/${intent.animeId}`;
   }
@@ -34,13 +50,19 @@ export function getAppIntentHref(intent: AppIntent): string {
 // Deep links to the native app
 export const deepLinks = {
   profile: getAppIntentHref({ type: 'profile' }),
+  discover: getAppIntentHref({ type: 'discover' }),
+  suggestions: getAppIntentHref({ type: 'suggestions' }),
+  social: getAppIntentHref({ type: 'social' }),
+  settings: getAppIntentHref({ type: 'settings' }),
   anime: (id: string) =>
     getAppIntentHref({ type: 'anime-detail', animeId: id }),
 };
 
 // Supabase banner image URL built from base URL in env
 const supabaseBaseUrl = process.env.NEXT_PUBLIC_SUPABASE_BASE_URL ?? '';
-export const supabaseBannerUrl = `${supabaseBaseUrl}/media/banner/156cc9127eb16c7fd645a9ba0fb3a4e21678353995_main.jpg`;
+export const supabaseBannerUrl = supabaseBaseUrl
+  ? `${supabaseBaseUrl}/media/banner/156cc9127eb16c7fd645a9ba0fb3a4e21678353995_main.jpg`
+  : null;
 
 // Static fallback repository data
 export const fallbackRepos = [

@@ -2,20 +2,51 @@
   "hero": {
     "title": "The Ultimate Anime & Manga Companion",
     "description": "Your definitive companion for tracking anime and manga. Discover, track, and share your passion with a global community.",
+    "kicker": "Editorial anime tracking",
+    "panels": {
+      "discovery": {
+        "title": "Web-first discovery that keeps moving",
+        "description": "Use the website to browse upcoming, airing, and high-signal picks before you jump back into the native app."
+      },
+      "handoff": {
+        "title": "Native handoff where mobile wins",
+        "description": "Open verified AniTrend app surfaces directly from the web when your next step belongs on mobile."
+      }
+    },
     "cta": {
       "getStarted": "Get Started",
       "viewOnGitHub": "View on GitHub"
     }
   },
   "featuresSection": {
+    "badge": "Core workflow",
     "title": "All-in-One Anime & Manga Tracker",
     "description": "AniTrend is packed with features to help you organize your lists, discover new favorites, and connect with other fans."
   },
   "appShowcase": {
     "title": "Beautifully Crafted Interface",
-    "description": "Explore a meticulously designed interface that's both intuitive and visually stunning. Every screen is built to enhance your anime and manga journey."
+    "description": "Explore a meticulously designed interface that's both intuitive and visually stunning. Every screen is built to enhance your anime and manga journey.",
+    "badge": "Dark-first polish",
+    "featuredLabel": "Featured mobile surface"
+  },
+  "appBridge": {
+    "badge": "Web to app handoff",
+    "title": "Open AniTrend where it fits best",
+    "description": "Stay on the web for editorial browsing, then jump straight into the verified AniTrend app surfaces that work better on mobile.",
+    "items": {
+      "discover": {
+        "description": "Continue browsing in AniTrend's native discovery flow when you want a mobile-first session."
+      },
+      "suggestions": {
+        "description": "Jump into AniTrend suggestions for a tighter recommendation trail without leaving your current context behind."
+      },
+      "social": {
+        "description": "Open AniTrend's social feed when the next step is conversation, reactions, and community updates."
+      }
+    }
   },
   "integrations": {
+    "badge": "Open ecosystem",
     "title": "Proudly Open Source",
     "description": "AniTrend is a passion project built by the community, for the community. Explore our repositories and contribute.",
     "updatedPrefix": "Updated",
@@ -35,6 +66,7 @@
     }
   },
   "getTheApp": {
+    "badge": "Install options",
     "title": "Take AniTrend Anywhere",
     "description": "Choose your preferred download method. Get the official release from Google Play or grab the latest build from GitHub.",
     "googlePlay": {
@@ -52,6 +84,7 @@
   },
   "community": {
     "backgroundAlt": "Community background",
+    "badge": "Stay in the loop",
     "title": "Start Your Adventure",
     "description": "Join our community, support AniTrend, and dive into an incredible anime and manga experience!",
     "cta": "Join on Discord"

@@ -47,6 +47,16 @@ export function AppHandoffFallbackDialog({
       };
     }
 
+    if (intent.type !== 'anime-detail') {
+      return {
+        title: common('handoff.genericFallback.title'),
+        description: common('handoff.genericFallback.description'),
+        playStoreLabel: common('handoff.genericFallback.actions.playStore'),
+        githubLabel: common('handoff.genericFallback.actions.github'),
+        dismissLabel: common('handoff.genericFallback.actions.dismiss'),
+      };
+    }
+
     return {
       title: anime('handoff.openFallback.title'),
       description: anime('handoff.openFallback.description'),
