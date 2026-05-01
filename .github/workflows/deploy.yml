@@ -260,12 +260,13 @@ jobs:
             **Auto-generated**: Yes
             
             This should be merged after the release is confirmed to be working correctly.
-          branch: version-bump/${{ needs.validate-release.outputs.version }}
+          branch: platform/version-bump
           base: main
           delete-branch: true
           labels: |
             version
             automated
+            :skateboard: skip-changelog
 
       - name: Notify success
         run: |
