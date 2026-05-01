@@ -74,7 +74,7 @@ export function AppHandoffSection() {
                     intent={item.intent}
                     intentStatus={appIntentStatus[item.intent.type]}
                     variant="ghost"
-                    className="h-auto w-full justify-start rounded-[1.25rem] px-4 py-4 text-left text-white hover:bg-white/10 hover:text-white"
+                    className="h-auto w-full items-start justify-start whitespace-normal rounded-[1.25rem] px-4 py-4 text-left text-white hover:bg-white/10 hover:text-white"
                     onAttempt={() => {
                       void logEvent('open_in_app', {
                         source: 'home',
