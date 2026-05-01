@@ -33,7 +33,7 @@ yarn test:e2e         # Playwright end-to-end tests (expects app running on :900
 - Container images published to GitHub Container Registry (GHCR): `ghcr.io/anitrend/website`
 - Deploys to a self-hosted server via SSH using Docker Compose (`compose.prod.yaml`)
 - Reverse proxy assumed (Traefik) with labels managed in compose files
-- Primary workflows: `ci.yml` (lint/build + docker build check), `deploy.yml` (build & push image, remote deploy), `release.yml` (versioned image publish + release)
+- Primary workflows: `ci.yml` (lint/build + docker build check), `deploy.yml` (validate on `main` and tag pushes, publish images only on published GitHub releases or manual dispatch)
 - Docker build uses Next.js standalone output and multi-stage builds for optimization
 - Always uses yarn as package manager with frozen lockfiles for consistent builds
 
@@ -140,7 +140,8 @@ Next.js image domains configured for:
 
 ### Container Build & Publish
 
-- Images tagged by branch/sha and `latest` on main.
+- `deploy.yml` validates release candidates on `main` and tag pushes, but only publishes GHCR images for published GitHub releases or explicit manual dispatches.
+- Stable published releases also update the `latest` tag; prereleases publish only their version tag.
 
 ### Compose
 
