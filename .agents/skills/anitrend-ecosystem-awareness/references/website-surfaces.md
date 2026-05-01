@@ -7,6 +7,10 @@ This inventory captures current website surfaces that either centralize or emit 
 ### `src/config/links.ts`
 
 - `deepLinks.profile`: `app.anitrend://action/profile`
+- `deepLinks.discover`: `app.anitrend://action/discover`
+- `deepLinks.suggestions`: `app.anitrend://action/suggestions`
+- `deepLinks.social`: `app.anitrend://action/social`
+- `deepLinks.settings`: `app.anitrend://action/settings`
 - `deepLinks.anime(id)`: `app.anitrend://action/anime/${id}`
 - `getAppIntentHref(intent)`: typed app intent to URI resolution
 - `appIntentStatus`: current contract confidence for shared app handoff surfaces
@@ -51,6 +55,39 @@ Behavior:
 Implication:
 
 - Profile handoff is present in dashboard UX, reuses centralized intent resolution, and keeps app-handoff analytics attached at the emitting component.
+
+### `src/app/dashboard/page.tsx` + `src/components/dashboard-app-shortcuts.tsx`
+
+Surface:
+
+- Dashboard shortcut cluster for `profile`, `discover`, `suggestions`, `social`, and `settings`
+
+Behavior:
+
+- Delegates each handoff through `src/components/app-handoff/open-in-app-button.tsx`
+- Emits app intents `{ type: 'profile' }`, `{ type: 'discover' }`, `{ type: 'suggestions' }`, `{ type: 'social' }`, and `{ type: 'settings' }`
+- Logs analytics event `open_in_app` with `{ source: 'dashboard', target }`
+- Reuses the shared fallback dialog and centralized intent status map
+
+Implication:
+
+- Dashboard now acts as the primary verified native-app launch surface beyond profile-only handoff.
+
+### `src/app/page.tsx` + `src/components/sections/app-handoff-section.tsx`
+
+Surface:
+
+- Landing-page bridge section: "Open AniTrend where it fits best"
+
+Behavior:
+
+- Emits verified app intents for `discover`, `suggestions`, and `social`
+- Logs analytics event `open_in_app` with `{ source: 'home', target }`
+- Uses shared `OpenInAppButton` behavior and centralized URI generation from `src/config/links.ts`
+
+Implication:
+
+- The homepage now explicitly bridges web exploration to verified native routes without scattering deeplink literals across marketing sections.
 
 ## Discovery Quality Notes
 

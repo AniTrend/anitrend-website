@@ -3,6 +3,7 @@ import { getTranslations } from 'next-intl/server';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ArrowUpRight, GitFork, Heart, Layers, Star } from 'lucide-react';
 import { getLanguageColor } from '@/lib/github-service';
+import { SectionIntro } from '@/components/sections/section-intro';
 
 export interface RepoForDisplay {
   name: string;
@@ -23,19 +24,18 @@ export async function IntegrationsSection({
   const t = await getTranslations('marketing');
 
   return (
-    <section id="integrations" className="py-20 scroll-mt-20">
+    <section id="integrations" className="scroll-mt-24 py-20">
       <div className="container">
-        <div className="grid lg:grid-cols-5 gap-12 items-start">
+        <div className="grid items-start gap-10 lg:grid-cols-5">
           <div className="lg:col-span-2 flex flex-col gap-6">
-            <h2 className="text-3xl font-bold tracking-tight md:text-4xl font-headline">
-              {t('integrations.title')}
-            </h2>
-            <p className="text-lg text-muted-foreground">
-              {t('integrations.description')}
-            </p>
+            <SectionIntro
+              badge={t('integrations.badge')}
+              title={t('integrations.title')}
+              description={t('integrations.description')}
+            />
             <div className="space-y-8 mt-4">
               <div className="flex items-start gap-4">
-                <div className="flex h-12 w-12 items-center justify-center rounded-full border border-primary/20 bg-secondary/30 flex-shrink-0">
+                <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-primary/20 bg-primary/10 flex-shrink-0">
                   <Heart className="w-6 h-6 text-primary" />
                 </div>
                 <div>
@@ -48,7 +48,7 @@ export async function IntegrationsSection({
                 </div>
               </div>
               <div className="flex items-start gap-4">
-                <div className="flex h-12 w-12 items-center justify-center rounded-full border border-primary/20 bg-secondary/30 flex-shrink-0">
+                <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-primary/20 bg-primary/10 flex-shrink-0">
                   <GitFork className="w-6 h-6 text-primary" />
                 </div>
                 <div>
@@ -61,7 +61,7 @@ export async function IntegrationsSection({
                 </div>
               </div>
               <div className="flex items-start gap-4">
-                <div className="flex h-12 w-12 items-center justify-center rounded-full border border-primary/20 bg-secondary/30 flex-shrink-0">
+                <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-primary/20 bg-primary/10 flex-shrink-0">
                   <Layers className="w-6 h-6 text-primary" />
                 </div>
                 <div>
@@ -80,11 +80,11 @@ export async function IntegrationsSection({
               {repositories.map((repo) => (
                 <Card
                   key={repo.name}
-                  className="bg-secondary/30 hover:border-primary/50 transition-colors flex flex-col h-full group"
+                  className="group flex h-full flex-col rounded-[1.5rem] border-white/10 bg-[linear-gradient(180deg,rgba(20,24,52,0.92),rgba(10,12,26,0.98))] transition-colors hover:border-primary/40"
                 >
                   <CardHeader>
                     <div className="flex justify-between items-start">
-                      <CardTitle className="font-headline text-lg hover:text-primary">
+                      <CardTitle className="font-headline text-lg text-white hover:text-primary">
                         <Link
                           href={repo.url}
                           target="_blank"
@@ -117,7 +117,7 @@ export async function IntegrationsSection({
                     )}
                   </CardHeader>
                   <CardContent className="flex-1">
-                    <p className="text-muted-foreground text-sm mb-3">
+                    <p className="mb-3 text-sm text-slate-300">
                       {repo.description}
                     </p>
                     <div className="flex items-center gap-4 text-xs text-muted-foreground">

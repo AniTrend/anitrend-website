@@ -1,9 +1,9 @@
 import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
-import Balancer from 'react-wrap-balancer';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Rocket } from 'lucide-react';
+import { SectionIntro } from '@/components/sections/section-intro';
 
 export function DiscordIcon({ className }: { className?: string }) {
   return (
@@ -22,38 +22,43 @@ export async function CommunitySection({
   supabaseBannerUrl,
   discordInviteUrl,
 }: {
-  supabaseBannerUrl: string;
+  supabaseBannerUrl: string | null;
   discordInviteUrl: string;
 }) {
   const t = await getTranslations('marketing');
 
   return (
-    <section id="community" className="py-20 md:py-32 relative">
-      <Image
-        src={supabaseBannerUrl}
-        alt={t('community.backgroundAlt')}
-        fill
-        className="absolute inset-0 w-full h-full object-cover -z-10 opacity-20"
-        data-ai-hint="anime community"
-      />
-      <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/60 to-transparent -z-10"></div>
-      <div className="container text-center max-w-3xl mx-auto">
-        <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full border border-primary/20 bg-background mb-6">
-          <Rocket className="w-8 h-8 text-primary" />
-        </div>
-        <h2 className="text-3xl font-bold tracking-tight md:text-4xl font-headline">
-          {t('community.title')}
-        </h2>
-        <p className="mt-4 max-w-2xl mx-auto text-lg text-muted-foreground">
-          <Balancer>{t('community.description')}</Balancer>
-        </p>
-        <div className="mt-8">
-          <Button asChild size="lg" variant="discord">
-            <Link href={discordInviteUrl} target="_blank" rel="noreferrer">
-              <DiscordIcon className="mr-2 h-5 w-5" />
-              {t('community.cta')}
-            </Link>
-          </Button>
+    <section id="community" className="relative py-20 md:py-28">
+      {supabaseBannerUrl ? (
+        <Image
+          src={supabaseBannerUrl}
+          alt={t('community.backgroundAlt')}
+          fill
+          className="absolute inset-0 -z-10 h-full w-full object-cover opacity-20"
+          data-ai-hint="anime community"
+        />
+      ) : null}
+      <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top,rgba(141,92,255,0.24),transparent_30%),linear-gradient(180deg,rgba(8,10,24,0.55),rgba(8,10,24,0.96))]" />
+      <div className="container">
+        <div className="mx-auto max-w-4xl rounded-[2rem] border border-white/10 bg-black/30 p-8 text-center shadow-[0_30px_120px_rgba(4,6,20,0.38)] backdrop-blur md:p-10">
+          <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full border border-primary/20 bg-primary/10">
+            <Rocket className="w-8 h-8 text-primary" />
+          </div>
+          <SectionIntro
+            badge={t('community.badge')}
+            title={t('community.title')}
+            description={t('community.description')}
+            align="center"
+            className="mx-auto"
+          />
+          <div className="mt-8">
+            <Button asChild size="lg" variant="discord">
+              <Link href={discordInviteUrl} target="_blank" rel="noreferrer">
+                <DiscordIcon className="mr-2 h-5 w-5" />
+                {t('community.cta')}
+              </Link>
+            </Button>
+          </div>
         </div>
       </div>
     </section>

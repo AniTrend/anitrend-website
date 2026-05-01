@@ -30,6 +30,11 @@
   "actions": {
     "openInApp": "Open in App",
     "openMyListsInApp": "Open My Lists in App",
+    "openProfileInApp": "Open Profile in App",
+    "openDiscoverInApp": "Open Discover in App",
+    "openSuggestionsInApp": "Open Suggestions in App",
+    "openSocialInApp": "Open Social in App",
+    "openSettingsInApp": "Open Settings in App",
     "share": "Share",
     "linkCopied": "Link copied"
   },
@@ -66,6 +71,15 @@
         "playStore": "Install AniTrend for your lists",
         "github": "Get the latest AniTrend build",
         "dismiss": "Keep browsing on the web"
+      }
+    },
+    "genericFallback": {
+      "title": "Couldn't open AniTrend",
+      "description": "Your browser stayed on this page, so the AniTrend app may not be installed yet. You can keep browsing here or grab the latest app build.",
+      "actions": {
+        "playStore": "Install AniTrend",
+        "github": "Get the latest AniTrend build",
+        "dismiss": "Stay on the website"
       }
     }
   }
