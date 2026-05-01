@@ -10,7 +10,7 @@ description: 'Next.js App Router conventions for AniTrend — server-first route
 - All route segments (`page.tsx`, `layout.tsx`, `loading.tsx`) are **Server Components** unless explicitly opted in with `'use client'`.
 - Move state, event handlers, and browser-only logic to dedicated Client Components placed in `src/components/`.
 - Prefer extracting interactive logic into a dedicated Client Component in `src/components/` and keeping the route file as a Server Component that passes data down to it.
-- Only add `'use client'` directly to a `page.tsx` when the **entire** interaction model of the route requires client state from the top level and there is no meaningful server-renderable shell to preserve (e.g., `src/app/recommend/page.tsx` where the full page is driven by real-time user input and transitions). This is the escape hatch, not the default.
+- Only add `'use client'` directly to a `page.tsx` when the **entire** interaction model of the route requires client state from the top level and there is no meaningful server-renderable shell to preserve. This is the escape hatch, not the default.
 
 ## Metadata
 
@@ -35,7 +35,7 @@ description: 'Next.js App Router conventions for AniTrend — server-first route
 ## Route Composition Patterns
 
 - Reuse the shared header and footer via the root layout; do not re-import root chrome in individual pages.
-- Use nested layouts for shared chrome within route groups (e.g., `recommend/layout.tsx`).
+- Use nested layouts for shared chrome within route groups when multiple related routes need the same local shell.
 - Dynamic routes (`[id]`) must validate params before service calls; use `notFound()` for missing resources and `redirect()` only when the route intentionally moves elsewhere.
 - API routes live under `src/app/api/` and delegate data logic to `src/lib/` services — keep route handlers thin.
 

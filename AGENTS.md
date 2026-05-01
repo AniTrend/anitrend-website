@@ -4,8 +4,8 @@ This document is the **authoritative guide for autonomous AI agents** working in
 
 ## Project Snapshot
 
-- **Type**: Next.js 15 landing website with AI-powered anime recommendations
-- **Stack**: React 19, TypeScript, Tailwind CSS, shadcn/ui, Google Genkit (Gemini 2.0)
+- **Type**: Next.js 15 landing website for the AniTrend anime tracking ecosystem
+- **Stack**: React 19, TypeScript, Tailwind CSS, shadcn/ui
 - **Package Manager**: Yarn 4.9.2 (frozen lockfile, immutable installs)
 - **Node Version**: 22 LTS
 - **Primary Environments**: Development (port 9002), Production (Docker), CI/CD (GitHub Actions)
@@ -136,11 +136,6 @@ yarn install --immutable  # Use frozen lockfile
 # Terminal 1: Next.js dev server (port 9002, Turbopack)
 yarn dev
 
-# Terminal 2: Genkit AI flow dev server (watches src/ai/dev.ts)
-yarn genkit:dev
-
-# Terminal 3: Genkit watch mode (auto-reload flows)
-yarn genkit:watch
 ```
 
 ### Common Commands
@@ -148,7 +143,6 @@ yarn genkit:watch
 | Command           | Purpose                                    |
 | ----------------- | ------------------------------------------ |
 | `yarn dev`        | Start Next.js dev server (port 9002)       |
-| `yarn genkit:dev` | Start Genkit AI dev runtime                |
 | `yarn build`      | Build for production (outputs to `.next/`) |
 | `yarn start`      | Start production Next.js server            |
 | `yarn lint`       | Run ESLint validation                      |
@@ -164,11 +158,6 @@ yarn genkit:watch
 
 ```
 src/
-  ├── ai/                        # Genkit AI flows & configuration
-  │   ├── dev.ts                 # Flow registration (side-effect import)
-  │   ├── genkit.ts              # Genkit client init
-  │   └── flows/
-  │       └── recommend-anime-flow.ts
   ├── app/                       # Next.js app router
   │   ├── page.tsx               # Landing page (/)
   │   ├── layout.tsx             # Root layout
@@ -201,37 +190,6 @@ src/
       └── (type definitions)
 ```
 
-### AI Flow Architecture (Server-Side Pattern)
-
-**Location**: `src/ai/flows/`
-
-**Pattern**:
-
-```typescript
-'use server'; // Mark as server action
-
-// Zod schema for validation
-const schema = z.object({
-  /* ... */
-});
-
-// Internal flow implementation
-async function flowImpl(input: Input): Promise<Output> {
-  // Fetch external data (e.g., Jikan API)
-  // Call Genkit model with prompt
-  // Return structured output
-}
-
-// Wrapper for client consumption
-export async function flowName(input: Input): Promise<Output> {
-  return flowImpl(input);
-}
-```
-
-**Registration**: Import in `src/ai/dev.ts` (side-effect) so Genkit dev server discovers flows.
-
-**Testing flows**: Use `yarn genkit:dev` then test via UI at `http://localhost:4000`.
-
 ### Data Fetching Patterns
 
 **API Pattern**:
@@ -263,7 +221,6 @@ const repoData = await fetch(`https://api.github.com/orgs/AniTrend/repos`, {
 | `/`                 | `page.tsx`                  | Static          | Landing page (marketing)            |
 | `/dashboard`        | `dashboard/page.tsx`        | Dynamic         | Hub with shortcuts & teaser         |
 | `/discover`         | `discover/page.tsx`         | Server + Client | Anime grid browser (Jikan API)      |
-| `/recommend`        | `recommend/page.tsx`        | Server Action   | AI recommendation interface         |
 | `/anime/[id]`       | `anime/[id]/page.tsx`       | Dynamic         | Anime detail page (Jikan API)       |
 | `/api/repositories` | `api/repositories/route.ts` | API Route       | Get GitHub org repos (query params) |
 
@@ -320,42 +277,6 @@ const anime: Anime = {
   // ... more fields
 };
 ```
-
-### Google Genkit (Gemini 2.0)
-
-**Model**: `googleai/gemini-2.0-flash`
-
-**Pattern**:
-
-```typescript
-const prompt = ai.definePrompt({
-  name: 'recommendAnimePrompt',
-  input: { schema: RecommendAnimeInputSchema },
-  output: { schema: RecommendAnimeOutputSchema },
-  prompt: `Recommend an anime based on the user's request.`
-})
-
-const recommendAnimeFlow = ai.defineFlow(
-  {
-    name: 'recommendAnimeFlow',
-    inputSchema: RecommendAnimeInputSchema,
-    outputSchema: RecommendAnimeOutputSchema,
-  },
-  async (input) => {
-    const { output } = await prompt(input)
-
-    if (!output) {
-      throw new Error('Failed to generate anime recommendation')
-    }
-
-    return output
-  }
-})
-```
-
-**Output**: Use Zod schemas for structured JSON output.
-
-**Environment**: Requires `GOOGLE_GENKIT_API_KEY` in `.env.local`.
 
 ### GitHub API (Organization Repos)
 
@@ -452,25 +373,14 @@ yarn build     # Full build simulation
 5. **Commit**: `fix: resolve issue with X`
 6. **PR & merge**: Follow standard workflow
 
-### C. Adding a New AI Flow
-
-1. **Create file**: `src/ai/flows/<flow-name>-flow.ts`
-2. **Define schema**: Use Zod for input/output validation
-3. **Implement**: Mark with `'use server'`, fetch data, call Genkit
-4. **Export wrapper**: Client-facing async function
-5. **Register**: Import in `src/ai/dev.ts` (side-effect)
-6. **Test**: Run `yarn genkit:dev`, test via UI
-7. **Integrate UI**: Add client component in `src/app/recommend/` or similar
-8. **PR & deploy**: Standard workflow
-
-### D. Updating Dependencies
+### C. Updating Dependencies
 
 1. **Review changes**: `git diff HEAD^..HEAD package.json`
 2. **Test**: Run full CI suite (`yarn lint && yarn typecheck && yarn build && yarn test:e2e`)
 3. **Commit**: `chore: update dependencies`
 4. **Monitor**: Check for any build/runtime issues post-deploy
 
-### E. Preparing a Release
+### D. Preparing a Release
 
 1. **Create release branch**: `git checkout -b release/v1.2.3`
 2. **Update version**: In `package.json` (matches semver tag)
@@ -513,7 +423,6 @@ yarn build     # Full build simulation
 **Required for local dev** (create `.env.local`):
 
 ```
-GOOGLE_GENKIT_API_KEY=<your-api-key>
 NEXT_PUBLIC_FIREBASE_PROJECT_ID=<project-id>
 # ... other Firebase config keys
 ```
@@ -547,7 +456,6 @@ NEXT_PUBLIC_FIREBASE_PROJECT_ID=<project-id>
 ```bash
 # Development
 yarn dev                    # Start Next.js dev server
-yarn genkit:dev             # Start Genkit AI dev server
 yarn build                  # Production build
 
 # Validation
@@ -611,7 +519,6 @@ yarn typecheck --pretty
 ### Port Conflicts
 
 - Dev server: 9002 (check `yarn dev` output)
-- Genkit dev UI: 4000 (check `yarn genkit:dev` output)
 - Use `lsof -i :PORT` to find process, `kill -9 PID` to stop
 
 ### API Rate Limits
@@ -637,7 +544,6 @@ yarn upgrade <package>    # Update dependency (updates lock)
 - **Issues**: https://github.com/AniTrend/anitrend-website/issues
 - **PRs**: https://github.com/AniTrend/anitrend-website/pulls
 - **Container Registry**: https://ghcr.io/anitrend/website
-- **Genkit Docs**: https://firebase.google.com/docs/genkit
 - **shadcn/ui**: https://ui.shadcn.com/
 - **Next.js**: https://nextjs.org/docs
 - **Tailwind CSS**: https://tailwindcss.com/docs

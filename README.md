@@ -5,7 +5,6 @@ A modern landing website for the AniTrend anime tracking ecosystem, built with N
 ## 🚀 Tech Stack
 
 - **Frontend**: Next.js 15 with App Router & Turbopack
-- **AI Framework**: Google Genkit with Gemini 2.0 Flash
 - **UI Components**: shadcn/ui with Tailwind CSS
 - **Typography**: Space Grotesk (headlines) & Inter (body)
 - **Data Source**: MyAnimeList via Jikan API
@@ -71,7 +70,6 @@ yarn lint   # ESLint code checking
 
 - `/` - Landing page with marketing sections
 - `/discover` - Server-rendered anime grid with client-side interactivity
-- `/recommend` - AI-powered recommendation interface
 - `/anime/[id]` - Dynamic anime detail pages
 - Deep linking: `app.anitrend://action/anime/{id}` for mobile app
 

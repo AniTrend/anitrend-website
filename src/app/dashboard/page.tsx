@@ -75,12 +75,6 @@ export default async function DashboardPage() {
           </p>
           <div className="flex items-center justify-center gap-3">
             <DashboardOpenListsButton />
-            <Button asChild variant="outline" size="lg">
-              <Link href="/recommend">
-                <Sparkles className="mr-2 h-5 w-5" />
-                {t('hero.cta.aiRecommendations')}
-              </Link>
-            </Button>
           </div>
         </section>
 

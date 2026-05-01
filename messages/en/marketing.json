@@ -34,11 +34,6 @@
       }
     }
   },
-  "aiRecommender": {
-    "title": "Discover Your Next Favorite with AI",
-    "description": "Tired of endless scrolling? Describe what you're in the mood for, and let our AI find the perfect anime for you from a massive catalog of titles.",
-    "cta": "Try the AI Recommender"
-  },
   "getTheApp": {
     "title": "Take AniTrend Anywhere",
     "description": "Choose your preferred download method. Get the official release from Google Play or grab the latest build from GitHub.",
