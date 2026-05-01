@@ -26,6 +26,7 @@ FROM dependencies AS with-source
 # Copy all source files and configuration
 COPY src ./src
 COPY public ./public
+COPY messages ./messages
 COPY next.config.ts .
 COPY tsconfig.json .
 COPY tailwind.config.ts .
