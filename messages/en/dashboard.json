@@ -1,10 +1,7 @@
 {
   "hero": {
     "title": "Your AniTrend Hub",
-    "description": "Jump back into the anime you care about, explore curated filters, and grab AI-powered picks in one place.",
-    "cta": {
-      "aiRecommendations": "Get AI Recommendations"
-    }
+    "description": "Jump back into the anime you care about, open your lists in app, and explore curated filters in one place."
   },
   "shortcuts": {
     "title": "Discover shortcuts",

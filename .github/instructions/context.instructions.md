@@ -6,12 +6,11 @@ applyTo: '**'
 
 ## Architecture Overview
 
-This is the **AniTrend landing website** - a Next.js 15 app showcasing the AniTrend anime tracking ecosystem. The site combines a marketing landing page with AI-powered anime recommendations using Google's Genkit framework.
+This is the **AniTrend landing website** - a Next.js 15 app showcasing the AniTrend anime tracking ecosystem. The site combines a marketing landing page, anime discovery, and app handoff into the native AniTrend experience.
 
 ### Key Components
 
 - **Landing Page**: Marketing site promoting the AniTrend Android app and ecosystem
-- **AI Recommender**: Genkit-powered anime recommendation engine using Gemini 2.0
 - **Anime Discovery**: Browse interface consuming MyAnimeList (Jikan) API
 - **Design System**: shadcn/ui components with custom AniTrend theming
 - **Repository Showcase**: GitHub org repositories surfaced via a Next.js API route
@@ -22,8 +21,6 @@ This is the **AniTrend landing website** - a Next.js 15 app showcasing the AniTr
 
 ```bash
 yarn dev              # Next.js dev server on port 9002 with Turbopack
-yarn genkit:dev       # Start Genkit AI development server
-yarn genkit:watch     # Watch mode for AI flow development
 yarn typecheck        # TypeScript validation
 yarn lint             # ESLint validation (CI runs this explicitly)
 yarn build            # Next.js production build
@@ -42,30 +39,9 @@ yarn test:e2e         # Playwright end-to-end tests (expects app running on :900
 
 ## Critical Patterns
 
-### AI Flow Architecture
-
-AI recommendations live in `src/ai/flows/` using the **server-side flow pattern**:
-
-- Flows are server actions marked with `'use server'`
-- Use Zod schemas for input/output validation
-- Fetch external APIs (Jikan) within flows for real-time data
-- Export wrapper functions for client consumption
-
-Flows are registered for the Genkit dev runtime by importing them in `src/ai/dev.ts` (side-effect import). Run the AI dev server with `yarn genkit:dev`.
-
-Example pattern from `recommend-anime-flow.ts`:
-
-```typescript
-export async function recommendAnime(
-  input: RecommendAnimeInput
-): Promise<RecommendAnimeOutput | null> {
-  return recommendAnimeFlow(input);
-}
-```
-
 ### Data Fetching Patterns
 
-- **Dynamic data**: Direct Jikan API calls in Server Components and AI flows
+- **Dynamic data**: Direct Jikan API calls in Server Components and supporting services
 - **Type safety**: Shared interfaces in `src/lib/types.ts`
 
 GitHub data is fetched server-side via `src/lib/github-service.ts` with response transformation and light caching using `next: { revalidate: N }`. API rate-limits are handled gracefully with fallbacks.
@@ -90,16 +66,15 @@ const anime: Anime = {
 ### Copy and Content Conventions
 
 - **Localized copy framework**: User-facing copy is served through `next-intl` request config in `src/i18n/` and locale catalogs under `messages/en/`
-- **Domain-based namespaces**: Keep messages grouped by domain (`metadata`, `marketing`, `dashboard`, `discover`, `recommend`, `anime`, `common`) to avoid mixed route/component constants
+- **Domain-based namespaces**: Keep messages grouped by domain (`metadata`, `marketing`, `dashboard`, `discover`, `anime`, `common`) to avoid mixed route/component constants
 - **No new inline UI strings**: When touching pages and components, move user-facing literals into the message catalogs instead of adding fresh inline strings
 - **Metadata alignment**: Route metadata copy should use centralized localized values so Open Graph and Twitter stay aligned with page copy
 
 ### Routing Structure
 
 - `/` - Landing page with marketing sections
-- `/dashboard` - Hub with Discover shortcuts, AI recommendation teaser, and app deep link
+- `/dashboard` - Hub with discover shortcuts, curated content, and app deep links
 - `/discover` - Server-rendered anime grid with client-side interactivity
-- `/recommend` - AI-powered recommendation interface
 - `/anime/[id]` - Dynamic anime detail pages fetching from Jikan API
 - Deep linking: `app.anitrend://action/anime/{id}` protocol for mobile app integration
 
@@ -111,12 +86,6 @@ const anime: Anime = {
 - No auth required, but respect rate limits
 - Key endpoints: `/top/anime`, `/anime/{id}`, `/recommendations/anime`
 - Always handle API failures gracefully with fallbacks
-
-### Google Genkit AI
-
-- Model: `googleai/gemini-2.0-flash`
-- Prompt engineering in `src/ai/flows/recommend-anime-flow.ts`
-- Use structured JSON output with Zod schemas
 
 ### GitHub API (Organization Repos)
 
@@ -143,15 +112,6 @@ Next.js image domains configured for:
 - ESLint disabled during `next build`; CI still runs `yarn lint` separately
 
 ## Common Tasks
-
-### Adding New AI Flows
-
-1. Create in `src/ai/flows/` with server action pattern
-2. Define Zod input/output schemas
-3. Export wrapper function for client use
-4. Test with `yarn genkit:dev`
-
-Tip: Register flows by importing them in `src/ai/dev.ts` so the Genkit dev server can load them.
 
 ### Adding New Pages
 
