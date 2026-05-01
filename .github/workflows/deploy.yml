@@ -16,6 +16,9 @@ on:
         options:
           - production
           - staging
+  release:
+    types:
+      - published
   push:
     branches:
       - main
@@ -44,6 +47,7 @@ jobs:
       version: ${{ steps.version.outputs.version }}
       is_prerelease: ${{ steps.version.outputs.is_prerelease }}
       platforms: ${{ steps.version.outputs.platforms }}
+      publish_image: ${{ steps.version.outputs.publish_image }}
       push_latest: ${{ steps.version.outputs.push_latest }}
       should_create_version_pr: ${{ steps.version.outputs.should_create_version_pr }}
     steps:
@@ -64,23 +68,29 @@ jobs:
         uses: release-drafter/release-drafter@v7
         with:
           config-name: release-drafter-config.yml
-          disable-autolabeler: true
-        env:
-          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
+          commitish: main
+          token: ${{ steps.app-token.outputs.token }}
 
       - name: Extract version
         id: version
         run: |
           SHOULD_CREATE_VERSION_PR="false"
+          PUBLISH_IMAGE="false"
+
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            PUBLISH_IMAGE="true"
+          fi
 
           if [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "${{ github.event.inputs.tag }}" != "latest" ]; then
             VERSION="${{ github.event.inputs.tag }}"
+          elif [ "${{ github.event_name }}" = "release" ]; then
+            VERSION="${{ github.event.release.tag_name }}"
+            SHOULD_CREATE_VERSION_PR="true"
+            PUBLISH_IMAGE="true"
           elif [[ "${GITHUB_REF}" == refs/tags/* ]]; then
             VERSION=${GITHUB_REF#refs/tags/}
-            SHOULD_CREATE_VERSION_PR="true"
           elif [ "${GITHUB_REF}" = "refs/heads/main" ]; then
             VERSION="${{ steps.release-drafter.outputs.resolved_version }}"
-            SHOULD_CREATE_VERSION_PR="true"
 
             if [ -z "$VERSION" ]; then
               echo "::error::Release Drafter did not resolve a version for this run."
@@ -92,6 +102,7 @@ jobs:
           fi
           
           echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "publish_image=$PUBLISH_IMAGE" >> $GITHUB_OUTPUT
           echo "should_create_version_pr=$SHOULD_CREATE_VERSION_PR" >> $GITHUB_OUTPUT
           
           # Check if this is a prerelease (contains alpha, beta, rc)
@@ -112,11 +123,11 @@ jobs:
             echo "platforms=linux/amd64,linux/arm64" >> $GITHUB_OUTPUT
           fi
 
-          # Only push :latest for stable, tag-based releases (or explicit manual latest)
+          # Only push :latest for stable published releases (or explicit manual latest)
           PUSH_LATEST="false"
           if [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "${{ github.event.inputs.tag }}" = "latest" ]; then
             PUSH_LATEST="true"
-          elif [[ "${GITHUB_REF}" == refs/tags/* ]] && [[ ! $VERSION =~ (alpha|beta|rc) ]]; then
+          elif [ "${{ github.event_name }}" = "release" ] && [[ ! $VERSION =~ (alpha|beta|rc) ]]; then
             PUSH_LATEST="true"
           fi
           echo "push_latest=$PUSH_LATEST" >> $GITHUB_OUTPUT
@@ -149,6 +160,7 @@ jobs:
     name: Build Release
     runs-on: ubuntu-latest
     needs: validate-release
+    if: needs.validate-release.outputs.publish_image == 'true'
     permissions:
       contents: read
       packages: write
@@ -209,7 +221,7 @@ jobs:
     name: Post-Release Tasks
     runs-on: ubuntu-latest
     needs: [validate-release]
-    if: needs.validate-release.outputs.is_prerelease == 'false' && needs.validate-release.outputs.should_create_version_pr == 'true'
+    if: needs.validate-release.outputs.publish_image == 'true' && needs.validate-release.outputs.is_prerelease == 'false' && needs.validate-release.outputs.should_create_version_pr == 'true'
     permissions:
       contents: write
       pull-requests: write

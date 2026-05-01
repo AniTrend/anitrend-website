@@ -12,7 +12,7 @@ Before opening a pull request, please ensure you've done the following:
 <!--- If you're unsure about any of these, don't hesitate to ask. We're here to help! -->
 
 - You have followed our [**contributing guidelines**](https://github.com/AniTrend/anitrend-webiste/blob/dev/CONTRIBUTING.md)
-- Double checked that your branch is based on `dev` and targets `dev` (where applicable)
+- Double checked that your branch is based on `main` and targets `main` (where applicable)
 - Pull request has tests (if applicable)
 - Documentation is updated (if necessary)
 - Description explains the issue/use-case resolved
