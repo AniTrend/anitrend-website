@@ -161,6 +161,8 @@ jobs:
     runs-on: ubuntu-latest
     needs: validate-release
     if: needs.validate-release.outputs.publish_image == 'true'
+    environment:
+      name: ${{ github.event.inputs.environment || 'production' }}
     permissions:
       contents: read
       packages: write
