@@ -16,7 +16,6 @@ import {
   type FeatureItem,
 } from '@/components/sections/features-section';
 import { AppShowcaseSection } from '@/components/sections/app-showcase-section';
-import { AIRecommenderSection } from '@/components/sections/ai-recommender-section';
 import { GetTheAppSection } from '@/components/sections/get-the-app-section';
 import { CommunitySection } from '@/components/sections/community-section';
 import type { Metadata } from 'next';
@@ -81,7 +80,6 @@ export default async function Home() {
       <IntegrationsSection repositories={repositories} />
       <FeaturesSection features={features} />
       <AppShowcaseSection screenshots={showcaseScreenshots} />
-      <AIRecommenderSection />
       <GetTheAppSection
         playStoreUrl={playStoreUrl}
         githubReleasesUrl={githubReleasesUrl}

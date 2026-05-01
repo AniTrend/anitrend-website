@@ -1,4 +1,4 @@
-import { Compass, LayoutDashboard, Wand2, Menu } from 'lucide-react';
+import { Compass, LayoutDashboard, Menu } from 'lucide-react';
 import AnalyticsSettings from '@/components/settings/analytics-settings';
 import { siGithub } from 'simple-icons';
 import Link from 'next/link';
@@ -51,16 +51,6 @@ export async function AppHeader() {
               <Compass className="mr-2 h-4 w-4" />
               {t('nav.discover')}
             </Link>
-            <Link
-              href="/recommend"
-              className={buttonVariants({
-                variant: 'ghost',
-                className: 'text-foreground/60 hover:text-foreground/80',
-              })}
-            >
-              <Wand2 className="mr-2 h-4 w-4" />
-              {t('nav.recommend')}
-            </Link>
           </nav>
         </div>
 
@@ -106,9 +96,6 @@ export async function AppHeader() {
                 </Link>
                 <Link href="/discover" className="flex items-center text-lg">
                   <Compass className="mr-2 h-5 w-5" /> {t('nav.discover')}
-                </Link>
-                <Link href="/recommend" className="flex items-center text-lg">
-                  <Wand2 className="mr-2 h-5 w-5" /> {t('nav.recommend')}
                 </Link>
                 <AnalyticsSettings />
                 <Link href="/#features" className="text-lg">
