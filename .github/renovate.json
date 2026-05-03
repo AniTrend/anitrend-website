@@ -1,16 +1,10 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": [
-    "config:recommended"
-  ],
-  "addLabels": [
-    ":dagger: dependencies"
-  ],
+  "extends": ["config:recommended"],
+  "addLabels": [":dagger: dependencies"],
   "branchPrefix": "deps/",
   "reviewers": ["wax911"],
-  "baseBranches": [
-    "main"
-  ],
+  "baseBranchPatterns": ["main"],
   "autoApprove": true,
   "automerge": true,
   "automergeType": "pr",
