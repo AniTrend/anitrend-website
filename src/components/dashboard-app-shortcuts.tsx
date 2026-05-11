@@ -21,7 +21,10 @@ const shortcutIcons = {
   suggestions: Sparkles,
   social: MessageSquareMore,
   settings: Settings2,
-} satisfies Record<DashboardShortcutTarget, React.ComponentType<{ className?: string }>>;
+} satisfies Record<
+  DashboardShortcutTarget,
+  React.ComponentType<{ className?: string }>
+>;
 
 const dashboardTargets: DashboardShortcutTarget[] = [
   'profile',
@@ -57,7 +60,7 @@ export function DashboardAppShortcuts() {
               intent={{ type: target }}
               intentStatus={appIntentStatus[target]}
               variant="ghost"
-              className="h-auto w-full justify-start rounded-2xl px-3 py-3 text-left hover:bg-accent/60"
+              className="h-auto w-full items-start justify-start whitespace-normal rounded-2xl px-3 py-3 text-left hover:bg-accent/60"
               onAttempt={() => {
                 void logEvent('open_in_app', {
                   source: 'dashboard',
@@ -73,7 +76,9 @@ export function DashboardAppShortcuts() {
                   {common(actionLabelKey[target] as never)}
                 </span>
                 <span className="text-xs text-muted-foreground">
-                  {dashboard(`appShortcuts.items.${target}.description` as never)}
+                  {dashboard(
+                    `appShortcuts.items.${target}.description` as never
+                  )}
                 </span>
               </span>
             </OpenInAppButton>
