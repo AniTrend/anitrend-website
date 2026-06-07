@@ -14,7 +14,15 @@ const STORAGE_KEY = 'anitrend_analytics_consent';
  */
 export default function AnalyticsConsentBanner() {
   const t = useTranslations('common');
-  const [visible, setVisible] = useState(false);
+  const [visible, setVisible] = useState<boolean>(() => {
+    if (typeof window === 'undefined') return false;
+    try {
+      const stored = localStorage.getItem(STORAGE_KEY);
+      return stored !== 'granted' && stored !== 'denied';
+    } catch {
+      return true;
+    }
+  });
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -22,18 +30,11 @@ export default function AnalyticsConsentBanner() {
       const stored = localStorage.getItem(STORAGE_KEY);
       if (stored === 'granted') {
         void setAnalyticsEnabled(true);
-        setVisible(false);
       } else if (stored === 'denied') {
         void setAnalyticsEnabled(false);
-        setVisible(false);
-      } else {
-        // No stored preference — show the banner
-        setVisible(true);
       }
     } catch (err) {
-      // If anything goes wrong with localStorage, don't block the app
       console.warn('[analytics] failed to read consent from storage', err);
-      setVisible(true);
     }
   }, []);
 

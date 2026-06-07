@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import {
   Dialog,
   DialogTrigger,
@@ -22,22 +22,17 @@ const STORAGE_KEY = 'anitrend_analytics_consent';
 
 export default function AnalyticsSettings() {
   const t = useTranslations('common');
-  const [enabled, setEnabled] = useState<boolean | null>(null);
-
-  useEffect(() => {
+  const [enabled, setEnabled] = useState<boolean | null>(() => {
+    if (typeof window === 'undefined') return null;
     try {
-      const stored =
-        typeof window !== 'undefined'
-          ? localStorage.getItem(STORAGE_KEY)
-          : null;
-      if (stored === 'granted') setEnabled(true);
-      else if (stored === 'denied') setEnabled(false);
-      else setEnabled(null);
+      const stored = localStorage.getItem(STORAGE_KEY);
+      if (stored === 'granted') return true;
+      if (stored === 'denied') return false;
+      return null;
     } catch {
-      // fail silently
-      setEnabled(null);
+      return null;
     }
-  }, []);
+  });
 
   const toggle = async (next: boolean) => {
     try {

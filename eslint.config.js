@@ -1,13 +1,17 @@
-const { FlatCompat } = require('@eslint/eslintrc');
-const js = require('@eslint/js');
-const typescriptEslint = require('@typescript-eslint/eslint-plugin');
-const typescriptParser = require('@typescript-eslint/parser');
-const path = require('node:path');
+const next = require('eslint-config-next');
 
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-  recommendedConfig: js.configs.recommended,
-});
+const [baseConfig, tsConfig, ...rest] = next;
+
+const enhancedTsConfig = {
+  ...tsConfig,
+  rules: {
+    ...tsConfig.rules,
+    '@typescript-eslint/no-unused-vars': 'error',
+    '@typescript-eslint/no-explicit-any': 'warn',
+    '@typescript-eslint/explicit-function-return-type': 'off',
+    '@typescript-eslint/explicit-module-boundary-types': 'off',
+  },
+};
 
 module.exports = [
   {
@@ -24,27 +28,7 @@ module.exports = [
       'commitlint.config.js',
     ],
   },
-  ...compat.extends('next/core-web-vitals'),
-  {
-    files: ['**/*.{js,jsx,ts,tsx}'],
-    plugins: {
-      '@typescript-eslint': typescriptEslint,
-    },
-    languageOptions: {
-      parser: typescriptParser,
-      ecmaVersion: 2020,
-      sourceType: 'module',
-      parserOptions: {
-        ecmaFeatures: {
-          jsx: true,
-        },
-      },
-    },
-    rules: {
-      '@typescript-eslint/no-unused-vars': 'error',
-      '@typescript-eslint/no-explicit-any': 'warn',
-      '@typescript-eslint/explicit-function-return-type': 'off',
-      '@typescript-eslint/explicit-module-boundary-types': 'off',
-    },
-  },
+  baseConfig,
+  enhancedTsConfig,
+  ...rest,
 ];
