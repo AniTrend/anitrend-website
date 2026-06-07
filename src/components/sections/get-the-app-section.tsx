@@ -10,7 +10,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { Github } from 'lucide-react';
+import { siGithub } from 'simple-icons';
 import { SectionIntro } from '@/components/sections/section-intro';
 
 export async function GetTheAppSection({
@@ -80,7 +80,14 @@ export async function GetTheAppSection({
           <Card className="flex flex-col rounded-[1.75rem] border-white/10 bg-card/85 shadow-[0_24px_80px_rgba(4,6,20,0.2)]">
             <CardHeader>
               <div className="flex items-center gap-4">
-                <Github className="h-10 w-10 text-muted-foreground" />
+                <svg
+                  role="img"
+                  viewBox="0 0 24 24"
+                  className="h-10 w-10 text-muted-foreground"
+                  fill="currentColor"
+                >
+                  <path d={siGithub.path} />
+                </svg>
                 <div>
                   <CardTitle>{t('getTheApp.github.title')}</CardTitle>
                   <CardDescription>

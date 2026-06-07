@@ -2,7 +2,8 @@ import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
 import Balancer from 'react-wrap-balancer';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, Github, Sparkles } from 'lucide-react';
+import { ArrowRight, Sparkles } from 'lucide-react';
+import { siGithub } from 'simple-icons';
 import { AnimePreview } from '@/components/anime-preview';
 
 export async function HeroSection({ githubOrgUrl }: { githubOrgUrl: string }) {
@@ -27,7 +28,11 @@ export async function HeroSection({ githubOrgUrl }: { githubOrgUrl: string }) {
                 <Balancer>{t('hero.description')}</Balancer>
               </p>
               <div className="flex flex-col sm:flex-row items-center gap-4">
-                <Button asChild size="lg" className="w-full shadow-[0_18px_48px_rgba(141,92,255,0.3)] sm:w-auto">
+                <Button
+                  asChild
+                  size="lg"
+                  className="w-full shadow-[0_18px_48px_rgba(141,92,255,0.3)] sm:w-auto"
+                >
                   <Link href="#get-the-app">
                     {t('hero.cta.getStarted')}{' '}
                     <ArrowRight className="ml-2 h-5 w-5" />
@@ -40,7 +45,14 @@ export async function HeroSection({ githubOrgUrl }: { githubOrgUrl: string }) {
                   className="w-full border-white/15 bg-white/5 text-white hover:bg-white/10 sm:w-auto"
                 >
                   <Link href={githubOrgUrl} target="_blank" rel="noreferrer">
-                    <Github className="mr-2 h-5 w-5" />
+                    <svg
+                      role="img"
+                      viewBox="0 0 24 24"
+                      className="mr-2 h-5 w-5"
+                      fill="currentColor"
+                    >
+                      <path d={siGithub.path} />
+                    </svg>
                     {t('hero.cta.viewOnGitHub')}
                   </Link>
                 </Button>
