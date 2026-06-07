@@ -1,19 +1,11 @@
 const next = require('eslint-config-next');
-const typescriptEslint = require('@typescript-eslint/eslint-plugin');
-const typescriptParser = require('@typescript-eslint/parser');
 
-const customTypescriptConfig = {
-  files: ['**/*.{js,jsx,ts,tsx}'],
-  plugins: {
-    '@typescript-eslint': typescriptEslint,
-  },
-  languageOptions: {
-    parser: typescriptParser,
-    parserOptions: {
-      ecmaFeatures: { jsx: true },
-    },
-  },
+const [baseConfig, tsConfig, ...rest] = next;
+
+const enhancedTsConfig = {
+  ...tsConfig,
   rules: {
+    ...tsConfig.rules,
     '@typescript-eslint/no-unused-vars': 'error',
     '@typescript-eslint/no-explicit-any': 'warn',
     '@typescript-eslint/explicit-function-return-type': 'off',
@@ -36,6 +28,7 @@ module.exports = [
       'commitlint.config.js',
     ],
   },
-  ...next,
-  customTypescriptConfig,
+  baseConfig,
+  enhancedTsConfig,
+  ...rest,
 ];
