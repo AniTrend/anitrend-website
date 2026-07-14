@@ -84,7 +84,7 @@
   "resolutions": {
     "tmp": "^0.2.7",
     "ip-address": "^10.0.0",
-    "undici": "^6.27.0",
+    "undici": "^8.0.0",
     "postcss": "^8.5.10",
     "protobufjs": "^8.0.0"
   },
