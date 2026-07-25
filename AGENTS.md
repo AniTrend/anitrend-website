@@ -140,15 +140,15 @@ yarn dev
 
 ### Common Commands
 
-| Command           | Purpose                                    |
-| ----------------- | ------------------------------------------ |
-| `yarn dev`        | Start Next.js dev server (port 9002)       |
-| `yarn build`      | Build for production (outputs to `.next/`) |
-| `yarn start`      | Start production Next.js server            |
-| `yarn lint`       | Run ESLint validation                      |
-| `yarn typecheck`  | Run TypeScript type-checking               |
-| `yarn test:e2e`   | Run Playwright end-to-end tests            |
-| `yarn prepare`    | Install Husky pre-commit hooks             |
+| Command          | Purpose                                    |
+| ---------------- | ------------------------------------------ |
+| `yarn dev`       | Start Next.js dev server (port 9002)       |
+| `yarn build`     | Build for production (outputs to `.next/`) |
+| `yarn start`     | Start production Next.js server            |
+| `yarn lint`      | Run ESLint validation                      |
+| `yarn typecheck` | Run TypeScript type-checking               |
+| `yarn test:e2e`  | Run Playwright end-to-end tests            |
+| `yarn prepare`   | Install Husky pre-commit hooks             |
 
 ---
 
@@ -556,3 +556,15 @@ yarn upgrade <package>    # Update dependency (updates lock)
 **Version**: 1.0
 
 For issues or suggestions regarding this guide, open an issue or discussion in the repository.
+
+## Repository Map
+
+A full codemap is available at `codemap.md` in the project root.
+
+Before working on any task, read `codemap.md` to understand:
+
+- Project architecture and entry points
+- Directory responsibilities and design patterns
+- Data flow and integration points between modules
+
+For deep work on a specific folder, also read that folder's `codemap.md`.
