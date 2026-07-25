@@ -117,7 +117,7 @@ export async function IntegrationsSection({
                     )}
                   </CardHeader>
                   <CardContent className="flex-1">
-                    <p className="mb-3 text-sm text-slate-300">
+                    <p className="mb-3 min-h-[4.5rem] line-clamp-3 overflow-hidden text-sm leading-6 text-slate-300">
                       {repo.description}
                     </p>
                     <div className="flex items-center gap-4 text-xs text-muted-foreground">

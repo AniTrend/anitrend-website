@@ -22,6 +22,19 @@ type OpenInAppButtonProps = {
   onAttempt?: () => void;
 };
 
+function shouldHandleAppHandoffClick(
+  event: React.MouseEvent<HTMLAnchorElement>
+): boolean {
+  return (
+    !event.defaultPrevented &&
+    event.button === 0 &&
+    !event.metaKey &&
+    !event.altKey &&
+    !event.ctrlKey &&
+    !event.shiftKey
+  );
+}
+
 export function OpenInAppButton({
   intent,
   intentStatus,
@@ -40,6 +53,10 @@ export function OpenInAppButton({
           href={getAppIntentHref(intent)}
           data-intent-status={intentStatus}
           onClick={(event) => {
+            if (!shouldHandleAppHandoffClick(event)) {
+              return;
+            }
+
             event.preventDefault();
             onAttempt?.();
 

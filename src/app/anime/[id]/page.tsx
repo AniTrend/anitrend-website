@@ -10,6 +10,7 @@ import {
   OpenInAppButton,
   ShareButton,
 } from '@/components/anime-analytics';
+import { ReadMoreText } from '@/components/read-more-text';
 
 export default async function AnimeDetailPage({
   params,
@@ -153,9 +154,15 @@ export default async function AnimeDetailPage({
                 <h2 className="text-xl font-semibold font-headline mb-3">
                   {t('details.synopsis')}
                 </h2>
-                <p className="text-muted-foreground leading-relaxed">
-                  {anime.synopsis || t('details.synopsisFallback')}
-                </p>
+                <ReadMoreText
+                  text={anime.synopsis || t('details.synopsisFallback')}
+                  lines={7}
+                  threshold={260}
+                  className="text-muted-foreground leading-relaxed"
+                  expandLabel={t('details.readMore')}
+                  collapseLabel={t('details.showLess')}
+                  ariaLabel={t('details.toggleSynopsis')}
+                />
               </section>
 
               {anime.background && (
@@ -163,9 +170,15 @@ export default async function AnimeDetailPage({
                   <h2 className="text-xl font-semibold font-headline mb-3">
                     {t('details.background')}
                   </h2>
-                  <p className="text-muted-foreground leading-relaxed text-sm">
-                    {anime.background}
-                  </p>
+                  <ReadMoreText
+                    text={anime.background}
+                    lines={5}
+                    threshold={220}
+                    className="text-sm text-muted-foreground leading-relaxed"
+                    expandLabel={t('details.readMore')}
+                    collapseLabel={t('details.showLess')}
+                    ariaLabel={t('details.toggleBackground')}
+                  />
                 </section>
               )}
 

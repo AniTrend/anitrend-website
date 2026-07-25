@@ -3,6 +3,9 @@ import createNextIntlPlugin from 'next-intl/plugin';
 
 const withNextIntl = createNextIntlPlugin('./src/i18n/request.ts');
 
+const SUPABASE_STORAGE_BANNER_PATHNAME =
+  '/storage/v1/object/public/media/banner/**';
+
 const nextConfig: NextConfig = {
   /* config options here */
   output: 'standalone',
@@ -25,9 +28,12 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: 'https',
-        hostname: 'vzujgysigfwbabgsqcse.supabase.co',
+        // Keep this static so runtime Supabase env values cannot drift from
+        // the build-time Next image allowlist. The path remains banner-only.
+        hostname: '*.supabase.co',
         port: '',
-        pathname: '/storage/v1/object/public/**',
+        pathname: SUPABASE_STORAGE_BANNER_PATHNAME,
+        search: '',
       },
       {
         protocol: 'https',

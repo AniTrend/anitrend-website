@@ -4,11 +4,13 @@ type OpenAppIntentOptions = {
   timeoutMs?: number;
 };
 
+const DEFAULT_APP_HANDOFF_TIMEOUT_MS = 1800;
+
 export async function openAppIntent(
   intent: AppIntent,
   options: OpenAppIntentOptions = {}
 ): Promise<boolean> {
-  const timeoutMs = options.timeoutMs ?? 1200;
+  const timeoutMs = options.timeoutMs ?? DEFAULT_APP_HANDOFF_TIMEOUT_MS;
 
   if (typeof document === 'undefined' || typeof window === 'undefined') {
     return false;
@@ -21,6 +23,7 @@ export async function openAppIntent(
 
     const cleanup = () => {
       document.removeEventListener('visibilitychange', handleVisibilityChange);
+      window.removeEventListener('pagehide', handlePageHide);
       window.clearTimeout(timeoutId);
     };
 
@@ -37,11 +40,18 @@ export async function openAppIntent(
       }
     };
 
+    const handlePageHide = () => {
+      // In this handled flow, pagehide is treated as an app-switch heuristic,
+      // not proof that the native app opened.
+      settle(true);
+    };
+
     const timeoutId = window.setTimeout(() => {
       settle(document.visibilityState === 'hidden');
     }, timeoutMs);
 
     document.addEventListener('visibilitychange', handleVisibilityChange);
+    window.addEventListener('pagehide', handlePageHide);
 
     try {
       window.location.assign(href);

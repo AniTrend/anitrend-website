@@ -16,8 +16,8 @@ Owns the reusable client-side handoff CTA that attempts to open a native AniTren
 1. A consumer renders `OpenInAppButton` with a concrete intent.
 2. The rendered anchor receives `href={getAppIntentHref(intent)}` and `data-intent-status={intentStatus}` for semantic deep link metadata.
 3. Click handling prevents normal navigation, runs the optional `onAttempt` callback, then calls `openAppIntent(intent)`.
-4. `openAppIntent` returns `false` immediately outside the browser, otherwise it builds the deep link href, attaches a `visibilitychange` listener, starts a 1200 ms timeout, and calls `window.location.assign(href)`.
-5. If the page becomes hidden before settlement, or is hidden when the timeout fires, the promise resolves `true` because the native app likely opened.
+4. `openAppIntent` returns `false` immediately outside the browser, otherwise it builds the deep link href, attaches `visibilitychange` and `pagehide` listeners, starts an 1800 ms timeout, and calls `window.location.assign(href)`.
+5. If the page becomes hidden or emits `pagehide` before settlement, or is hidden when the timeout fires, the promise resolves `true` because the native app likely opened.
 6. If assignment throws or the timeout completes without hidden visibility, the promise resolves `false`.
 7. `OpenInAppButton` opens `AppHandoffFallbackDialog` when `openAppIntent` resolves `false`.
 8. The fallback dialog offers Play Store and GitHub releases links, plus a dismiss action. For `pendingVerification` intents it also shows a pending verification note.

@@ -21,6 +21,10 @@
     "trailer": "Trailer",
     "characters": "Characters",
     "notAvailable": "N/A",
+    "readMore": "Read more",
+    "showLess": "Show less",
+    "toggleSynopsis": "Show or hide the full synopsis",
+    "toggleBackground": "Show or hide the full background",
     "trailerTitle": "{title} Trailer"
   },
   "handoff": {

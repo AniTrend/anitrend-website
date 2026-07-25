@@ -123,7 +123,7 @@ export function RepositoryShowcase({
               )}
             </CardHeader>
             <CardContent className="flex-1">
-              <p className="text-muted-foreground text-sm mb-3">
+              <p className="mb-3 min-h-[4.5rem] line-clamp-3 overflow-hidden text-sm leading-6 text-muted-foreground">
                 {repo.description}
               </p>
               <div className="flex items-center gap-4 text-xs text-muted-foreground">
