@@ -59,9 +59,37 @@ export const deepLinks = {
 };
 
 // Supabase banner image URL built from base URL in env
-const supabaseBaseUrl = process.env.NEXT_PUBLIC_SUPABASE_BASE_URL ?? '';
-export const supabaseBannerUrl = supabaseBaseUrl
-  ? `${supabaseBaseUrl}/media/banner/156cc9127eb16c7fd645a9ba0fb3a4e21678353995_main.jpg`
+const SUPABASE_STORAGE_PUBLIC_PATH = '/storage/v1/object/public';
+const SUPABASE_BANNER_OBJECT_PATH =
+  '/media/banner/156cc9127eb16c7fd645a9ba0fb3a4e21678353995_main.jpg';
+const SUPABASE_PROJECT_HOSTNAME_PATTERN = /^[a-z0-9-]+\.supabase\.co$/;
+
+function getSupabaseProjectOrigin(): string | null {
+  const baseUrl = process.env.NEXT_PUBLIC_SUPABASE_BASE_URL?.trim();
+
+  if (!baseUrl) {
+    return null;
+  }
+
+  try {
+    const url = new URL(baseUrl);
+    const isSupabaseProjectOrigin =
+      url.protocol === 'https:' &&
+      SUPABASE_PROJECT_HOSTNAME_PATTERN.test(url.hostname) &&
+      !url.port &&
+      url.pathname === '/' &&
+      !url.search &&
+      !url.hash;
+
+    return isSupabaseProjectOrigin ? url.origin : null;
+  } catch {
+    return null;
+  }
+}
+
+const supabaseProjectOrigin = getSupabaseProjectOrigin();
+export const supabaseBannerUrl = supabaseProjectOrigin
+  ? `${supabaseProjectOrigin}${SUPABASE_STORAGE_PUBLIC_PATH}${SUPABASE_BANNER_OBJECT_PATH}`
   : null;
 
 // Static fallback repository data

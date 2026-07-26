@@ -40,9 +40,13 @@ next-env.d.ts
 
 .genkit/*
 .env*
+!.env.example
 
 # firebase
 firebase-debug.log
 firestore-debug.log
 # Added by code-review-graph
 .code-review-graph/
+
+# Deepwork progress state
+.slim/deepwork/

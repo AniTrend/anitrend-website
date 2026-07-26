@@ -45,7 +45,7 @@ export function AnimeCard({ anime }: { anime: Anime }) {
             </div>
           </div>
           <div className="p-4 space-y-2">
-            <h3 className="font-semibold text-base truncate group-hover:text-primary">
+            <h3 className="min-h-[3rem] line-clamp-2 text-base font-semibold leading-snug group-hover:text-primary">
               {anime.title}
             </h3>
             <div className="flex justify-between text-xs text-muted-foreground">
