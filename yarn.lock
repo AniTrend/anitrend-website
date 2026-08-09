@@ -1167,20 +1167,20 @@ __metadata:
   linkType: hard
 
 "@hookform/resolvers@npm:^5.0.0":
-  version: 5.4.3
-  resolution: "@hookform/resolvers@npm:5.4.3"
+  version: 5.7.1
+  resolution: "@hookform/resolvers@npm:5.7.1"
   dependencies:
     "@standard-schema/utils": "npm:^0.3.0"
   peerDependencies:
     "@sinclair/typebox": ">=0.25.24"
     "@standard-schema/spec": ^1.0.0
     "@typeschema/main": ">=0.13.7"
-    "@vinejs/vine": ^2.0.0 || ^3.0.0
+    "@vinejs/vine": ^2.0.0 || ^3.0.0 || ^4.0.0
     ajv: ^8.12.0
     ajv-errors: ^3.0.0
     ajv-formats: ^2.1.1
     arktype: ^2.0.0
-    ata-validator: ^0.7.0
+    ata-validator: ^1.2.0
     class-transformer: ">=0.4.0"
     class-validator: ">=0.12.0"
     computed-types: ^1.0.0
@@ -1193,7 +1193,7 @@ __metadata:
     react-hook-form: ^7.55.0
     superstruct: ">=0.12.0"
     typanion: ^3.3.2
-    valibot: ^1.0.0 || ^1.0.0-beta.4 || ^1.0.0-rc
+    valibot: ">=0.31.0 || ^1.0.0-beta.4 || ^1.0.0-rc"
     vest: ">=3.0.0"
     yup: ^1.0.0
     zod: ^3.25.0 || ^4.0.0
@@ -1246,7 +1246,7 @@ __metadata:
       optional: true
     zod:
       optional: true
-  checksum: 10c0/7b1cea06a95835215462893710d934de10c9d93765a9bb3683a775630470c12bdf2abb1b70ddbbc6ada9be28b4fe6a8f84fdb8583b6985d2dd15250f14f4be8d
+  checksum: 10c0/a1e9608ca62488ad80883e421e2cf973e87668864993f490af6ea286c270530f04584a4f1b88159eee2a8207a52c92efeca363ddd6ea86b029d902a135101cdb
   languageName: node
   linkType: hard
 
