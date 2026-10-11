@@ -9,16 +9,16 @@
 
 ## Design
 
-- `analytics-consent-banner.tsx` is a client component with local `visible` state.
-- Visibility is derived from storage during state initialization. The banner is hidden when storage contains `granted` or `denied` and shown when no recognized choice exists or storage read fails.
+- `analytics-consent-banner.tsx` is a client component with a storage snapshot from `useSyncExternalStore` and local dismissal state.
+- Visibility starts hidden on both the server and the first client render. After hydration, storage determines whether the banner is shown, preserving matching HTML during hydration.
 - Runtime analytics control is delegated to `setAnalyticsEnabled` from `src/lib/firebase.ts`; the banner does not import Firebase SDK modules directly.
 - Consent event recording is delegated to `logEvent` from `src/lib/firebase.ts` after analytics is enabled for accepted consent.
 - Storage and Firebase calls are wrapped in `try` blocks so consent UI failures do not break the page.
 
 ## Flow
 
-- Initial render checks `localStorage.getItem('anitrend_analytics_consent')` when running in the browser.
-- On mount, the stored value is read again:
+- Initial render keeps the banner hidden without reading browser storage.
+- On mount, `localStorage.getItem('anitrend_analytics_consent')` determines visibility:
   - `granted` calls `setAnalyticsEnabled(true)`.
   - `denied` calls `setAnalyticsEnabled(false)`.
   - Any other value leaves the banner available for a choice.

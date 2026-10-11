@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from './fixtures';
 
 test('shows a fallback prompt when profile app handoff does not open the app', async ({
   page,

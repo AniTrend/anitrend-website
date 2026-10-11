@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from './fixtures';
 
 test('shows the web-to-app bridge section with curated app entry points', async ({
   page,

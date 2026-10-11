@@ -1,11 +1,27 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useSyncExternalStore } from 'react';
 import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
 import { setAnalyticsEnabled, logEvent } from '@/lib/firebase';
 
 const STORAGE_KEY = 'anitrend_analytics_consent';
+
+function subscribeToConsent(onChange: () => void) {
+  window.addEventListener('storage', onChange);
+  return () => window.removeEventListener('storage', onChange);
+}
+
+function needsConsent() {
+  try {
+    const stored = localStorage.getItem(STORAGE_KEY);
+    return stored !== 'granted' && stored !== 'denied';
+  } catch {
+    return true;
+  }
+}
+
+const serverNeedsConsent = () => false;
 
 /**
  * Simple bottom-fixed consent banner for analytics collection.
@@ -14,15 +30,13 @@ const STORAGE_KEY = 'anitrend_analytics_consent';
  */
 export default function AnalyticsConsentBanner() {
   const t = useTranslations('common');
-  const [visible, setVisible] = useState<boolean>(() => {
-    if (typeof window === 'undefined') return false;
-    try {
-      const stored = localStorage.getItem(STORAGE_KEY);
-      return stored !== 'granted' && stored !== 'denied';
-    } catch {
-      return true;
-    }
-  });
+  // Match the server render until hydration finishes, then read browser storage.
+  const pendingConsent = useSyncExternalStore(
+    subscribeToConsent,
+    needsConsent,
+    serverNeedsConsent
+  );
+  const [dismissed, setDismissed] = useState(false);
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -38,7 +52,7 @@ export default function AnalyticsConsentBanner() {
     }
   }, []);
 
-  if (!visible) return null;
+  if (!pendingConsent || dismissed) return null;
 
   const accept = async () => {
     try {
@@ -52,7 +66,7 @@ export default function AnalyticsConsentBanner() {
     } catch (err) {
       console.warn('[analytics] accept failed', err);
     } finally {
-      setVisible(false);
+      setDismissed(true);
     }
   };
 
@@ -63,7 +77,7 @@ export default function AnalyticsConsentBanner() {
     } catch (err) {
       console.warn('[analytics] decline failed', err);
     } finally {
-      setVisible(false);
+      setDismissed(true);
     }
   };
 

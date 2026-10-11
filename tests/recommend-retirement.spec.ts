@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from './fixtures';
 
 test('retires the recommend route and dashboard entry point', async ({ page }) => {
   const response = await page.goto('/recommend');

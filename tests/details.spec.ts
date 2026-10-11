@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from './fixtures';
 
 test('loads anime details with rich information', async ({ page }) => {
   // Navigate to Cowboy Bebop details page
