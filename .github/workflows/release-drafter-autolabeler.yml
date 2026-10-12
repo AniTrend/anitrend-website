@@ -20,12 +20,7 @@ jobs:
       pull-requests: write
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/create-github-app-token@v3
-        id: app-token
-        with:
-          client-id: ${{ secrets.APP_ID }}
-          private-key: ${{ secrets.APP_PRIVATE_KEY }}
       - uses: release-drafter/release-drafter/autolabeler@v7
         with:
           config-name: release-drafter-config.yml
-          token: ${{ steps.app-token.outputs.token }}
+          token: ${{ github.token }}

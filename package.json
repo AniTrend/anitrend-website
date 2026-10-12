@@ -10,7 +10,8 @@
     "typecheck": "tsc --noEmit",
     "check:copy": "node scripts/check-no-inline-copy.mjs",
     "prepare": "husky",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "check:security": "node scripts/check-dependency-security.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.0.0",
@@ -42,7 +43,7 @@
     "embla-carousel-react": "^8.6.0",
     "firebase": "^12.4.0",
     "lucide-react": "^1.0.0",
-    "next": "16.2.11",
+    "next": "16.3.8",
     "next-intl": "^4.4.0",
     "patch-package": "^8.0.0",
     "react": "^19.0.0",
@@ -86,7 +87,10 @@
     "ip-address": "^10.0.0",
     "undici": "^8.0.0",
     "postcss": "^8.5.10",
-    "protobufjs": "^8.0.0"
+    "protobufjs": "^8.0.0",
+    "braces@npm:^3.0.3": "patch:braces@npm%3A3.0.3#~/.yarn/patches/braces-npm-3.0.3-582c14023c.patch",
+    "braces@npm:~3.0.2": "patch:braces@npm%3A3.0.3#~/.yarn/patches/braces-npm-3.0.3-582c14023c.patch",
+    "@grpc/grpc-js": "^1.13.6"
   },
   "packageManager": "yarn@4.18.0"
 }

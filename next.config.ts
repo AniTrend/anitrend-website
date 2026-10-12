@@ -9,6 +9,12 @@ const SUPABASE_STORAGE_BANNER_PATHNAME =
 const nextConfig: NextConfig = {
   /* config options here */
   output: 'standalone',
+  experimental: {
+    // Playwright intercepts Jikan requests only in its explicitly opted-in dev server.
+    testProxy:
+      process.env.NODE_ENV === 'development' &&
+      process.env.PLAYWRIGHT_TEST_PROXY === '1',
+  },
   typescript: {
     ignoreBuildErrors: true,
   },

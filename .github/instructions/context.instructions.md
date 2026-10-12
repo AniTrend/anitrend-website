@@ -25,7 +25,7 @@ yarn typecheck        # TypeScript validation
 yarn lint             # ESLint validation (CI runs this explicitly)
 yarn build            # Next.js production build
 yarn start            # Start production server
-yarn test:e2e         # Playwright end-to-end tests (expects app running on :9002)
+yarn test:e2e         # Starts an opted-in dev server on :9002; deterministic Jikan fixtures
 ```
 
 ### Deployment (Self-hosted, Docker)
@@ -167,3 +167,12 @@ Project-scoped agent customizations live in `.agents/skills/` and `.github/instr
 
 - **`.github/instructions/app-router.instructions.md`** — Next.js App Router conventions: server-first routes, metadata placement, `searchParams` handling, and API normalization. Applied to `src/app/**`.
 - **`.github/instructions/deeplink-contract.instructions.md`** — Centralized deep link URI generation, verified URI shapes, analytics, and fallback preservation. Applied to `src/{config,components,app}/**/*.{ts,tsx}`.
+
+### Browser regression isolation
+
+Playwright starts the dev server with `PLAYWRIGHT_TEST_PROXY=1`. `next.config.ts`
+enables Next's fetch test proxy only when this flag is set and Node is in development
+mode. `tests/fixtures.ts` supplies Jikan detail, character, search, and paginated
+list responses for both server and browser fetches. Production builds keep the proxy
+disabled. The consent banner starts hidden during SSR and initial hydration, then
+reads browser storage on mount so the server and client HTML match.
