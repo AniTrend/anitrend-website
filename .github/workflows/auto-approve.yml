@@ -1,24 +1,45 @@
-name: Auto Approve
+name: Dependency Risk Gate
 
-on: 
+on:
   pull_request_target:
-    types:
-      - opened
-      - synchronize
+    branches: [main]
+    types: [opened, synchronize, reopened, ready_for_review]
+  issue_comment:
+    types: [created, edited]
   workflow_dispatch:
-    inputs: 
+    inputs:
       pullRequestNumber:
-        description: Pull request number to auto-approve
+        description: Pull request to reassess (no approval or merge is performed)
         required: true
-  
+        type: string
+
+# No App token, write permissions, PR-head checkout, install or model execution.
+permissions:
+  contents: read
+  pull-requests: read
+  issues: read
+  checks: read
+  actions: read
+  statuses: read
+
 jobs:
-  auto-approve:
+  gate:
+    name: Dependency Risk Gate
+    if: >-
+      github.event_name != 'issue_comment' ||
+      (github.event.issue.pull_request &&
+       startsWith(github.event.comment.body, '<!-- anitrend.security-runner.v1 -->'))
     runs-on: ubuntu-latest
-    permissions:
-      pull-requests: write
-    if: github.actor == 'renovate[bot]' || github.event_name == 'workflow_dispatch'
+    timeout-minutes: 5
     steps:
-      - uses: hmarr/auto-approve-action@v4.0.0
+      - name: Checkout trusted base only
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
-          review-message: "Auto approved automated PR"
-          pull-request-number: ${{ github.event.inputs.pullRequestNumber }}
+          ref: ${{ github.event.pull_request.base.sha || github.sha }}
+          persist-credentials: false
+      - name: Validate against live GitHub evidence
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RISK_PR: ${{ github.event.pull_request.number || github.event.issue.number || inputs.pullRequestNumber }}
+          RISK_REPOSITORY: ${{ github.repository }}
+        run: python3 scripts/security/dependency_risk.py --repo "$RISK_REPOSITORY" --pr "$RISK_PR"

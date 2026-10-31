@@ -138,6 +138,22 @@ Next.js image domains configured for:
 
 ## CI/CD & Secrets
 
+### Dependency risk review
+
+- `.github/workflows/auto-approve.yml` is now a read-only trusted-base eligibility
+  gate, not an unconditional approval bot. It never checks out or executes PR
+  code and has no review, merge or release write permissions.
+- `scripts/security/dependency_risk.py` validates the closed
+  `anitrend.security-runner.v1` schema and live GitHub metadata. The initial
+  profile is deliberately limited to graph-preserving npm lockfile updates,
+  low risk/high confidence, current human approval, complete scan evidence and
+  individual green matrix/jobs; unknown protection access fails closed.
+- See `.github/security/DEPENDENCY_RISK_GATE.md` for the assessment comment,
+  human attestation, rollout limitations and rerun protocol. Branch/ruleset
+  settings are unchanged. Validator success is not approval or release authority.
+- Run `python3 -m unittest discover -s scripts/security -p 'test_dependency_risk.py' -v`
+  for offline adversarial tests; `dependency-risk-tests.yml` runs them in CI.
+
 ### Container Build & Publish
 
 - `deploy.yml` validates release candidates on `main` and tag pushes, but only publishes GHCR images for published GitHub releases or explicit manual dispatches.
