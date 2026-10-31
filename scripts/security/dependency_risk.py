@@ -176,6 +176,7 @@ def evaluate(a, e):
     require(e['merge_parents'] == [e['base_sha'], e['head_sha']], 'stale_merge_candidate')
     require(e['mergeable'] is True and e['mergeable_state'] == 'clean', 'github_merge_blocked')
     require(e['protections_verified'] is True, 'protection_requirements_unknown')
+    require(e['review_decision'] == 'APPROVED' and e['threads_resolved'] is True, 'review_or_thread_blocker')
     substantive = [c['name'] for c in e['checks'] if c['name'] not in OPTIONAL_SKIPS
                    or c['name'] in e['required_checks']]
     require(len(set(substantive)) == len(substantive), 'ambiguous_duplicate_check_names')
@@ -269,6 +270,45 @@ class GitHub:
                 return result
         raise Blocked('api_pagination_limit')
 
+    def review_state(self, number):
+        # Fixed read-only GraphQL query: never accepts model-supplied query text.
+        query = '''query($number:Int!, $after:String) {
+          repository(owner:"AniTrend", name:"anitrend-website") {
+            pullRequest(number:$number) {
+              reviewDecision
+              reviewThreads(first:100, after:$after) {
+                nodes { isResolved }
+                pageInfo { hasNextPage endCursor }
+              }
+            }
+          }
+        }'''
+        after, resolved, decision = None, True, None
+        for _ in range(100):
+            req = urllib.request.Request('https://api.github.com/graphql', method='POST',
+                data=json.dumps({'query': query, 'variables': {'number': number, 'after': after}}).encode(),
+                headers={'Authorization': 'Bearer ' + self.token, 'Content-Type': 'application/json',
+                         'User-Agent': 'anitrend-risk-gate'})
+            try:
+                with self.opener.open(req, timeout=30) as response:
+                    raw = response.read(10_000_001)
+                    require(len(raw) <= 10_000_000, 'api_response_too_large')
+                    result = strict_json(raw)
+            except urllib.error.HTTPError as ex:
+                raise Blocked('api_unavailable_' + str(ex.code)) from None
+            require(not result.get('errors'), 'review_threads_unavailable')
+            pr = result['data']['repository']['pullRequest']
+            require(decision is None or decision == pr['reviewDecision'], 'review_changed_during_evaluation')
+            decision = pr['reviewDecision']
+            threads = pr['reviewThreads']
+            resolved = resolved and all(t['isResolved'] is True for t in threads['nodes'])
+            if not threads['pageInfo']['hasNextPage']:
+                return decision, resolved
+            cursor = threads['pageInfo']['endCursor']
+            require(cursor is not None and cursor != after, 'review_thread_pagination_incomplete')
+            after = cursor
+        raise Blocked('api_pagination_limit')
+
 
 def collect(api, number):
     p = api.prefix
@@ -295,7 +335,8 @@ def collect(api, number):
     require(set(check_policy['contexts']) == {c['context'] for c in check_policy['checks']}, 'required_check_list_incomplete')
     require(all(c['app_id'] == (46505 if c['context'] == 'GitGuardian Security Checks' else 15368)
                 for c in check_policy['checks']), 'required_check_origin_unverified')
-    # GitHub clean enforces configured CODEOWNER, conversation and other policy.
+    # Read actual review decision/threads, not only REST mergeable_state.
+    review_decision, threads_resolved = api.review_state(number)
     reviews = api.pages(f'{p}/pulls/{number}/reviews')
     permissions = {}
     for review in reviews:
@@ -347,6 +388,7 @@ def collect(api, number):
          'base_lock': lock(base), 'head_lock': lock(head),
          'mergeable': pr['mergeable'], 'mergeable_state': pr['mergeable_state'],
          'protections_verified': True, 'required_approvals': reviews_policy['required_approving_review_count'],
+         'review_decision': review_decision, 'threads_resolved': threads_resolved,
          'reviews': reviews, 'checks': normalized, 'required_checks': [c['context'] for c in check_policy['checks']],
          'assessment_url': comment['html_url'], 'assessment_updated_at': comment['updated_at'], 'jobs_verified': True,
          'complete': True, 'coverage_gaps': [], 'observed_at': dt.datetime.now(dt.timezone.utc).isoformat()}
@@ -355,6 +397,7 @@ def collect(api, number):
             and again['merge_commit_sha'] == pr['merge_commit_sha']
             and again['mergeable_state'] == pr['mergeable_state'], 'pr_changed_during_evaluation')
     require(api.get(f'{p}/git/ref/heads/{branch}')['object']['sha'] == base, 'base_changed')
+    require(api.review_state(number) == (review_decision, threads_resolved), 'review_changed_during_evaluation')
     current_comment = api.get(f"{p}/issues/comments/{comment['id']}")
     require(current_comment['body'] == comment['body'] and
             current_comment['updated_at'] == comment['updated_at'], 'assessment_changed_during_evaluation')
