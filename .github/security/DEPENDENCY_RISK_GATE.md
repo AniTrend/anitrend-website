@@ -64,7 +64,9 @@ identities with write/maintain/admin permission count. Bot/self/stale/dismissed
 reviews and repeated approvals by one identity do not count. Any outstanding
 changes-requested decision blocks. GitHub's clean mergeability state plus readable
 branch protection must also demonstrate that configured approvals, CODEOWNER and
-conversation rules are satisfied. The model's semantic claims are not treated as
+conversation rules are satisfied; the GraphQL review decision and every paginated
+review thread are also checked directly, with unavailable metadata blocking.
+The model's semantic claims are not treated as
 an independent security control: the human attests them and the validator checks
 the independently observable facts.
 

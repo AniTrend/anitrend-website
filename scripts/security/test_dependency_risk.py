@@ -3,7 +3,7 @@ import copy
 import base64
 import json
 import unittest
-from unittest.mock import patch
+from unittest.mock import MagicMock, patch
 
 import dependency_risk as gate
 
@@ -30,6 +30,7 @@ def fixture():
          'changed_files': ['yarn.lock'], 'base_lock': lock('6.1.4'), 'head_lock': lock('6.1.5'),
          'head_parent': base, 'merge_parents': [base, head], 'mergeable': True,
          'mergeable_state': 'clean', 'protections_verified': True, 'required_approvals': 1,
+         'review_decision': 'APPROVED', 'threads_resolved': True,
          'assessment_url': 'https://github.com/AniTrend/anitrend-website/pull/1#issuecomment-1',
          'assessment_updated_at': '2026-10-31T00:00:00Z',
          'observed_at': '2026-10-31T00:30:00+00:00',
@@ -124,6 +125,9 @@ class FixtureAPI:
                      'steps': [{'name': 'fixture-test', 'conclusion': 'success'}]} for n in names]
         raise AssertionError('Unexpected fixture collection: ' + path)
 
+    def review_state(self, number):
+        return 'APPROVED', True
+
 
 class GateTests(unittest.TestCase):
     def setUp(self):
@@ -163,6 +167,7 @@ class GateTests(unittest.TestCase):
                  ('author_type', 'User'), ('head_parent', 'c' * 40),
                  ('merge_parents', ['c' * 40, 'a' * 40]), ('mergeable', None),
                  ('mergeable_state', 'blocked'), ('protections_verified', False),
+                 ('review_decision', 'REVIEW_REQUIRED'), ('threads_resolved', False),
                  ('changed_files', ['package.json', 'yarn.lock']), ('jobs_verified', False)]
         for field, value in cases:
             with self.subTest(field=field):
@@ -298,6 +303,31 @@ class GateTests(unittest.TestCase):
             client.get('/user')
         with self.assertRaises(gate.Blocked):
             gate.NoRedirect().redirect_request(None, None, None, None, None, None)
+
+    def test_graphql_review_threads_are_fully_paginated(self):
+        client = gate.GitHub(gate.REPOSITORY, 'fixture-not-a-credential')
+        responses = []
+        for more, cursor, resolved in [(True, 'cursor1', True), (False, None, False)]:
+            result = {'data': {'repository': {'pullRequest': {
+                'reviewDecision': 'APPROVED', 'reviewThreads': {
+                    'nodes': [{'isResolved': resolved}],
+                    'pageInfo': {'hasNextPage': more, 'endCursor': cursor}}}}}}
+            response = MagicMock()
+            response.__enter__.return_value.read.return_value = json.dumps(result).encode()
+            responses.append(response)
+        with patch.object(client.opener, 'open', side_effect=responses) as opened:
+            self.assertEqual(client.review_state(1), ('APPROVED', False))
+            self.assertEqual(opened.call_count, 2)
+            second = json.loads(opened.call_args.args[0].data)
+            self.assertEqual(second['variables']['after'], 'cursor1')
+
+    def test_graphql_errors_cannot_become_empty_resolved_threads(self):
+        client = gate.GitHub(gate.REPOSITORY, 'fixture-not-a-credential')
+        response = MagicMock()
+        response.__enter__.return_value.read.return_value = b'{"errors":[{"message":"denied"}]}'
+        with patch.object(client.opener, 'open', return_value=response):
+            with self.assertRaisesRegex(gate.Blocked, 'review_threads_unavailable'):
+                client.review_state(1)
 
     def test_protection_denial_is_not_zero_requirements(self):
         class Denied:
