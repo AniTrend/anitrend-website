@@ -14,6 +14,7 @@
 /coverage
 /test-results
 /audit-report.json
+__pycache__/
 
 # next.js
 /.next/
